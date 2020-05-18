@@ -49,9 +49,19 @@ def distanceEuclides(u_rating1,u_rating2):
             distance += pow(u_rating1[key] - u_rating2[key],2)
     return np.sqrt(distance)
 
-data=loadDatabase()
+
+def distanceMinkowsky(u_rating1,u_rating2,r=1):
+
+    distance = 0
+    for key in u_rating1:
+        if key in u_rating2:
+            distance +=pow(abs(u_rating1[key] - u_rating2[key]),r)
+    return distance**(1/r)
+
+data=loadDatabase('../')
 
 #print(data)
 #print(distanceEuclides(data['Hailey'],data['Jordyn']))
-print(distanceManhattan(data['Blues Traveler'],data['Deadmau5']))
+#print(distanceManhattan(data['Blues Traveler'],data['Deadmau5']))
+print(distanceMinkowsky(data['Blues Traveler'],data['Deadmau5'],2))
 #print(distanceEuclides(data['Bryan'],data['Heather']))
