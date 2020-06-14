@@ -13,6 +13,9 @@ class Recommender{
 		double *averages;
 		map<Bits,std::map<Bits,float>> bandaUsrPuntaje;//puntaje Banda Usr Puntaje
 	
+		int max=5;
+		int min=0;
+		static std::string filename;
 		int maxRating=5;
 		int minRating=0;
 	public:
@@ -28,7 +31,9 @@ class Recommender{
 		void generateMatrixDisco();
 		std::pair<Bits,float> normalizar(
 				std::string iduser,std::string iditem);
-		
+		void printMatrix();	
+	private:
+		void set_dir(std::string &path);
 		void printMatrix();
 		void getAverage();
 
