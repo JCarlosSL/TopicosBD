@@ -26,7 +26,7 @@ class Recommender{
 		std::map<Bits,float> influences(std::string _user,int r);
 		float recommender(std::map<Bits,float> inf,std::string obj);
 		float computeSimilarity(std::string band1,std::string band2);
-		double* computeSimilarity3(std::string band1,std::string band2);
+		double* computeSimilarity3(Bits band1,Bits band2);
 		void generateMatrix();
 		void generateMatrixDisco();
 		std::pair<Bits,float> normalizar(
