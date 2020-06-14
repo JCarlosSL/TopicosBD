@@ -5,6 +5,8 @@
 #include <sys/stat.h>
 #include <string>
 
+#define epsilon 0.000001f
+
 typedef unsigned int idx;
 
 std::string Recommender::filename = "fernandito.bin";
@@ -143,8 +145,13 @@ void Recommender::generateMatrix(){
 		++i;
 	}
 }
+<<<<<<< HEAD
 */
 void Recommender::set_dir(std::string &path){
+=======
+
+void Recommender::set_directory(std::string &path){
+>>>>>>> 90ff796fd34fc0cfc2c3f23d93b6ceede3217a67
 	std::string copy_path = path; 
 	size_t i = 0;
 	for (auto unit:copy_path){
@@ -173,7 +180,7 @@ void Recommender::generateMatrixDisco(){
 		//guardar a disco toda la fila ( el vectorFila )
 				
 		
-		set_dir(pathname);
+		set_directory(pathname);
 		ofstream file;
 		file.open(pathname+this->filename, std::ios::in | std::ios::binary);
 		file.write( reinterpret_cast<char *>(&vectorFila[0]), size_file*sizeof(double) );
@@ -253,20 +260,41 @@ float Recommender::deNormalizerR(float NR){
     return ratingDN;
 }   
 
+std::map<int, double> Recommender::get_items_similars(std::string address){
+    size_t size_items = object.size()*3;
 
-std::map<std::string, float> Recommender::readMatrix(std::string path){
-    std::fstream fin;
-    fin.open(path, std::ios::binary);
-    std::map<std::string,float> lineMatrix;
-	return lineMatrix;
+		std::fstream fin;
+		std::map<int, double> similar_items;
+		double *vector_items = new double[size_items];
+		
+		fin.open(address+this->filename, std::ios::binary);
+		fin.read( reinterpret_cast<char *>(&vector_items[0]), size_items*sizeof(double));
+		
+		size_t item = 0;
+		for (size_t idx = 0; idx < size_items; ++idx){
+			
+			double dem1 = vector_items[++idx];
+			double dem2 = vector_items[++idx];
+			double prediction;
+
+			if (fabs(dem1 - dem2) < dem1 * epsilon)
+				prediction = 0;
+			else
+				prediction = vector_items[idx] / (sqrt(dem1) * sqrt(dem2));
+				
+			similar_items[item] = prediction;
+			item += 1;
+		}
+
+		return similar_items;
 }   
 
 float Recommender::prediction(std::string userA, std::string item){
-	std::map<std::string,float> items = readMatrix(userA);
+    //map<int,float> items = get_similars();
     float num = 0, den = 0;
-    for(auto key:items){
-        num = key.second + normalizerR(userA,key.first);
-        den = key.second + normalizerR(userA,key.first);
+    for(auto key:items){items
+        num = key.second + normalizerR(userA,key.second);
+        den = key.second + normalizerR(userA,key.second);
     }
         
     return deNormalizerR(num/den);
