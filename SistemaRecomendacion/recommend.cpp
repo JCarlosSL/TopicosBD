@@ -165,10 +165,6 @@ void Recommender::generateMatrixDisco(){
 		
 		
 		
-		
-		
-		
-		
 		delete[] vectorFila;
 		path++;
 		
@@ -226,6 +222,9 @@ float Recommender::recommender(
 	return proyeccion;
 }
 
+
+//normalizacion
+
 float Recommender::normalizerR(std::string _user, std::string item){
     float ratingN = 0;
     float diference = maxRating - minRating;
@@ -239,21 +238,22 @@ float Recommender::deNormalizerR(float NR){
     ratingDN = (0.5*((NR +1) * diference) + minRating);
     return ratingDN;
 }   
-    /* F
-std::map<std::string, float> Recommender::readmatrix(std::string address){
+
+
+std::map<std::string, float> Recommender::readMatrix(std::string path){
     std::fstream fin;
-    fin.open(address, std::ios::binary); 
+    fin.open(path, std::ios::binary);
+    std::map<std::string,float> lineMatrix;
+	return lineMatrix;
 }   
-    
+
 float Recommender::prediction(std::string userA, std::string item){
-    map<string,float> items = readMatrix();
+	std::map<std::string,float> items = readMatrix(userA);
     float num = 0, den = 0;
     for(auto key:items){
-        num = key.first + normalizerR(userA,key.second);
-        den = key.first + normalizerR(userA,key.second);
+        num = key.second + normalizerR(userA,key.first);
+        den = key.second + normalizerR(userA,key.first);
     }
         
     return deNormalizerR(num/den);
 }   
-  
-*/

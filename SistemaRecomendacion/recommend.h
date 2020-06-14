@@ -35,7 +35,7 @@ class Recommender{
 		float normalizerR(std::string _user,std::string item);
 		float deNormalizerR(float NR);
 
-		std::map<string,float> readmatrix(std::string address);
+		std::map<std::string,float> readMatrix(std::string address);
 		float prediction(std::string userA, std::string item);	
 };
 
