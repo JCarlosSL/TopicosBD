@@ -68,11 +68,65 @@ float Recommender::computeSimilarity(
 
 }
 
-	auto idit=object[iditem];
-	float val=(2*(dataUsers[idu][idit]-min)-(max-min))/(max-min);
-	return std::make_pair(idit,val); 
+void Recommender::getAverage(){
+    //averages std::map<Bits,float> averages;
+    averages = new double[user.size()]; // sin free, es para la clase Recommender
+    int i=0;
+    for(auto key:dataUsers){
+		double sum=0.0;
+		for(auto val:key.second){
+			sum+=val.second;
+		}	    
+		//averages[key.first]=sum/key.second.size();
+		if (key.second.size() == 0){
+		    averages[i]=0;
+		    cout<<"raro, tamaño de contenido de key cero?";
+		}
+		else
+		    averages[i] = sum/key.second.size();
+		i++;
+	}
 }
 
+double* Recommender::computeSimilarity3(std::string band1,std::string band2){
+	
+	double *valores = new double[3];
+	
+	double num=0;
+	double den1=0;
+	double den2=0;
+	
+	auto bandaA=object[band1];
+	auto bandaB=object[band2];
+	    
+    if (bandaUsrPuntaje[Bits(bandaA)].size() > bandaUsrPuntaje[Bits(bandaB)].size()){
+        int aux = bandaA;
+        bandaA = bandaB;
+        bandaB = aux;
+    }
+    
+    for(auto key:bandaUsrPuntaje[Bits(bandaA)]){
+    
+        auto usr = key.first;
+        float puntaje = key.second;
+        
+        if(bandaUsrPuntaje[Bits(bandaB)].find(usr) !=   bandaUsrPuntaje[Bits(bandaB)].end()){
+            double avg = averages[usr.getitem()];
+            double num1 = (puntaje - avg);
+            double num2 = (bandaUsrPuntaje[Bits(bandaB)][usr] - avg);
+            num += num1*num2;
+            den1 += pow(num1,2);
+            den2 += pow(num2,2);    
+        }    
+    }
+        
+	valores[0] = num;
+    valores[1] = den1;
+    valores[2] = den2;
+    
+	return valores;
+	
+}
 
 void Recommender::generateMatrix(){
 	int i=0;
@@ -88,6 +142,54 @@ void Recommender::generateMatrix(){
 		++i;
 	}
 }
+
+void Recommender::generateMatrixDisco(){
+    int ixx=0;
+	for(auto p=object.begin();p!=object.end();){
+		++p;
+		auto q=p;
+		
+		double *vectorFila = new double[object.size()*3];
+		
+		int j=0;
+		for(;q!=object.end() ;++q){
+	        double *valores = computeSimilarity3(p->first,q->first);
+	        vectorFila[j] = valores[0];
+	        vectorFila[j+1] = valores[1];
+	        vectorFila[j+2] = valores[2];
+	        j +=3;
+	        delete[] valores;
+	        
+		}
+		
+		//guardar a disco toda la fila ( el vectorFila )
+				
+		
+		
+		
+		
+		
+		
+		
+		
+		delete[] vectorFila;
+		cout<<ixx++<<"\n";
+	}
+}
+
+
+std::pair<Bits,float> Recommender::normalizar(std::string iduser,std::string iditem){
+	auto idu=user[iduser];
+	auto idit=object[iditem];
+	float val=(2*(dataUsers[idu][idit]-min)-(max-min))/(max-min);
+	return std::make_pair(idit,val); 
+}
+
+/*
+float Recommender::prediccion(std::string iduser,string iditem){
+	
+}*/
+
 
 std::vector<std::pair<Bits,float>> Recommender::computerNearestNeighbors(
 		std::string iduser,int r){
