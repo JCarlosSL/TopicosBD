@@ -3,15 +3,16 @@
 #include "bits.h"
 
 typedef std::pair<Bits,float> pbits;
+using namespace std;
 
 class Recommender{
 	public:
-		map<string,Bits> user;
-		map<string,Bits> object;
-		map<Bits,std::map<Bits,float>> dataUsers;//puntaje Usr Banda Puntaje
-		map<Bits,std::map<Bits,float>> dataSimil;
+		std::map<std::string,Bits> user;
+		std::map<std::string,Bits> object;
+		std::map<Bits,std::map<Bits,float>> dataUsers;//puntaje Usr Banda Puntaje
+		std::map<Bits,std::map<Bits,float>> dataSimil;
 		double *averages;
-		map<Bits,std::map<Bits,float>> bandaUsrPuntaje;//puntaje Banda Usr Puntaje
+		std::map<Bits,std::map<Bits,float>> bandaUsrPuntaje;//puntaje Banda Usr Puntaje
 	
 		int max=5;
 		int min=0;
