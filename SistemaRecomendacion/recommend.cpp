@@ -92,16 +92,13 @@ void Recommender::getAverage(){
 	}
 }
 
-double* Recommender::computeSimilarity3(std::string band1,std::string band2){
+double* Recommender::computeSimilarity3(Bits bandaA,Bits bandaB){
 	
 	double *valores = new double[3];
 	
 	double num=0;
 	double den1=0;
 	double den2=0;
-	
-	auto bandaA=object[band1];
-	auto bandaB=object[band2];
 	    
     if (bandaUsrPuntaje[bandaA].size() > bandaUsrPuntaje[bandaB].size()){
         auto aux = bandaA;
