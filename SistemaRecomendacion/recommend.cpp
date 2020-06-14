@@ -2,6 +2,12 @@
 #include <fstream>
 #include "tools.h"
 #include "metrica.cpp"
+#include <sys/stat.h>
+#include <string>
+
+typedef unsigned int idx;
+
+std::string Recommender::filename = "fernandito.bin";
 
 void Recommender::loadData(std::string path,char lim){
 	fstream f;
@@ -141,14 +147,29 @@ void Recommender::generateMatrix(){
 	}
 }
 
+void Recommender::set_dir(std::string &path){
+	std::string copy_path = path; 
+	size_t i = 0;
+	for (auto unit:copy_path){
+		path[i] += '/';
+		++i;
+	}
+}
+
 void Recommender::generateMatrixDisco(){
+  idx path=0;
+	size_t size_file = object.size()*3;
+	for(auto p=object.begin();p!=object.end();){
 
     int path=0;
 	for(auto p=object.begin();p!=object.end();++p){
 	
 		double *vectorFila = new double[object.size()*3];
 		
+		std::string path1 = std::to_string(path); 
+		double *vectorFila = new double[size_file];
 		int j=0;
+
 		for(auto q=object.begin();q!=object.end() ;++q){
 	        double *valores = computeSimilarity3(p->first,q->first);
 	        vectorFila[j] = valores[0];
@@ -156,19 +177,13 @@ void Recommender::generateMatrixDisco(){
 	        vectorFila[j+2] = valores[2];
 	        j +=3;
 	        delete[] valores;
-	        
 		}
-		
-		//guardar a disco toda la fila ( el vectorFila )
-				
-		
-		
-		
-		
-		
-		
-		
-		
+		set_dir(path1);
+		ofstream file;
+		file.open(path1+this->filename, std::ios::in | std::ios::binary);
+		file.write( reinterpret_cast<char *>(&vectorFila[0]), size_file*sizeof(double) );
+		file.close();
+
 		delete[] vectorFila;
 		path++;
 		
