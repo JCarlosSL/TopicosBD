@@ -15,23 +15,21 @@ void Recommender::loadData(std::string path,char lim){
 	if(getline(f,temp)) cout<<"init \n"; 
 	while(getline(f,temp)){
 		vector<string> fields=split(temp,lim);
-		auto usuario = fields[0];
-		auto item = fields[1]; 
-		auto p=user.find(usuario);
-		auto q=object.find(item);
+		auto p=user.find(fields[0]);
+		auto q=object.find(fields[1]);
 		if(p==user.end()){
-			user[usuario]=Bits(cp);
+			user[fields[0]]=Bits(cp);
 			tempp=Bits(cp);
 			cp++;
 		}
 		else tempp=p->second;
 		if(q==object.end()){
-			object[item]=Bits(cq);
+			object[fields[1]]=Bits(cq);
 			tempq=Bits(cq);
 			cq++;
 		}
 		else tempq=q->second;
-		dataUsers[tempp][tempq]=std::stof(strip(fields[2],lim));
+		dataUsers[tempp][tempq]=std::stof(fields[2]);
 	}
 	f.close();
 }

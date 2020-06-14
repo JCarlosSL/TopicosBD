@@ -8,11 +8,12 @@ int main(){
 
 	//Preprocesamiento de la data
 	 
-	DataPreprocessing prepro("datasetSmall/ratings.csv");
+	/*DataPreprocessing prepro("datasetSmall/ratings.csv");
 	prepro.DataRecognition();
 
 	char limit = prepro.getlim();
 	char strip = prepro.getdiv();	
+	*/
 	//sistema de recomendacion
 	 
 	Recommender data;
@@ -22,13 +23,14 @@ int main(){
 	//cout<<data.computeSimilarity("Star Wars","Jaws");
 	//data.loadData("Movie_Ratings.csv");
 	data.loadData("ml-latest-small/ratings.csv",',');
+	data.getAverage();
 	//data.loadData("ml-latest/ratings.csv");
 	//data.loadData("bandas.csv");
 	//std::cout<<data.user.size()<<" "<<data.object.size();
 
 	//cout<<data.computeSimilarity("You Got Mail","The Matrix");
 	//cout<<data.computeSimilarity("Deadmau5","Slightly Stoopid");
-	cout<<data.computeSimilarity("2344","457")<<"\n";
+	cout<<data.computeSimilarity3("2344","457")<<"\n";
 	//data.generateMatrix();
 	//cout<<data.computeSimilarity("Alien","Avatar");
 	//auto p=data.user.find("Stephen");
