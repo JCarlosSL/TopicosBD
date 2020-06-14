@@ -286,11 +286,19 @@ std::map<int, double> Recommender::get_items_similars(std::string address){
 }   
 
 float Recommender::prediction(std::string userA, std::string item){
-    //map<int,float> items = get_similars();
-    float num = 0, den = 0;
-    for(auto key:items){items
-        num = key.second + normalizerR(userA,key.second);
-        den = key.second + normalizerR(userA,key.second);
+    string str = object[item].item.to_string();
+	string address;
+	for(auto it:str){
+		address += it + "/";
+	}
+	address = address + "p.bin";
+
+	map<int,float> items = get_items_similars(address);
+    
+	float num = 0, den = 0;
+    for(auto key:items){
+        num = key.second + normalizerR(userA,item);
+        den = key.second + normalizerR(userA,item);
     }
         
     return deNormalizerR(num/den);
