@@ -145,13 +145,9 @@ void Recommender::generateMatrix(){
 		++i;
 	}
 }
-<<<<<<< HEAD
 */
-void Recommender::set_dir(std::string &path){
-=======
 
 void Recommender::set_directory(std::string &path){
->>>>>>> 90ff796fd34fc0cfc2c3f23d93b6ceede3217a67
 	std::string copy_path = path; 
 	size_t i = 0;
 	for (auto unit:copy_path){
