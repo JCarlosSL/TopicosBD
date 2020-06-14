@@ -255,7 +255,7 @@ float Recommender::deNormalizerR(float NR){
     return ratingDN;
 }   
 
-std::map<int, double> Recommender::get_similars(std::string address){
+std::map<int, double> Recommender::get_items_similars(std::string address){
     size_t size_items = object.size()*3;
 
 		std::fstream fin;

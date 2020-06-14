@@ -40,7 +40,7 @@ class Recommender{
 		float normalizerR(std::string _user,std::string item);
 		float deNormalizerR(float NR);
 
-		std::map<int,double> get_similars(std::string address);
+		std::map<int,double> get_item_similars(std::string address);
 		float prediction(std::string userA, std::string item);	
 };
 
