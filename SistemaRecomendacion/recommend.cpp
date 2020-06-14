@@ -159,14 +159,9 @@ void Recommender::set_dir(std::string &path){
 void Recommender::generateMatrixDisco(){
   idx path=0;
 	size_t size_file = object.size()*3;
-	for(auto p=object.begin();p!=object.end();){
-
-    int path=0;
 	for(auto p=object.begin();p!=object.end();++p){
-	
-		double *vectorFila = new double[object.size()*3];
-		
-		std::string path1 = std::to_string(path); 
+
+		std::string pathname = std::to_string(path); 
 		double *vectorFila = new double[size_file];
 		int j=0;
 
@@ -178,9 +173,9 @@ void Recommender::generateMatrixDisco(){
 	        j +=3;
 	        delete[] valores;
 		}
-		set_dir(path1);
+		set_dir(pathname);
 		ofstream file;
-		file.open(path1+this->filename, std::ios::in | std::ios::binary);
+		file.open(pathname+this->filename, std::ios::in | std::ios::binary);
 		file.write( reinterpret_cast<char *>(&vectorFila[0]), size_file*sizeof(double) );
 		file.close();
 
