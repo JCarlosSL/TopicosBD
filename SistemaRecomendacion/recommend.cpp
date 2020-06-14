@@ -64,6 +64,26 @@ float Recommender::computeSimilarity(
 
 }
 
+void Recommender::getAverage(){
+    //averages std::map<Bits,float> averages;
+    averages = new double[user.size()]; // sin free, es para la clase Recommender
+    int i=0;
+    for(auto key:dataUsers){
+		double sum=0.0;
+		for(auto val:key.second){
+			sum+=val.second;
+		}	    
+		//averages[key.first]=sum/key.second.size();
+		if (key.second.size() == 0){
+		    averages[i]=0;
+		    cout<<"raro, tamaño de contenido de key cero?";
+		}
+		else
+		    averages[i] = sum/key.second.size();
+		i++;
+	}
+}
+
 std::pair<Bits,float> Recommender::normalizar(std::string iduser,std::string iditem){
 	auto idu=user[iduser];
 	auto idit=object[iditem];
