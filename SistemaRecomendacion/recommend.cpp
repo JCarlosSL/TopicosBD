@@ -9,6 +9,7 @@
 
 typedef unsigned int idx;
 
+
 std::string Recommender::filename = "sim.bin";
 
 void Recommender::loadData(std::string path,char lim){
@@ -23,8 +24,8 @@ void Recommender::loadData(std::string path,char lim){
 	if(getline(f,temp)) cout<<"init \n"; 
 	while(getline(f,temp)){
 		vector<string> fields=split(temp,lim);
-		auto p=user.find(fields[0]);
-		auto q=object.find(fields[1]);
+		std::map<std::string,Bits>::iterator p=user.find(fields[0]);
+		std::map<std::string,Bits>::iterator q=object.find(fields[1]);
 		if(p==user.end()){
 			user[fields[0]]=Bits(cp);
 			tempp=Bits(cp);
@@ -37,7 +38,7 @@ void Recommender::loadData(std::string path,char lim){
 			cq++;
 		}
 		else tempq=q->second;
-		dataUsers[tempp][tempq]=std::stof(fields[2]);
+		dataUsers[tempp][tempq]=std::stof(trim(fields[2]));
 	}
 	f.close();
 }
