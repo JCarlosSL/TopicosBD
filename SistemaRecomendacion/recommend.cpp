@@ -9,7 +9,7 @@
 
 typedef unsigned int idx;
 
-std::string Recommender::filename = "fernandito.bin";
+std::string Recommender::filename = "sim.bin";
 
 void Recommender::loadData(std::string path,char lim){
 	fstream f;
@@ -262,7 +262,7 @@ std::map<int, double> Recommender::get_items_similars(std::string address){
 		std::map<int, double> similar_items;
 		double *vector_items = new double[size_items];
 		
-		fin.open(address+this->filename, std::ios::binary);
+		fin.open(address+Recommender::filename, std::ios::binary);
 		fin.read( reinterpret_cast<char *>(&vector_items[0]), size_items*sizeof(double));
 		
 		size_t item = 0;
