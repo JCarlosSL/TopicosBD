@@ -235,3 +235,35 @@ float Recommender::recommender(
 	return proyeccion;
 }
 
+float Recommender::normalizerR(std::string _user, std::string item){
+    float ratingN = 0;
+    float diference = maxRating - minRating;
+    ratingN = (2*(dataUsers[user[_user]][object[item]] - minRating) - diference)/diference;
+    return ratingN;
+}   
+    
+float Recommender::deNormalizerR(float NR){
+    float ratingDN = 0;
+    float diference = maxRating - minRating;
+    ratingDN = (0.5*((NR +1) * diference) + minRating);
+    return ratingDN;
+}   
+    
+std::map<string, float> readmatrix(string address){
+    std::fstream fin;
+    fin.open(address, std::ios::binary);
+    
+}   
+    
+float prediction(string userA, string item){
+    map<string,float> items = readMatrix();
+    float num = 0, den = 0;
+    for(auto key:items){
+        num = key.first + normalizerR(userA,key.second);
+        den = key.first + normalizerR(userA,key.second);
+    }
+        
+    return deNormalizerR(num/den);
+}   
+  
+
