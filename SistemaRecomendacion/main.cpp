@@ -6,28 +6,30 @@ using namespace std;
 
 int main(){
 
-	/*Preprocesamiento de la data
-	 */
-	//DataPreprocessing data("bandas.csv");
-	//data.DataRecognition();
-	//data.DataCleaning();
-	
-	/*sistema de recomendacion
-	 */
+	//Preprocesamiento de la data
+	 
+	DataPreprocessing prepro("datasetSmall/ratings.csv");
+	prepro.DataRecognition();
+
+	char limit = prepro.getlim();
+	char strip = prepro.getdiv();	
+	//sistema de recomendacion
+	 
 	Recommender data;
 
+	//data.loadData("BX-Book-Ratings.csv");
 	//data.loadData("ml-25m/ratings.csv");
 	//cout<<data.computeSimilarity("Star Wars","Jaws");
 	//data.loadData("Movie_Ratings.csv");
-	data.loadData("datasetSmall/ratings.csv");
+	data.loadData("ml-latest-small/ratings.csv",',');
 	//data.loadData("ml-latest/ratings.csv");
 	//data.loadData("bandas.csv");
 	//std::cout<<data.user.size()<<" "<<data.object.size();
 
 	//cout<<data.computeSimilarity("You Got Mail","The Matrix");
 	//cout<<data.computeSimilarity("Deadmau5","Slightly Stoopid");
-	//cout<<data.computeSimilarity("2344","457")<<"\n";
-	data.generateMatrix();
+	cout<<data.computeSimilarity("2344","457")<<"\n";
+	//data.generateMatrix();
 	//cout<<data.computeSimilarity("Alien","Avatar");
 	//auto p=data.user.find("Stephen");
 	//auto q=data.user.find("Amy");

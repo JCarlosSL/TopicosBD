@@ -5,6 +5,15 @@ DataPreprocessing::DataPreprocessing(string path){
 	filename=path;	
 }
 
+
+char DataPreprocessing::getlim(){
+	return lim;
+}
+
+char DataPreprocessing::getdiv(){
+	return div;
+}
+
 void DataPreprocessing::DataRecognition(){
 	fstream f;
 	f.open(filename,ios::in);
@@ -18,6 +27,7 @@ void DataPreprocessing::DataRecognition(){
 	else type=0;
 	f.close();
 }
+
 
 void DataPreprocessing::DataCleaning(){
 	fstream f,g;

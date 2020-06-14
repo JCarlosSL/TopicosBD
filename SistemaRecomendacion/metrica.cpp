@@ -1,4 +1,5 @@
 #include <cmath>
+
 float manhattan(std::map<Bits,float> rating1,std::map<Bits,float> rating2){
 	float distance=0;
 	bool verbose=false;

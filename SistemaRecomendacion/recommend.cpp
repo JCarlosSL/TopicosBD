@@ -3,7 +3,7 @@
 #include "tools.h"
 #include "metrica.cpp"
 
-void Recommender::loadData(std::string path){
+void Recommender::loadData(std::string path,char lim){
 	fstream f;
 	f.open(path,std::ios::in);
 	
@@ -14,23 +14,26 @@ void Recommender::loadData(std::string path){
 	Bits tempq;
 	if(getline(f,temp)) cout<<"init \n"; 
 	while(getline(f,temp)){
-		vector<string> fields=split(temp,',');
-		auto p=user.find(fields[0]);
-		auto q=object.find(fields[1]);
+		vector<string> fields=split(temp,lim);
+		auto usuario = fields[0];
+		auto item = fields[1]; 
+		auto p=user.find(usuario);
+		auto q=object.find(item);
 		if(p==user.end()){
-			user[fields[0]]=Bits(cp);
+			user[usuario]=Bits(cp);
 			tempp=Bits(cp);
 			cp++;
 		}
 		else tempp=p->second;
 		if(q==object.end()){
-			object[fields[1]]=Bits(cq);
+			object[item]=Bits(cq);
 			tempq=Bits(cq);
 			cq++;
 		}
 		else tempq=q->second;
-		dataUsers[tempp][tempq]=std::stof(fields[2]);
+		dataUsers[tempp][tempq]=std::stof(strip(fields[2],lim));
 	}
+	f.close();
 }
 
 float Recommender::computeSimilarity(
@@ -44,6 +47,7 @@ float Recommender::computeSimilarity(
 		}
 		averages[key.first]=sum/key.second.size();
 	}
+
 	float num=0;
 	float dem1=0;
 	float dem2=0;
@@ -64,16 +68,10 @@ float Recommender::computeSimilarity(
 
 }
 
-std::pair<Bits,float> Recommender::normalizar(std::string iduser,std::string iditem){
-	auto idu=user[iduser];
 	auto idit=object[iditem];
 	float val=(2*(dataUsers[idu][idit]-min)-(max-min))/(max-min);
 	return std::make_pair(idit,val); 
 }
-/*
-float Recommender::prediccion(std::string iduser,string iditem){
-	
-}*/
 
 
 void Recommender::generateMatrix(){
