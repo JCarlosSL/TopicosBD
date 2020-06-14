@@ -294,7 +294,7 @@ float Recommender::prediction(std::string userA, std::string item){
 	}
 	address = address + "p.bin";
 
-	map<int,float> items = get_items_similars(address);
+	std::map<int,double> items = get_items_similars(address);
     
 	float num = 0, den = 0;
     for(auto key:items){
