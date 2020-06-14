@@ -91,6 +91,40 @@ void Recommender::generateMatrix(){
 	}
 }
 
+void Recommender::generateMatrixDisco(){
+    int ixx=0;
+	for(auto p=object.begin();p!=object.end();){
+		++p;
+		auto q=p;
+		
+		double *vectorFila = new double[object.size()*3];
+		
+		int j=0;
+		for(;q!=object.end() ;++q){
+	        double *valores = computeSimilarity3(p->first,q->first);
+	        vectorFila[j] = valores[0];
+	        vectorFila[j+1] = valores[1];
+	        vectorFila[j+2] = valores[2];
+	        j +=3;
+	        delete[] valores;
+	        
+		}
+		
+		//guardar a disco toda la fila ( el vectorFila )
+				
+		
+		
+		
+		
+		
+		
+		
+		
+		delete[] vectorFila;
+		cout<<ixx++<<"\n";
+	}
+}
+
 std::vector<std::pair<Bits,float>> Recommender::computerNearestNeighbors(
 		std::string iduser,int r){
 	auto p=user[iduser];
