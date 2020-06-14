@@ -29,7 +29,8 @@ class Recommender{
 		std::pair<Bits,float> normalizar(
 				std::string iduser,std::string iditem);
 		
-		void printMatrix();	
+		void printMatrix();
+		void getAverage();	
 };
 
 

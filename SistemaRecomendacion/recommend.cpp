@@ -99,21 +99,21 @@ double* Recommender::computeSimilarity3(std::string band1,std::string band2){
 	auto bandaA=object[band1];
 	auto bandaB=object[band2];
 	    
-    if (bandaUsrPuntaje[Bits(bandaA)].size() > bandaUsrPuntaje[Bits(bandaB)].size()){
-        int aux = bandaA;
+    if (bandaUsrPuntaje[bandaA].size() > bandaUsrPuntaje[bandaB].size()){
+        auto aux = bandaA;
         bandaA = bandaB;
         bandaB = aux;
     }
     
-    for(auto key:bandaUsrPuntaje[Bits(bandaA)]){
+    for(auto key:bandaUsrPuntaje[bandaA]){
     
         auto usr = key.first;
         float puntaje = key.second;
         
-        if(bandaUsrPuntaje[Bits(bandaB)].find(usr) !=   bandaUsrPuntaje[Bits(bandaB)].end()){
-            double avg = averages[usr.getitem()];
+        if(bandaUsrPuntaje[bandaB].find(usr) !=   bandaUsrPuntaje[bandaB].end()){
+            double avg = averages[usr.item.to_ulong()];
             double num1 = (puntaje - avg);
-            double num2 = (bandaUsrPuntaje[Bits(bandaB)][usr] - avg);
+            double num2 = (bandaUsrPuntaje[bandaB][usr] - avg);
             num += num1*num2;
             den1 += pow(num1,2);
             den2 += pow(num2,2);    
