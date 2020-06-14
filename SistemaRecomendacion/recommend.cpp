@@ -84,12 +84,53 @@ void Recommender::getAverage(){
 	}
 }
 
+double* Recommender::computeSimilarity3(std::string band1,std::string band2){
+	
+	double *valores = new double[3];
+	
+	double num=0;
+	double den1=0;
+	double den2=0;
+	
+	auto bandaA=object[band1];
+	auto bandaB=object[band2];
+	    
+    if (bandaUsrPuntaje[Bits(bandaA)].size() > bandaUsrPuntaje[Bits(bandaB)].size()){
+        int aux = bandaA;
+        bandaA = bandaB;
+        bandaB = aux;
+    }
+    
+    for(auto key:bandaUsrPuntaje[Bits(bandaA)]){
+    
+        auto usr = key.first;
+        float puntaje = key.second;
+        
+        if(bandaUsrPuntaje[Bits(bandaB)].find(usr) !=   bandaUsrPuntaje[Bits(bandaB)].end()){
+            double avg = averages[usr.getitem()];
+            double num1 = (puntaje - avg);
+            double num2 = (bandaUsrPuntaje[Bits(bandaB)][usr] - avg);
+            num += num1*num2;
+            den1 += pow(num1,2);
+            den2 += pow(num2,2);    
+        }    
+    }
+        
+	valores[0] = num;
+    valores[1] = den1;
+    valores[2] = den2;
+    
+	return valores;
+	
+}
+
 std::pair<Bits,float> Recommender::normalizar(std::string iduser,std::string iditem){
 	auto idu=user[iduser];
 	auto idit=object[iditem];
 	float val=(2*(dataUsers[idu][idit]-min)-(max-min))/(max-min);
 	return std::make_pair(idit,val); 
 }
+
 /*
 float Recommender::prediccion(std::string iduser,string iditem){
 	
