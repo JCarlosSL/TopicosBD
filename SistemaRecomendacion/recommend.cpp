@@ -5,6 +5,8 @@
 #include <sys/stat.h>
 #include <string>
 
+#define epsilon 0.000001f
+
 typedef unsigned int idx;
 
 std::string Recommender::filename = "fernandito.bin";
@@ -147,7 +149,7 @@ void Recommender::generateMatrix(){
 	}
 }
 
-void Recommender::set_dir(std::string &path){
+void Recommender::set_directory(std::string &path){
 	std::string copy_path = path; 
 	size_t i = 0;
 	for (auto unit:copy_path){
@@ -249,21 +251,43 @@ float Recommender::deNormalizerR(float NR){
     ratingDN = (0.5*((NR +1) * diference) + minRating);
     return ratingDN;
 }   
-    /* F
-std::map<std::string, float> Recommender::readmatrix(std::string address){
-    std::fstream fin;
-    fin.open(address, std::ios::binary); 
+
+std::map<int, double> Recommender::get_similars(std::string address){
+    size_t size_items = object.size()*3;
+
+		std::fstream fin;
+		std::map<int, double> similar_items;
+		double *vector_items = new double[size_items];
+		
+		fin.open(address+this->filename, std::ios::binary);
+		fin.read( reinterpret_cast<char *>(&vector_items[0]), size_items*sizeof(double));
+		
+		size_t item = 0;
+		for (size_t idx = 0; idx < size_items; ++idx){
+			
+			double dem1 = vector_items[++idx];
+			double dem2 = vector_items[++idx];
+			double prediction;
+
+			if (fabs(dem1 - dem2) < epsilon)
+				prediction = 0;
+			else
+				prediction = vector_items[idx] / (sqrt(dem1) * sqrt(dem2));
+				
+			similar_items[item] = prediction;
+			item += 1;
+		}
+
+		return similar_items;
 }   
     
 float Recommender::prediction(std::string userA, std::string item){
-    map<string,float> items = readMatrix();
+    //map<int,float> items = get_similars();
     float num = 0, den = 0;
     for(auto key:items){
-        num = key.first + normalizerR(userA,key.second);
-        den = key.first + normalizerR(userA,key.second);
+        num = key.second + normalizerR(userA,key.second);
+        den = key.second + normalizerR(userA,key.second);
     }
         
     return deNormalizerR(num/den);
 }   
-  
-*/
