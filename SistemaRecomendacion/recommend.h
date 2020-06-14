@@ -15,6 +15,7 @@ class Recommender{
 	
 		int max=5;
 		int min=0;
+		static std::string filename;
 	public:
 		Recommender(){};
 		void loadData(string path);
@@ -30,6 +31,8 @@ class Recommender{
 				std::string iduser,std::string iditem);
 		
 		void printMatrix();	
+	private:
+		void set_dir(std::string &path);
 };
 
 
