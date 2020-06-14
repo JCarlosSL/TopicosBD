@@ -178,19 +178,6 @@ void Recommender::generateMatrixDisco(){
 }
 
 
-std::pair<Bits,float> Recommender::normalizar(std::string iduser,std::string iditem){
-	auto idu=user[iduser];
-	auto idit=object[iditem];
-	float val=(2*(dataUsers[idu][idit]-min)-(max-min))/(max-min);
-	return std::make_pair(idit,val); 
-}
-
-/*
-float Recommender::prediccion(std::string iduser,string iditem){
-	
-}*/
-
-
 std::vector<std::pair<Bits,float>> Recommender::computerNearestNeighbors(
 		std::string iduser,int r){
 	auto p=user[iduser];
@@ -253,14 +240,13 @@ float Recommender::deNormalizerR(float NR){
     ratingDN = (0.5*((NR +1) * diference) + minRating);
     return ratingDN;
 }   
-    
-std::map<string, float> readmatrix(string address){
+    /* F
+std::map<std::string, float> Recommender::readmatrix(std::string address){
     std::fstream fin;
-    fin.open(address, std::ios::binary);
-    
+    fin.open(address, std::ios::binary); 
 }   
     
-float prediction(string userA, string item){
+float Recommender::prediction(std::string userA, std::string item){
     map<string,float> items = readMatrix();
     float num = 0, den = 0;
     for(auto key:items){
@@ -271,4 +257,4 @@ float prediction(string userA, string item){
     return deNormalizerR(num/den);
 }   
   
-
+*/

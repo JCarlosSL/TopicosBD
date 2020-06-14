@@ -13,8 +13,8 @@ class Recommender{
 		double *averages;
 		map<Bits,std::map<Bits,float>> bandaUsrPuntaje;//puntaje Banda Usr Puntaje
 	
-		int max=5;
-		int min=0;
+		int maxRating=5;
+		int minRating=0;
 	public:
 		Recommender(){};
 		void loadData(string path,char lim);
@@ -30,7 +30,13 @@ class Recommender{
 				std::string iduser,std::string iditem);
 		
 		void printMatrix();
-		void getAverage();	
+		void getAverage();
+
+		float normalizerR(std::string _user,std::string item);
+		float deNormalizerR(float NR);
+
+		std::map<string,float> readmatrix(std::string address);
+		float prediction(std::string userA, std::string item);	
 };
 
 
