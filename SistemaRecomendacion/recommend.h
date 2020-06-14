@@ -33,14 +33,19 @@ class Recommender{
 				std::string iduser,std::string iditem);
 		float prediction(std::string userA, std::string item);	
 	private:
-		void set_dir(std::string &path);
+		void set_directory(std::string &path);
 		void printMatrix();
 		void getAverage();
 
 		float normalizerR(std::string _user,std::string item);
 		float deNormalizerR(float NR);
 
+<<<<<<< HEAD
 		std::map<std::string,float> readMatrix(std::string address);
+=======
+		std::map<int,double> get_item_similars(std::string address);
+		float prediction(std::string userA, std::string item);	
+>>>>>>> 90ff796fd34fc0cfc2c3f23d93b6ceede3217a67
 };
 
 
