@@ -16,9 +16,11 @@ class Recommender{
 		int max=5;
 		int min=0;
 		static std::string filename;
+		int maxRating=5;
+		int minRating=0;
 	public:
 		Recommender(){};
-		void loadData(string path);
+		void loadData(string path,char lim);
 		std::vector<std::pair<Bits,float>> computerNearestNeighbors(
 				std::string iduser,int r);
 		std::map<Bits,float> influences(std::string _user,int r);
@@ -33,6 +35,14 @@ class Recommender{
 		void printMatrix();	
 	private:
 		void set_dir(std::string &path);
+		void printMatrix();
+		void getAverage();
+
+		float normalizerR(std::string _user,std::string item);
+		float deNormalizerR(float NR);
+
+		std::map<string,float> readmatrix(std::string address);
+		float prediction(std::string userA, std::string item);	
 };
 
 

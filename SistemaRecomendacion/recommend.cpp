@@ -9,7 +9,7 @@ typedef unsigned int idx;
 
 std::string Recommender::filename = "fernandito.bin";
 
-void Recommender::loadData(std::string path){
+void Recommender::loadData(std::string path,char lim){
 	fstream f;
 	f.open(path,std::ios::in);
 	
@@ -20,7 +20,7 @@ void Recommender::loadData(std::string path){
 	Bits tempq;
 	if(getline(f,temp)) cout<<"init \n"; 
 	while(getline(f,temp)){
-		vector<string> fields=split(temp,',');
+		vector<string> fields=split(temp,lim);
 		auto p=user.find(fields[0]);
 		auto q=object.find(fields[1]);
 		if(p==user.end()){
@@ -37,6 +37,7 @@ void Recommender::loadData(std::string path){
 		else tempq=q->second;
 		dataUsers[tempp][tempq]=std::stof(fields[2]);
 	}
+	f.close();
 }
 
 float Recommender::computeSimilarity(
@@ -50,6 +51,7 @@ float Recommender::computeSimilarity(
 		}
 		averages[key.first]=sum/key.second.size();
 	}
+
 	float num=0;
 	float dem1=0;
 	float dem2=0;
@@ -101,21 +103,21 @@ double* Recommender::computeSimilarity3(std::string band1,std::string band2){
 	auto bandaA=object[band1];
 	auto bandaB=object[band2];
 	    
-    if (bandaUsrPuntaje[Bits(bandaA)].size() > bandaUsrPuntaje[Bits(bandaB)].size()){
-        int aux = bandaA;
+    if (bandaUsrPuntaje[bandaA].size() > bandaUsrPuntaje[bandaB].size()){
+        auto aux = bandaA;
         bandaA = bandaB;
         bandaB = aux;
     }
     
-    for(auto key:bandaUsrPuntaje[Bits(bandaA)]){
+    for(auto key:bandaUsrPuntaje[bandaA]){
     
         auto usr = key.first;
         float puntaje = key.second;
         
-        if(bandaUsrPuntaje[Bits(bandaB)].find(usr) !=   bandaUsrPuntaje[Bits(bandaB)].end()){
-            double avg = averages[usr.getitem()];
+        if(bandaUsrPuntaje[bandaB].find(usr) !=   bandaUsrPuntaje[bandaB].end()){
+            double avg = averages[usr.item.to_ulong()];
             double num1 = (puntaje - avg);
-            double num2 = (bandaUsrPuntaje[Bits(bandaB)][usr] - avg);
+            double num2 = (bandaUsrPuntaje[bandaB][usr] - avg);
             num += num1*num2;
             den1 += pow(num1,2);
             den2 += pow(num2,2);    
@@ -158,6 +160,11 @@ void Recommender::generateMatrixDisco(){
   idx path=0;
 	size_t size_file = object.size()*3;
 	for(auto p=object.begin();p!=object.end();){
+
+    int path=0;
+	for(auto p=object.begin();p!=object.end();++p){
+	
+		double *vectorFila = new double[object.size()*3];
 		
 		std::string path1 = std::to_string(path); 
 		double *vectorFila = new double[size_file];
@@ -179,21 +186,10 @@ void Recommender::generateMatrixDisco(){
 
 		delete[] vectorFila;
 		path++;
+		
+		cout<<path<<"\n";
 	}
 }
-
-
-std::pair<Bits,float> Recommender::normalizar(std::string iduser,std::string iditem){
-	auto idu=user[iduser];
-	auto idit=object[iditem];
-	float val=(2*(dataUsers[idu][idit]-min)-(max-min))/(max-min);
-	return std::make_pair(idit,val); 
-}
-
-/*
-float Recommender::prediccion(std::string iduser,string iditem){
-	
-}*/
 
 
 std::vector<std::pair<Bits,float>> Recommender::computerNearestNeighbors(
@@ -245,3 +241,34 @@ float Recommender::recommender(
 	return proyeccion;
 }
 
+float Recommender::normalizerR(std::string _user, std::string item){
+    float ratingN = 0;
+    float diference = maxRating - minRating;
+    ratingN = (2*(dataUsers[user[_user]][object[item]] - minRating) - diference)/diference;
+    return ratingN;
+}   
+    
+float Recommender::deNormalizerR(float NR){
+    float ratingDN = 0;
+    float diference = maxRating - minRating;
+    ratingDN = (0.5*((NR +1) * diference) + minRating);
+    return ratingDN;
+}   
+    /* F
+std::map<std::string, float> Recommender::readmatrix(std::string address){
+    std::fstream fin;
+    fin.open(address, std::ios::binary); 
+}   
+    
+float Recommender::prediction(std::string userA, std::string item){
+    map<string,float> items = readMatrix();
+    float num = 0, den = 0;
+    for(auto key:items){
+        num = key.first + normalizerR(userA,key.second);
+        den = key.first + normalizerR(userA,key.second);
+    }
+        
+    return deNormalizerR(num/den);
+}   
+  
+*/

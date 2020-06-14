@@ -5,6 +5,15 @@ DataPreprocessing::DataPreprocessing(string path){
 	filename=path;	
 }
 
+
+char DataPreprocessing::getlim(){
+	return lim;
+}
+
+char DataPreprocessing::getdiv(){
+	return div;
+}
+
 void DataPreprocessing::DataRecognition(){
 	fstream f;
 	f.open(filename,ios::in);
@@ -19,29 +28,12 @@ void DataPreprocessing::DataRecognition(){
 	f.close();
 }
 
+
 void DataPreprocessing::DataCleaning(){
 	fstream f,g;
 	f.open("temp.csv",ios::out);
 	g.open(filename,ios::in);
-	if(type==0){
-		string temp;
-		vector<string> data;
-		if(getline(g,temp)){
-			data=split(temp,div);
-			vector<string> sub(data.begin()+1,data.end());
-			data=forstrip(sub,lim);	
-		}
-		while(getline(g,temp)){
-			vector<string> fields=split(temp,div);
-			string objeto=strip(fields[0],lim);
-			for(int i=1;i<fields.size();++i){
-				if(fields[i]!=""){
-					f<<data[i-1]<<"\t"<<objeto<<"\t"<<fields[i]<<"\n";
-				}
-			}
-		}
-	}
-	else{
+	if(type==1){
 		string temp;
 		while(getline(g,temp)){
 			vector<string> fields=split(temp,div);
@@ -51,9 +43,9 @@ void DataPreprocessing::DataCleaning(){
 			}
 			f<<"\n";
 		}
+		string syst="cp temp.csv "+filename;
+		system(syst.c_str());
 	}
 	f.close();
 	g.close();
-	string syst="cp temp.csv "+filename;
-	system(syst.c_str());
 }
