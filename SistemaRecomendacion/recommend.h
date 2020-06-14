@@ -40,7 +40,11 @@ class Recommender{
 		float normalizerR(std::string _user,std::string item);
 		float deNormalizerR(float NR);
 
+<<<<<<< HEAD
 		std::map<int,double> get_similars(std::string address);
+=======
+		std::map<std::string,float> readMatrix(std::string address);
+>>>>>>> 3bb76e35ea073b0bf72a3c5231322345a1424842
 		float prediction(std::string userA, std::string item);	
 };
 

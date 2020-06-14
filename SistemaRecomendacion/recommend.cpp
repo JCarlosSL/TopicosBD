@@ -94,16 +94,13 @@ void Recommender::getAverage(){
 	}
 }
 
-double* Recommender::computeSimilarity3(std::string band1,std::string band2){
+double* Recommender::computeSimilarity3(Bits bandaA,Bits bandaB){
 	
 	double *valores = new double[3];
 	
 	double num=0;
 	double den1=0;
 	double den2=0;
-	
-	auto bandaA=object[band1];
-	auto bandaB=object[band2];
 	    
     if (bandaUsrPuntaje[bandaA].size() > bandaUsrPuntaje[bandaB].size()){
         auto aux = bandaA;
@@ -175,6 +172,9 @@ void Recommender::generateMatrixDisco(){
 	        j +=3;
 	        delete[] valores;
 		}
+		//guardar a disco toda la fila ( el vectorFila )
+				
+		
 		set_dir(pathname);
 		ofstream file;
 		file.open(pathname+this->filename, std::ios::in | std::ios::binary);
@@ -238,6 +238,9 @@ float Recommender::recommender(
 	return proyeccion;
 }
 
+
+//normalizacion
+
 float Recommender::normalizerR(std::string _user, std::string item){
     float ratingN = 0;
     float diference = maxRating - minRating;
@@ -280,7 +283,7 @@ std::map<int, double> Recommender::get_similars(std::string address){
 
 		return similar_items;
 }   
-    
+
 float Recommender::prediction(std::string userA, std::string item){
     //map<int,float> items = get_similars();
     float num = 0, den = 0;

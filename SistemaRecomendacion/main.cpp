@@ -4,6 +4,9 @@
 
 using namespace std;
 
+std::string path;
+
+
 int main(){
 
 	//Preprocesamiento de la data
@@ -30,8 +33,7 @@ int main(){
 
 	//cout<<data.computeSimilarity("You Got Mail","The Matrix");
 	//cout<<data.computeSimilarity("Deadmau5","Slightly Stoopid");
-	cout<<data.computeSimilarity3("2344","457")<<"\n";
-	//data.generateMatrix();
+	data.generateMatrixDisco();
 	//cout<<data.computeSimilarity("Alien","Avatar");
 	//auto p=data.user.find("Stephen");
 	//auto q=data.user.find("Amy");
