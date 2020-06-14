@@ -17,7 +17,7 @@ class Recommender{
 		int min=0;
 	public:
 		Recommender(){};
-		void loadData(string path);
+		void loadData(string path,char lim);
 		std::vector<std::pair<Bits,float>> computerNearestNeighbors(
 				std::string iduser,int r);
 		std::map<Bits,float> influences(std::string _user,int r);
@@ -29,7 +29,8 @@ class Recommender{
 		std::pair<Bits,float> normalizar(
 				std::string iduser,std::string iditem);
 		
-		void printMatrix();	
+		void printMatrix();
+		void getAverage();	
 };
 
 

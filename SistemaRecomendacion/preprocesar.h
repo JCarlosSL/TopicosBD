@@ -17,6 +17,8 @@ public:
 	void DataIntregation();
 	void DataReduction();
 	void DataTransformation();
+	char getlim();
+	char getdiv();
 };
 
 
