@@ -29,7 +29,6 @@ class Recommender{
 		void generateMatrixDisco();
 		std::pair<Bits,float> normalizar(
 				std::string iduser,std::string iditem);
-		
 		void printMatrix();	
 	private:
 		void set_dir(std::string &path);
