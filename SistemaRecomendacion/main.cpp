@@ -5,7 +5,25 @@
 using namespace std;
 
 std::string path;
+char limit;
 
+void listmetricas(){
+	cout<<"1 manhattan \n";
+	cout<<"2 euclides \n";
+	cout<<"3 minkowsky \n";
+	cout<<"4 coseno \n";
+	cout<<"5 jaccard \n";
+	cout<<"6 pearson \n";
+}
+
+void list(){
+	cout<<"1. metricas \n";
+	cout<<"2. computeSimilarity \n";
+	cout<<"3. generateMatrixDisco \n";
+	cout<<"4. computenearestNeighbors \n";
+	cout<<"5. recomendacion por usuario 'n";
+	cout<<"6. prediccion por items \n";
+}
 
 int main(){
 
@@ -26,7 +44,6 @@ int main(){
 	//cout<<data.computeSimilarity("Star Wars","Jaws");
 	//data.loadData("Movie_Ratings.csv");
 	data.loadData("ml-latest-small/ratings.csv",',');
-	data.getAverage();
 	//data.loadData("ml-latest/ratings.csv");
 	//data.loadData("bandas.csv");
 	//std::cout<<data.user.size()<<" "<<data.object.size();

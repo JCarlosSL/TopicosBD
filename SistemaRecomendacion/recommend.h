@@ -26,12 +26,12 @@ class Recommender{
 		std::map<Bits,float> influences(std::string _user,int r);
 		float recommender(std::map<Bits,float> inf,std::string obj);
 		float computeSimilarity(std::string band1,std::string band2);
-		double* computeSimilarity3(std::string band1,std::string band2);
+		double* computeSimilarity3(Bits band1,Bits band2);
 		void generateMatrix();
 		void generateMatrixDisco();
 		std::pair<Bits,float> normalizar(
 				std::string iduser,std::string iditem);
-		void printMatrix();	
+		float prediction(std::string userA, std::string item);	
 	private:
 		void set_dir(std::string &path);
 		void printMatrix();
@@ -41,7 +41,6 @@ class Recommender{
 		float deNormalizerR(float NR);
 
 		std::map<std::string,float> readMatrix(std::string address);
-		float prediction(std::string userA, std::string item);	
 };
 
 

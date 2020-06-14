@@ -128,7 +128,7 @@ double* Recommender::computeSimilarity3(Bits bandaA,Bits bandaB){
 	return valores;
 	
 }
-
+/*
 void Recommender::generateMatrix(){
 	int i=0;
 	for(auto p=object.begin();p!=object.end();){
@@ -143,7 +143,7 @@ void Recommender::generateMatrix(){
 		++i;
 	}
 }
-
+*/
 void Recommender::set_dir(std::string &path){
 	std::string copy_path = path; 
 	size_t i = 0;
@@ -163,7 +163,7 @@ void Recommender::generateMatrixDisco(){
 		int j=0;
 
 		for(auto q=object.begin();q!=object.end() ;++q){
-	        double *valores = computeSimilarity3(p->first,q->first);
+	        double *valores = computeSimilarity3(p->second,q->second);
 	        vectorFila[j] = valores[0];
 	        vectorFila[j+1] = valores[1];
 	        vectorFila[j+2] = valores[2];
