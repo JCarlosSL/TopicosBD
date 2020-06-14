@@ -144,15 +144,14 @@ void Recommender::generateMatrix(){
 }
 
 void Recommender::generateMatrixDisco(){
-    int ixx=0;
-	for(auto p=object.begin();p!=object.end();){
-		++p;
-		auto q=p;
-		
+
+    int path=0;
+	for(auto p=object.begin();p!=object.end();++p){
+	
 		double *vectorFila = new double[object.size()*3];
 		
 		int j=0;
-		for(;q!=object.end() ;++q){
+		for(auto q=object.begin();q!=object.end() ;++q){
 	        double *valores = computeSimilarity3(p->first,q->first);
 	        vectorFila[j] = valores[0];
 	        vectorFila[j+1] = valores[1];
@@ -173,7 +172,9 @@ void Recommender::generateMatrixDisco(){
 		
 		
 		delete[] vectorFila;
-		cout<<ixx++<<"\n";
+		path++;
+		
+		cout<<path<<"\n";
 	}
 }
 
