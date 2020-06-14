@@ -124,19 +124,6 @@ double* Recommender::computeSimilarity3(std::string band1,std::string band2){
 	
 }
 
-std::pair<Bits,float> Recommender::normalizar(std::string iduser,std::string iditem){
-	auto idu=user[iduser];
-	auto idit=object[iditem];
-	float val=(2*(dataUsers[idu][idit]-min)-(max-min))/(max-min);
-	return std::make_pair(idit,val); 
-}
-
-/*
-float Recommender::prediccion(std::string iduser,string iditem){
-	
-}*/
-
-
 void Recommender::generateMatrix(){
 	int i=0;
 	for(auto p=object.begin();p!=object.end();){
@@ -185,6 +172,20 @@ void Recommender::generateMatrixDisco(){
 		cout<<ixx++<<"\n";
 	}
 }
+
+
+std::pair<Bits,float> Recommender::normalizar(std::string iduser,std::string iditem){
+	auto idu=user[iduser];
+	auto idit=object[iditem];
+	float val=(2*(dataUsers[idu][idit]-min)-(max-min))/(max-min);
+	return std::make_pair(idit,val); 
+}
+
+/*
+float Recommender::prediccion(std::string iduser,string iditem){
+	
+}*/
+
 
 std::vector<std::pair<Bits,float>> Recommender::computerNearestNeighbors(
 		std::string iduser,int r){
