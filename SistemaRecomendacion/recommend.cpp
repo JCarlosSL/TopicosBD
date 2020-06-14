@@ -272,7 +272,7 @@ std::map<int, double> Recommender::get_similars(std::string address){
 			double dem2 = vector_items[++idx];
 			double prediction;
 
-			if (fabs(dem1 - dem2) < epsilon)
+			if (fabs(dem1 - dem2) < dem1 * epsilon)
 				prediction = 0;
 			else
 				prediction = vector_items[idx] / (sqrt(dem1) * sqrt(dem2));
@@ -287,7 +287,7 @@ std::map<int, double> Recommender::get_similars(std::string address){
 float Recommender::prediction(std::string userA, std::string item){
     //map<int,float> items = get_similars();
     float num = 0, den = 0;
-    for(auto key:items){
+    for(auto key:items){items
         num = key.second + normalizerR(userA,key.second);
         den = key.second + normalizerR(userA,key.second);
     }
