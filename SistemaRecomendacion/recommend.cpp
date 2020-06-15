@@ -5,9 +5,9 @@
 #include <sys/stat.h>
 #include <string>
 
-#define epsilon 0.000001f
+#define epsilon 0.0000001f
 
-typedef unsigned int idx;
+typedef int idx;
 
 
 std::string Recommender::filename = "sim.bin";
@@ -24,16 +24,16 @@ void Recommender::loadData(std::string path,char lim){
 	if(getline(f,temp)) cout<<"init \n"; 
 	while(getline(f,temp)){
 		vector<string> fields=split(temp,lim);
-		std::map<std::string,Bits>::iterator p=user.find(fields[0]);
-		std::map<std::string,Bits>::iterator q=object.find(fields[1]);
+		std::map<std::string,Bits>::iterator p=user.find(trim(fields[0]));
+		std::map<std::string,Bits>::iterator q=object.find(trim(fields[1]));
 		if(p==user.end()){
-			user[fields[0]]=Bits(cp);
+			user[trim(fields[0])]=Bits(cp);
 			tempp=Bits(cp);
 			cp++;
 		}
 		else tempp=p->second;
 		if(q==object.end()){
-			object[fields[1]]=Bits(cq);
+			object[trim(fields[1])]=Bits(cq);
 			tempq=Bits(cq);
 			cq++;
 		}
@@ -148,21 +148,27 @@ void Recommender::generateMatrix(){
 }
 */
 
-void Recommender::set_directory(std::string &path){
-	std::string copy_path = path; 
+std::string Recommender::set_directory(std::string &path){
+	std::string new_path="";
+	std::string slash="/";
 	size_t i = 0;
-	for (auto unit:copy_path){
-		path[i] += '/';
+	for (int unit=0;unit<path.size();++unit){
+		new_path += path[unit]+slash;
 		++i;
 	}
+	return "matriz/" +new_path;
 }
 
 void Recommender::generateMatrixDisco(){
+<<<<<<< HEAD
   	idx path=0;
+=======
+        int path = 0;
+>>>>>>> e4850056a66b8a0821b8c016714e2ab4b680f8db
 	size_t size_file = object.size()*3;
 	for(auto p=object.begin();p!=object.end();++p){
 
-		std::string pathname = std::to_string(path); 
+		std::string pathname =std::to_string(path); 
 		double *vectorFila = new double[size_file];
 		int j=0;
 
@@ -176,17 +182,17 @@ void Recommender::generateMatrixDisco(){
 		}
 		//guardar a disco toda la fila ( el vectorFila )
 				
-		
-		set_directory(pathname);
+		std::string new_path=set_directory(pathname);
+		mkdir(new_path.c_str(),0777);
 		ofstream file;
-		file.open(pathname+this->filename, std::ios::in | std::ios::binary);
+		file.open(new_path.c_str()+this->filename, std::ios::out|std::ios::in | std::ios::binary);
 		file.write( reinterpret_cast<char *>(&vectorFila[0]), size_file*sizeof(double) );
 		file.close();
 
 		delete[] vectorFila;
 		path++;
 		
-		cout<<path<<"\n";
+		//cout<<path<<"\n";
 	}
 }
 
@@ -274,7 +280,7 @@ std::map<int, double> Recommender::get_items_similars(std::string address){
 			double dem2 = vector_items[++idx];
 			double prediction;
 
-			if (fabs(dem1 - dem2) < dem1 * epsilon)
+			if (fabs(dem1) <= epsilon || fabs(dem2) <= epsilon)
 				prediction = 0;
 			else
 				prediction = vector_items[idx] / (sqrt(dem1) * sqrt(dem2));
@@ -292,7 +298,7 @@ float Recommender::prediction(std::string userA, std::string item){
 	for(auto it:str){
 		address += it + "/";
 	}
-	address = address + "p.bin";
+	address = address + "p.gbin";
 
 	std::map<int,double> items = get_items_similars(address);
     

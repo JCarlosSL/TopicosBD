@@ -33,7 +33,7 @@ class Recommender{
 		std::pair<Bits,float> normalizar(
 				std::string iduser,std::string iditem);
 	private:
-		void set_directory(std::string &path);
+		std::string set_directory(std::string &path);
 		void printMatrix();
 		void getAverage();
 

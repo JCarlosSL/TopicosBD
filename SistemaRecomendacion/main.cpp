@@ -49,7 +49,7 @@ int main(){
 	//data.loadData("bandas.csv");
 	//std::cout<<data.user.size()<<" "<<data.object.size();
 
-	//cout<<data.computeSimilarity("You Got Mail","The Matrix");
+	//cout<<data.computeSimilarity("213","2131");
 	//cout<<data.computeSimilarity("Deadmau5","Slightly Stoopid");
 	data.generateMatrixDisco();
 	//cout<<data.computeSimilarity("Alien","Avatar");
