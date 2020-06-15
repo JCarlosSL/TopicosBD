@@ -24,16 +24,16 @@ void Recommender::loadData(std::string path,char lim){
 	if(getline(f,temp)) cout<<"init \n"; 
 	while(getline(f,temp)){
 		vector<string> fields=split(temp,lim);
-		std::map<std::string,Bits>::iterator p=user.find(fields[0]);
-		std::map<std::string,Bits>::iterator q=object.find(fields[1]);
+		std::map<std::string,Bits>::iterator p=user.find(trim(fields[0]));
+		std::map<std::string,Bits>::iterator q=object.find(trim(fields[1]));
 		if(p==user.end()){
-			user[fields[0]]=Bits(cp);
+			user[trim(fields[0])]=Bits(cp);
 			tempp=Bits(cp);
 			cp++;
 		}
 		else tempp=p->second;
 		if(q==object.end()){
-			object[fields[1]]=Bits(cq);
+			object[trim(fields[1])]=Bits(cq);
 			tempq=Bits(cq);
 			cq++;
 		}
@@ -179,14 +179,14 @@ void Recommender::generateMatrixDisco(){
 		
 		set_directory(pathname);
 		ofstream file;
-		file.open(pathname+this->filename, std::ios::in | std::ios::binary);
+		file.open(pathname+this->filename, std::ios::out|std::ios::in | std::ios::binary);
 		file.write( reinterpret_cast<char *>(&vectorFila[0]), size_file*sizeof(double) );
 		file.close();
 
 		delete[] vectorFila;
 		path++;
 		
-		cout<<path<<"\n";
+		//cout<<path<<"\n";
 	}
 }
 
