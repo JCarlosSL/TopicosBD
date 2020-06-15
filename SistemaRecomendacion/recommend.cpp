@@ -179,11 +179,7 @@ void Recommender::generateMatrixDisco(){
 		//guardar a disco toda la fila ( el vectorFila )
 				
 		std::string new_path=set_directory(pathname);
-		//char *new_path1 = &new_path;
 		mkdir(new_path.c_str(),0777);
-		std::string directorio = "mkdir "+new_path;
-		char *a=&new_path[0];
-		system(a);
 		ofstream file;
 		file.open(new_path.c_str()+this->filename, std::ios::out|std::ios::in | std::ios::binary);
 		file.write( reinterpret_cast<char *>(&vectorFila[0]), size_file*sizeof(double) );
