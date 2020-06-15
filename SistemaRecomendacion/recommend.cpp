@@ -9,6 +9,7 @@
 
 typedef unsigned int idx;
 
+
 std::string Recommender::filename = "sim.bin";
 
 void Recommender::loadData(std::string path,char lim){
@@ -23,8 +24,8 @@ void Recommender::loadData(std::string path,char lim){
 	if(getline(f,temp)) cout<<"init \n"; 
 	while(getline(f,temp)){
 		vector<string> fields=split(temp,lim);
-		auto p=user.find(fields[0]);
-		auto q=object.find(fields[1]);
+		std::map<std::string,Bits>::iterator p=user.find(fields[0]);
+		std::map<std::string,Bits>::iterator q=object.find(fields[1]);
 		if(p==user.end()){
 			user[fields[0]]=Bits(cp);
 			tempp=Bits(cp);
@@ -37,7 +38,7 @@ void Recommender::loadData(std::string path,char lim){
 			cq++;
 		}
 		else tempq=q->second;
-		dataUsers[tempp][tempq]=std::stof(fields[2]);
+		dataUsers[tempp][tempq]=std::stof(trim(fields[2]));
 	}
 	f.close();
 }
@@ -130,7 +131,7 @@ double* Recommender::computeSimilarity3(Bits bandaA,Bits bandaB){
 	return valores;
 	
 }
-
+/*
 void Recommender::generateMatrix(){
 	int i=0;
 	for(auto p=object.begin();p!=object.end();){
@@ -145,6 +146,7 @@ void Recommender::generateMatrix(){
 		++i;
 	}
 }
+*/
 
 void Recommender::set_directory(std::string &path){
 	std::string copy_path = path; 
@@ -165,7 +167,7 @@ void Recommender::generateMatrixDisco(){
 		int j=0;
 
 		for(auto q=object.begin();q!=object.end() ;++q){
-	        double *valores = computeSimilarity3(p->first,q->first);
+	        double *valores = computeSimilarity3(p->second,q->second);
 	        vectorFila[j] = valores[0];
 	        vectorFila[j+1] = valores[1];
 	        vectorFila[j+2] = valores[2];
@@ -285,11 +287,19 @@ std::map<int, double> Recommender::get_items_similars(std::string address){
 }   
 
 float Recommender::prediction(std::string userA, std::string item){
-    //map<int,float> items = get_similars();
-    float num = 0, den = 0;
-    for(auto key:items){items
-        num = key.second + normalizerR(userA,key.second);
-        den = key.second + normalizerR(userA,key.second);
+    string str = object[item].item.to_string();
+	string address;
+	for(auto it:str){
+		address += it + "/";
+	}
+	address = address + "p.bin";
+
+	std::map<int,double> items = get_items_similars(address);
+    
+	float num = 0, den = 0;
+    for(auto key:items){
+        num = key.second + normalizerR(userA,item);
+        den = key.second + normalizerR(userA,item);
     }
         
     return deNormalizerR(num/den);

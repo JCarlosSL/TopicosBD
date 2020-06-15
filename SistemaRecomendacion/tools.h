@@ -15,6 +15,13 @@ vector<string> split(const string &s,char delimiter){
 	return tokens;
 }
 
+string trim(const string &str){
+	if(str.front() == '"' || str.front() == '\''){
+		return str.substr(1,str.size()-2);
+	}
+	return str;
+}
+
 string strip(const string &str,char delimiter){
 	size_t first = str.find_first_not_of(delimiter);
 	size_t last = str.find_last_not_of(delimiter);
@@ -43,6 +50,8 @@ bool sortbysec(const std::pair<Bits,float> &a,
 		const std::pair<Bits,float> &b){
 	return (a.second>b.second);
 }
+
+
 
 
 #endif

@@ -3,15 +3,16 @@
 #include "bits.h"
 
 typedef std::pair<Bits,float> pbits;
+using namespace std;
 
 class Recommender{
 	public:
-		map<string,Bits> user;
-		map<string,Bits> object;
-		map<Bits,std::map<Bits,float>> dataUsers;//puntaje Usr Banda Puntaje
-		map<Bits,std::map<Bits,float>> dataSimil;
+		std::map<std::string,Bits> user;
+		std::map<std::string,Bits> object;
+		std::map<Bits,std::map<Bits,float>> dataUsers;//puntaje Usr Banda Puntaje
+		std::map<Bits,std::map<Bits,float>> dataSimil;
 		double *averages;
-		map<Bits,std::map<Bits,float>> bandaUsrPuntaje;//puntaje Banda Usr Puntaje
+		std::map<Bits,std::map<Bits,float>> bandaUsrPuntaje;//puntaje Banda Usr Puntaje
 	
 		int max=5;
 		int min=0;
@@ -31,7 +32,6 @@ class Recommender{
 		void generateMatrixDisco();
 		std::pair<Bits,float> normalizar(
 				std::string iduser,std::string iditem);
-		void printMatrix();	
 	private:
 		void set_directory(std::string &path);
 		void printMatrix();
@@ -40,6 +40,8 @@ class Recommender{
 		float normalizerR(std::string _user,std::string item);
 		float deNormalizerR(float NR);
 
+		std::map<std::string,float> readMatrix(std::string address);
+		std::map<int,double> get_item_similars(std::string address);
 		std::map<int,double> get_items_similars(std::string address);
 		float prediction(std::string userA, std::string item);	
 };
