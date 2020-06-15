@@ -5,7 +5,7 @@
 #include <sys/stat.h>
 #include <string>
 
-#define epsilon 0.000001f
+#define epsilon 0.0000001f
 
 typedef int idx;
 
@@ -149,17 +149,17 @@ void Recommender::generateMatrix(){
 */
 
 void Recommender::set_directory(std::string &path){
-	std::string copy_path = path; 
+	std::string new_path; 
 	size_t i = 0;
-	for (auto unit:copy_path){
-		std::cout<<unit<<"\n";
-		path[i] += unit+'/';
+	for (auto unit:path){
+		new_path += unit + '/';
 		++i;
 	}
+	path = new_path;
 }
 
 void Recommender::generateMatrixDisco(){
-  	idx path=0;
+  idx path = 0;
 	size_t size_file = object.size()*3;
 	for(auto p=object.begin();p!=object.end();++p){
 
@@ -275,7 +275,7 @@ std::map<int, double> Recommender::get_items_similars(std::string address){
 			double dem2 = vector_items[++idx];
 			double prediction;
 
-			if (fabs(dem1) < dem1 * epsilon || fabs(dem2) < dem2 * epsilon)
+			if (fabs(dem1) <= epsilon || fabs(dem2) <= epsilon)
 				prediction = 0;
 			else
 				prediction = vector_items[idx] / (sqrt(dem1) * sqrt(dem2));
