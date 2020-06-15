@@ -43,8 +43,8 @@ int main(){
 	//data.loadData("BX-Book-Ratings.csv");
 	//data.loadData("ml-25m/ratings.csv");
 	//cout<<data.computeSimilarity("Star Wars","Jaws");
-	//data.loadData("Movie_Ratings.csv");
-	data.loadData("ml-latest-small/ratings.csv",',');
+	data.loadData("Movie_Ratings.csv",'\t');
+	//data.loadData("ml-latest-small/ratings.csv",',');
 	//data.loadData("ml-latest/ratings.csv");
 	//data.loadData("bandas.csv");
 	//std::cout<<data.user.size()<<" "<<data.object.size();

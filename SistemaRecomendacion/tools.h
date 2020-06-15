@@ -16,7 +16,7 @@ vector<string> split(const string &s,char delimiter){
 }
 
 string trim(const string &str){
-	if(str.front() == '"' || str.front() == '\''){
+	if(str.front() == '"'){
 		return str.substr(1,str.size()-2);
 	}
 	return str;

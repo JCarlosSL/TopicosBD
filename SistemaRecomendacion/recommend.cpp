@@ -180,8 +180,8 @@ void Recommender::generateMatrixDisco(){
 				
 		std::string new_path=set_directory(pathname);
 		mkdir(new_path.c_str(),0777);
-		ofstream file;
-		file.open(new_path.c_str()+this->filename, std::ios::out|std::ios::in | std::ios::binary);
+		fstream file;
+		file.open(new_path.c_str()+this->filename,std::ios::out|std::ios::binary);
 		file.write( reinterpret_cast<char *>(&vectorFila[0]), size_file*sizeof(double) );
 		file.close();
 
