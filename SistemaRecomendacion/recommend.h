@@ -10,7 +10,7 @@ class Recommender{
 		std::map<std::string,int> user;
 		std::map<std::string,int> object;
 		std::map<Bits,std::map<Bits,float>> dataUsers;//puntaje Usr Banda Puntaje
-		double *averages;
+		float *averages;
 		std::map<Bits,std::map<Bits,float>> bandaUsrPuntaje;//puntaje Banda Usr Puntaje
 	
 		static std::string filename;
@@ -24,7 +24,7 @@ class Recommender{
 		std::map<Bits,float> influences(std::string _user,int r);
 		float recommender(std::map<Bits,float> inf,std::string obj);
 		float computeSimilarity(std::string band1,std::string band2);
-		double* computeSimilarity3(Bits band1,Bits band2);
+		float* computeSimilarity3(Bits band1,Bits band2);
 		void generateMatrix();
 		void generateMatrixDisco();
 		std::pair<Bits,float> normalizar(
@@ -38,8 +38,8 @@ class Recommender{
 		float deNormalizerR(float NR);
 
 		std::map<std::string,float> readMatrix(std::string address);
-		std::map<int,double> get_item_similars(std::string address);
-		std::map<int,double> get_items_similars(std::string address);
+		std::map<int,float> get_item_similars(std::string address);
+		std::map<int,float> get_items_similars(std::string address);
 		float prediction(std::string userA, std::string item);	
 };
 

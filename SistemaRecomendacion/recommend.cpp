@@ -80,10 +80,10 @@ float Recommender::computeSimilarity(
 
 void Recommender::getAverage(){
     //averages std::map<Bits,float> averages;
-    averages = new double[user.size()]; // sin free, es para la clase Recommender
+    averages = new float[user.size()]; // sin free, es para la clase Recommender
     int i=0;
     for(auto key:dataUsers){
-		double sum=0.0;
+		float sum=0.0;
 		for(auto val:key.second){
 			sum+=val.second;
 		}	    
@@ -98,13 +98,13 @@ void Recommender::getAverage(){
 	}
 }
 
-double* Recommender::computeSimilarity3(Bits bandaA,Bits bandaB){
+float* Recommender::computeSimilarity3(Bits bandaA,Bits bandaB){
 	
-	double *valores = new double[3];
+	float *valores = new float[3];
 	
-	double num=0;
-	double den1=0;
-	double den2=0;
+	float num=0;
+	float den1=0;
+	float den2=0;
 	    
     if (bandaUsrPuntaje[bandaA].size() > bandaUsrPuntaje[bandaB].size()){
         auto aux = bandaA;
@@ -118,9 +118,9 @@ double* Recommender::computeSimilarity3(Bits bandaA,Bits bandaB){
         float puntaje = key.second;
         
         if(bandaUsrPuntaje[bandaB].find(usr) !=   bandaUsrPuntaje[bandaB].end()){
-            double avg = averages[usr.item.to_ulong()];
-            double num1 = (puntaje - avg);
-            double num2 = (bandaUsrPuntaje[bandaB][usr] - avg);
+            float avg = averages[usr.item.to_ulong()];
+            float num1 = (puntaje - avg);
+            float num2 = (bandaUsrPuntaje[bandaB][usr] - avg);
             num += num1*num2;
             den1 += pow(num1,2);
             den2 += pow(num2,2);    
@@ -161,12 +161,12 @@ void Recommender::generateMatrixDisco(){
 	size_t size_file = object.size()*3;
 	for(int path=0;path<object.size();path++){
 		std::string pathname =std::to_string(path); 
-		double *vectorFila = new double[size_file];
+		float *vectorFila = new float[size_file];
 		
 		int h=0;
 
 		for(int j = 0 ; j < object.size()*3 ; j+=3){
-	        double *valores = computeSimilarity3(Bits(path),Bits(h));
+	        float *valores = computeSimilarity3(Bits(path),Bits(h));
 	        vectorFila[j] = valores[0];
 	        vectorFila[j+1] = valores[1];
 	        vectorFila[j+2] = valores[2];
@@ -179,7 +179,7 @@ void Recommender::generateMatrixDisco(){
 		mkdir(new_path.c_str(),0777);
 		fstream file;
 		file.open(new_path.c_str()+this->filename,std::ios::out|std::ios::binary);
-		file.write( reinterpret_cast<char *>(&vectorFila[0]), size_file*sizeof(double) );
+		file.write( reinterpret_cast<char *>(&vectorFila[0]), size_file*sizeof(float) );
 		file.close();
 
 		delete[] vectorFila;
@@ -254,31 +254,31 @@ float Recommender::deNormalizerR(float NR){
     return ratingDN;
 }   
 
-std::map<int, double> Recommender::get_items_similars(std::string address){
+std::map<int, float> Recommender::get_items_similars(std::string address){
     size_t size_items = object.size()*3;
 
 		std::fstream fin;
 
-		std::map<int, double> similar_items;
-		double *vector_items = new double[size_items];
+		std::map<int, float> similar_items;
+		float *vector_items = new float[size_items];
 		
 		fin.open(address+filename, std::ios::binary | std::ios::in);
-		fin.read( reinterpret_cast<char *>(&vector_items[0]), size_items*sizeof(double));
+		fin.read( reinterpret_cast<char *>(&vector_items[0]), size_items*sizeof(float));
 		
 		size_t item = 0;
 		for (size_t idx = 0; idx < size_items; ++idx){
 			
-			double num = vector_items[idx];
-			double dem1 = vector_items[++idx];
-			double dem2 = vector_items[++idx];
-			double prediction;
+			float num = vector_items[idx];
+			float dem1 = vector_items[++idx];
+			float dem2 = vector_items[++idx];
+			float prediction;
 			if (fabs(dem1) <= epsilon || fabs(dem2) <= epsilon)
 				prediction = 0;
 			else
 				prediction = num / (sqrt(dem1) * sqrt(dem2));	
 			similar_items[item] = prediction;
 			item += 1;
-			//cout<<prediction<<" "<<dem1<<" "<<dem2<<"\n";
+		//	cout<<prediction<<" "<<dem1<<" "<<dem2<<"\n";
 		}
 
 		return similar_items;
@@ -295,7 +295,7 @@ float Recommender::prediction(std::string userA, std::string item){
 
 	//relax	
 	address = address;
-	std::map<int,double> items = get_items_similars(address);
+	std::map<int,float> items = get_items_similars(address);
 
 /*	
 	for(auto it:items){
@@ -306,7 +306,7 @@ float Recommender::prediction(std::string userA, std::string item){
 	float num = 0, den = 0;
     	for(auto key:items){
 			if(keyitem!=key.first){
-				//cout<<key.first<<" "<<key.second<<"\n";
+		//		cout<<key.first<<" "<<key.second<<"\n";
 				auto NR=normalizerR(Bits(user[userA]),Bits(key.first));
     	    	num += key.second * NR;
 				den += fabs(key.second);
