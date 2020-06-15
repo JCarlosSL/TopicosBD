@@ -160,11 +160,7 @@ std::string Recommender::set_directory(std::string &path){
 }
 
 void Recommender::generateMatrixDisco(){
-<<<<<<< HEAD
-  	idx path=0;
-=======
-        int path = 0;
->>>>>>> e4850056a66b8a0821b8c016714e2ab4b680f8db
+  int path = 0;
 	size_t size_file = object.size()*3;
 	for(auto p=object.begin();p!=object.end();++p){
 
