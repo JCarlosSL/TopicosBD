@@ -133,22 +133,16 @@ double* Recommender::computeSimilarity3(Bits bandaA,Bits bandaB){
 	return valores;
 	
 }
-/*
+
 void Recommender::generateMatrix(){
 	int i=0;
-	for(auto p=object.begin();p!=object.end();){
-		++p;
-		auto q=p;
-		std::cout<<i<<std::endl;
-		for(;q!=object.end() ;++q){
-			float sim=computeSimilarity(p->first,q->first);
-			dataSimil[p->second][q->second]=sim;
-			std::cout<<sim<<" "<<p->first<<" "<<q->first<<"\n";
-		}
-		++i;
+	std::string item="Kacey Musgraves";
+	for(auto p:object ){
+			float sim=computeSimilarity(item,p.first);
+			std::cout<<p.second<<" "<<sim<<"\n";
 	}
 }
-*/
+
 
 std::string Recommender::set_directory(std::string &path){
 	std::string new_path="";
@@ -174,9 +168,8 @@ void Recommender::generateMatrixDisco(){
 	        vectorFila[j] = valores[0];
 	        vectorFila[j+1] = valores[1];
 	        vectorFila[j+2] = valores[2];
-	//	std::cout<<valores[0]<<" "<<valores[1]<<" "<<valores[2]<<std::endl;
 	        delete[] valores;
-		h+=1;
+			h+=1;
 		}
 		//guardar a disco toda la fila ( el vectorFila )
 				
@@ -188,8 +181,6 @@ void Recommender::generateMatrixDisco(){
 		file.close();
 
 		delete[] vectorFila;
-		path++;
-		
 		//cout<<path<<"\n";
 	}
 }
@@ -268,7 +259,8 @@ std::map<int, double> Recommender::get_items_similars(std::string address){
 		std::map<int, double> similar_items;
 		double *vector_items = new double[size_items];
 		
-		fin.open(address+Recommender::filename, std::ios::binary);
+		std::cout<<address+filename<<std::endl;
+		fin.open(address+filename, std::ios::binary | std::ios::in);
 		fin.read( reinterpret_cast<char *>(&vector_items[0]), size_items*sizeof(double));
 		
 		size_t item = 0;
@@ -277,13 +269,13 @@ std::map<int, double> Recommender::get_items_similars(std::string address){
 			double dem1 = vector_items[++idx];
 			double dem2 = vector_items[++idx];
 			double prediction;
-
 			if (fabs(dem1) <= epsilon || fabs(dem2) <= epsilon)
 				prediction = 0;
 			else
 				prediction = vector_items[idx] / (sqrt(dem1) * sqrt(dem2));	
 			similar_items[item] = prediction;
 			item += 1;
+			//cout<<prediction<<" "<<dem1<<" "<<dem2<<"\n";
 		}
 
 		return similar_items;
@@ -292,19 +284,19 @@ std::map<int, double> Recommender::get_items_similars(std::string address){
 float Recommender::prediction(std::string userA, std::string item){
        int iditem = object[item].item.to_ulong();
        string str = std::to_string(iditem);
-	string address="";
+	string address="matriz/";
 	string slash="/";
 	for(auto it:str){
 		address += it + slash;
 	}
-	address = address + "sim.bin";
+	
+	address = address;
 	std::map<int,double> items = get_items_similars(address);
 
-	
 	for(auto it:items){
 		std::cout<<it.first<<" "<<it.second<<"\n";
 	}
-
+	
 	float num = 0, den = 0;
     for(auto key:items){
         num += key.second * normalizerR(userA,item);
