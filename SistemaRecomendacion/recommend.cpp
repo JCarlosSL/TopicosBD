@@ -148,22 +148,23 @@ void Recommender::generateMatrix(){
 }
 */
 
-void Recommender::set_directory(std::string &path){
-	std::string new_path; 
+std::string Recommender::set_directory(std::string &path){
+	std::string new_path="";
+	std::string slash="/";
 	size_t i = 0;
-	for (auto unit:path){
-		new_path += unit + '/';
+	for (int unit=0;unit<path.size();++unit){
+		new_path += path[unit]+slash;
 		++i;
 	}
-	path = new_path;
+	return "matriz/" +new_path;
 }
 
 void Recommender::generateMatrixDisco(){
-  idx path = 0;
+        int path = 0;
 	size_t size_file = object.size()*3;
 	for(auto p=object.begin();p!=object.end();++p){
 
-		std::string pathname = std::to_string(path); 
+		std::string pathname =std::to_string(path); 
 		double *vectorFila = new double[size_file];
 		int j=0;
 
@@ -177,10 +178,14 @@ void Recommender::generateMatrixDisco(){
 		}
 		//guardar a disco toda la fila ( el vectorFila )
 				
-		set_directory(pathname);
-		mkdir(pathname.c_str(),0777);
+		std::string new_path=set_directory(pathname);
+		//char *new_path1 = &new_path;
+		mkdir(new_path.c_str(),0777);
+		std::string directorio = "mkdir "+new_path;
+		char *a=&new_path[0];
+		system(a);
 		ofstream file;
-		file.open(pathname+this->filename, std::ios::out|std::ios::in | std::ios::binary);
+		file.open(new_path.c_str()+this->filename, std::ios::out|std::ios::in | std::ios::binary);
 		file.write( reinterpret_cast<char *>(&vectorFila[0]), size_file*sizeof(double) );
 		file.close();
 
