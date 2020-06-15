@@ -40,13 +40,6 @@ public:
 	bool operator == (const Bits & b) const{
 		return this->item.to_ulong() ==b.item.to_ulong();
 	}
-	//int operator +(const Bits & b){
-	//	return rating+b.rating;
-	//}
-	
-	//int operator +(const int &a){
-	//	return rating+a;
-	//}
 
 	friend std::ostream& operator<<(std::ostream &out,const Bits &b){
 		out<<b.item.to_ulong();

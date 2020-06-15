@@ -54,7 +54,7 @@ int main(){
 	data.getAverage();
 	data.generateMatrixDisco();
 	//cout<<data.computeSimilarity("Alien","Avatar");
-	data.generateMatrix();
+	//data.generateMatrix();
 	cout<<data.prediction("David","Kacey Musgraves");
 	//auto p=data.user.find("Stephen");
 	//auto q=data.user.find("Amy");

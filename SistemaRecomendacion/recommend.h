@@ -7,18 +7,15 @@ using namespace std;
 
 class Recommender{
 	public:
-		std::map<std::string,Bits> user;
-		std::map<std::string,Bits> object;
+		std::map<std::string,int> user;
+		std::map<std::string,int> object;
 		std::map<Bits,std::map<Bits,float>> dataUsers;//puntaje Usr Banda Puntaje
-		std::map<Bits,std::map<Bits,float>> dataSimil;
 		double *averages;
 		std::map<Bits,std::map<Bits,float>> bandaUsrPuntaje;//puntaje Banda Usr Puntaje
 	
-		int max=5;
-		int min=0;
 		static std::string filename;
 		int maxRating=5;
-		int minRating=0;
+		int minRating=1;
 	public:
 		Recommender(){};
 		void loadData(string path,char lim);
