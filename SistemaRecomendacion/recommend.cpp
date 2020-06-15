@@ -307,7 +307,7 @@ float Recommender::prediction(std::string userA, std::string item){
         num += key.second * normalizerR(userA,item);
         den += key.second * normalizerR(userA,item);
     }
-    if(fabs(den) < den * epsilon)
+    if(fabs(den) <= den * epsilon)
 		return 0;
 	else
     	return deNormalizerR(num/den);
