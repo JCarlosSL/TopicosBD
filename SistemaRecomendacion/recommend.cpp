@@ -39,6 +39,8 @@ void Recommender::loadData(std::string path,char lim){
 		}
 		else tempq=q->second;
 		dataUsers[tempp][tempq]=std::stof(trim(fields[2]));
+		bandaUsrPuntaje[tempq][tempp]=std::stof(trim(fields[2]));
+		
 	}
 	f.close();
 }
@@ -160,21 +162,21 @@ std::string Recommender::set_directory(std::string &path){
 }
 
 void Recommender::generateMatrixDisco(){
-  int path = 0;
 	size_t size_file = object.size()*3;
-	for(auto p=object.begin();p!=object.end();++p){
-
+	for(int path=0;path<object.size();path++){
 		std::string pathname =std::to_string(path); 
 		double *vectorFila = new double[size_file];
-		int j=0;
+		
+		int h=0;
 
-		for(auto q=object.begin();q!=object.end() ;++q){
-	        double *valores = computeSimilarity3(p->second,q->second);
+		for(int j = 0 ; j < object.size()*3 ; j+=3){
+	        double *valores = computeSimilarity3(Bits(path),Bits(h));
 	        vectorFila[j] = valores[0];
 	        vectorFila[j+1] = valores[1];
 	        vectorFila[j+2] = valores[2];
-	        j +=3;
+	//	std::cout<<valores[0]<<" "<<valores[1]<<" "<<valores[2]<<std::endl;
 	        delete[] valores;
+		h+=1;
 		}
 		//guardar a disco toda la fila ( el vectorFila )
 				
@@ -279,8 +281,7 @@ std::map<int, double> Recommender::get_items_similars(std::string address){
 			if (fabs(dem1) <= epsilon || fabs(dem2) <= epsilon)
 				prediction = 0;
 			else
-				prediction = vector_items[idx] / (sqrt(dem1) * sqrt(dem2));
-				
+				prediction = vector_items[idx] / (sqrt(dem1) * sqrt(dem2));	
 			similar_items[item] = prediction;
 			item += 1;
 		}
@@ -289,15 +290,21 @@ std::map<int, double> Recommender::get_items_similars(std::string address){
 }   
 
 float Recommender::prediction(std::string userA, std::string item){
-    string str = object[item].item.to_string();
-	string address;
+       int iditem = object[item].item.to_ulong();
+       string str = std::to_string(iditem);
+	string address="";
+	string slash="/";
 	for(auto it:str){
-		address += it + "/";
+		address += it + slash;
 	}
 	address = address + "sim.bin";
-
 	std::map<int,double> items = get_items_similars(address);
-    
+
+	
+	for(auto it:items){
+		std::cout<<it.first<<" "<<it.second<<"\n";
+	}
+
 	float num = 0, den = 0;
     for(auto key:items){
         num += key.second * normalizerR(userA,item);

@@ -32,7 +32,7 @@ class Recommender{
 		void generateMatrixDisco();
 		std::pair<Bits,float> normalizar(
 				std::string iduser,std::string iditem);
-	private:
+	public:
 		std::string set_directory(std::string &path);
 		void printMatrix();
 		void getAverage();
