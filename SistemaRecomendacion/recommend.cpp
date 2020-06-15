@@ -158,7 +158,7 @@ void Recommender::set_directory(std::string &path){
 }
 
 void Recommender::generateMatrixDisco(){
-  idx path=0;
+  	idx path=0;
 	size_t size_file = object.size()*3;
 	for(auto p=object.begin();p!=object.end();++p){
 
@@ -298,9 +298,11 @@ float Recommender::prediction(std::string userA, std::string item){
     
 	float num = 0, den = 0;
     for(auto key:items){
-        num = key.second + normalizerR(userA,item);
-        den = key.second + normalizerR(userA,item);
+        num += key.second * normalizerR(userA,item);
+        den += key.second * normalizerR(userA,item);
     }
-        
-    return deNormalizerR(num/den);
+    if(fabs(den) < den * epsilon)
+		return 0;
+	else
+    	return deNormalizerR(num/den);
 }   
