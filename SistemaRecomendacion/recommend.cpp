@@ -176,8 +176,8 @@ void Recommender::generateMatrixDisco(){
 		}
 		//guardar a disco toda la fila ( el vectorFila )
 				
-		
 		set_directory(pathname);
+		mkdir(pathname.c_str(),0777);
 		ofstream file;
 		file.open(pathname+this->filename, std::ios::out|std::ios::in | std::ios::binary);
 		file.write( reinterpret_cast<char *>(&vectorFila[0]), size_file*sizeof(double) );
@@ -274,7 +274,7 @@ std::map<int, double> Recommender::get_items_similars(std::string address){
 			double dem2 = vector_items[++idx];
 			double prediction;
 
-			if (fabs(dem1 - dem2) < dem1 * epsilon)
+			if (fabs(dem1) < dem1 * epsilon || fabs(dem2) < dem2 * epsilon)
 				prediction = 0;
 			else
 				prediction = vector_items[idx] / (sqrt(dem1) * sqrt(dem2));
@@ -292,7 +292,7 @@ float Recommender::prediction(std::string userA, std::string item){
 	for(auto it:str){
 		address += it + "/";
 	}
-	address = address + "p.bin";
+	address = address + "p.gbin";
 
 	std::map<int,double> items = get_items_similars(address);
     
