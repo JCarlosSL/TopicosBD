@@ -7,7 +7,7 @@
 
 #define epsilon 0.000001f
 
-typedef unsigned int idx;
+typedef int idx;
 
 
 std::string Recommender::filename = "sim.bin";
@@ -152,13 +152,14 @@ void Recommender::set_directory(std::string &path){
 	std::string copy_path = path; 
 	size_t i = 0;
 	for (auto unit:copy_path){
-		path[i] += '/';
+		std::cout<<unit<<"\n";
+		path[i] += unit+'/';
 		++i;
 	}
 }
 
 void Recommender::generateMatrixDisco(){
-  idx path=0;
+  	idx path=0;
 	size_t size_file = object.size()*3;
 	for(auto p=object.begin();p!=object.end();++p){
 
