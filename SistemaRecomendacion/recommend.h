@@ -34,7 +34,7 @@ class Recommender{
 		void printMatrix();
 		void getAverage();
 
-		float normalizerR(std::string _user,std::string item);
+		float normalizerR(Bits _user,Bits item);
 		float deNormalizerR(float NR);
 
 		std::map<std::string,float> readMatrix(std::string address);

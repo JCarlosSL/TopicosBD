@@ -183,7 +183,7 @@ void Recommender::generateMatrixDisco(){
 		file.close();
 
 		delete[] vectorFila;
-		//cout<<path<<"\n";
+		cout<<path<<"\n";
 	}
 }
 
@@ -240,10 +240,10 @@ float Recommender::recommender(
 
 //normalizacion
 
-float Recommender::normalizerR(std::string _user, std::string item){
+float Recommender::normalizerR(Bits _user,Bits item){
     float ratingN = 0;
     float diference = maxRating - minRating;
-    ratingN = (2*(dataUsers[Bits(user[_user])][Bits(object[item])] - minRating) - diference)/diference;
+    ratingN = (2*(dataUsers[_user][item] - minRating) - diference)/diference;
     return ratingN;
 }   
     
@@ -258,6 +258,7 @@ std::map<int, double> Recommender::get_items_similars(std::string address){
     size_t size_items = object.size()*3;
 
 		std::fstream fin;
+
 		std::map<int, double> similar_items;
 		double *vector_items = new double[size_items];
 		
@@ -296,18 +297,24 @@ float Recommender::prediction(std::string userA, std::string item){
 	address = address;
 	std::map<int,double> items = get_items_similars(address);
 
+/*	
 	for(auto it:items){
 		std::cout<<it.first<<" "<<it.second<<"\n";
-	}
-	
+	}*/
+	int keyitem=object[item];
+
 	float num = 0, den = 0;
     	for(auto key:items){
-    	    num += key.second * normalizerR(userA,item);
-    	    den += key.second * normalizerR(userA,item);
+			if(keyitem!=key.first){
+				//cout<<key.first<<" "<<key.second<<"\n";
+				auto NR=normalizerR(Bits(user[userA]),Bits(key.first));
+    	    	num += key.second * NR;
+				den += fabs(key.second);
+			}
     	}
     	if(fabs(den) <= den * epsilon)
 		return 0;
 	else
-    		return deNormalizerR(num/den);
+    	return deNormalizerR(num/den);
 }  
 
