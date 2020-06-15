@@ -40,10 +40,29 @@ int main(){
 	 
 	Recommender data;
 
-	//data.loadData("BX-Book-Ratings.csv");
-	data.loadData("ml-25m/ratings.csv",',');
+	data.loadData("Movie_Ratings.csv",'\t');
+
+	//cout<<data.computeSimilarity("213","2131");
+	//cout<<data.computeSimilarity("Deadmau5","Slightly Stoopid");
+	data.getAverage();
+	//data.generateMatrixDisco();
+	//cout<<data.computeSimilarity("Alien","Avatar");
+	//data.generateMatrix();
+	cout<<"Recomendacion\nUsr, Item\n";
+	string usr="";
+	string item="";
+	
+	while(usr != "fin" || item!="fin"){
+	    getline(cin, usr);
+	    getline(cin, item);
+	    cout<<usr<<", "<<item<<'\n';
+	    cout<<data.prediction(usr,item)<<"\n\n";
+	}
+	//data.loadData("BX-Dump/BX-Book-Ratings.csv",';');
+	//data.loadData("ml-25m/ratings.csv",',');
 	//cout<<data.computeSimilarity("Star Wars","Jaws");
-	//data.loadData("Data/bandas2.csv",'\t');
+	//data.loadData("Data/bandas.csv",'\t');
+	//data.loadData("movie_ratings/Movie_Ratings.csv",',');
 	//data.loadData("ml-latest-small/ratings.csv",',');
 	//data.loadData("ml-latest/ratings.csv");
 	//data.loadData("bandas.csv");
@@ -51,8 +70,8 @@ int main(){
 
 	//cout<<data.computeSimilarity("213","2131");
 	//cout<<data.computeSimilarity("Deadmau5","Slightly Stoopid");
-	data.getAverage();
-	data.generateMatrixDisco();
+	//data.getAverage();
+	//data.generateMatrixDisco();
 	//cout<<data.computeSimilarity("Alien","Avatar");
 	//data.generateMatrix();
 	//cout<<data.prediction("David","Kacey Musgraves");
