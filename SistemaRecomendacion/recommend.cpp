@@ -171,6 +171,31 @@ std::string Recommender::set_directory(std::string &path){
 	return "matriz/" +new_path;
 }
 
+void Recommender::generatevectorDisco(std::string iditem){
+	auto p=object[iditem];
+	size_t size_file = object.size()*3;
+	float *vectorFila = new float[size_file];
+	int i=0;
+	int id=p.item.to_ulong();
+	std::cout<<p<<std::endl;
+	std::string pathname = std::to_string(id);
+	for(int j=0;j<object.size()*3;j+=3){
+		float *valores = computeSimilarity3(p,Bits(i));
+		vectorFila[j] = valores[0];
+		vectorFila[j+1] = valores[1];
+		vectorFila[j+2] = valores[2];
+		delete[] valores;
+		i+=1;
+	}
+	std::string new_path = set_directory(pathname);
+	mkdir(new_path.c_str(),0777);
+	fstream file;
+	file.open(new_path.c_str()+this->filename,std::ios::out|std::ios::binary);
+	file.write(reinterpret_cast<char *>(&vectorFila[0]),size_file*sizeof(float));
+	file.close();
+	delete[] vectorFila;
+}
+
 void Recommender::generateMatrixDisco(){
 	size_t size_file = object.size()*3;
 	for(int path=0;path<object.size();path++){
@@ -257,7 +282,7 @@ float Recommender::recommender(
 float Recommender::normalizerR(Bits _user,Bits item){
     float ratingN = 0;
     float diference = maxRating - minRating;
-    ratingN = (2*(dataUsers[_user][item] - minRating) - diference)/diference;
+    ratingN = (2*(bandaUsrPuntaje[item][_user] - minRating) - diference)/diference;
     return ratingN;
 }   
     
@@ -316,18 +341,20 @@ float Recommender::prediction(std::string userA, std::string item){
 		std::cout<<it.first<<" "<<it.second<<"\n";
 	}*/
 
-	float num = 0, den = 0;
-    for(auto key:items){
-		if(iditem!=key.first){
-	//		cout<<key.first<<" "<<key.second<<"\n";
-			auto NR=normalizerR(user[userA],Bits(key.first));
-        	num += key.second * NR;
-			den += fabs(key.second);
-		}
+	float num = 0.0, den = 0.0;
+	for(auto p:dataUsers[user[userA]]){
+    	//for(auto key:items){
+		auto idit = p.first;
+		auto NR=normalizerR(user[userA],idit);
+		
+		auto sim = items[idit.item.to_ulong()];
+		cout<<NR<<endl;
+		num += items[sim] * NR;
+		den += fabs(sim);
     }
 	if(fabs(den) <= den * epsilon)
 		return 0;
 	else
-		return deNormalizerR(num/den);
+		return deNormalizerR(float(num/den));
 }  
 
