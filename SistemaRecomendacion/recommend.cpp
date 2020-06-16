@@ -38,7 +38,8 @@ void Recommender::loadData(std::string path,char lim){
 			cq++;
 		}
 		else tempq=q->second;
-		dataUsers[tempp][tempq]=std::stof(trim(fields[2]));	
+		dataUsers[tempp][tempq]=std::stof(trim(fields[2]));
+		bandaUsrPuntaje[Bits(tempq)][Bits(tempp)]=std::stof(fields[2]);
 	}
 	f.close();
 }
