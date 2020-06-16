@@ -4,6 +4,7 @@
 #include "metrica.cpp"
 #include <sys/stat.h>
 #include <string>
+#include <sys/types.h>
 
 #define epsilon 0.0000001f
 
@@ -154,11 +155,13 @@ std::string Recommender::set_directory(std::string &path){
 		new_path += path[unit]+slash;
 		++i;
 	}
-	return "matriz/" +new_path;
+	cout<<"a"<<endl;
+	return "Matriz/"+new_path;
 }
 
 void Recommender::generateMatrixDisco(){
 	size_t size_file = object.size()*3;
+	mkdir("Matriz/",0777);
 	for(int path=0;path<object.size();path++){
 		std::string pathname =std::to_string(path); 
 		float *vectorFila = new float[size_file];
@@ -175,7 +178,7 @@ void Recommender::generateMatrixDisco(){
 		}
 		//guardar a disco toda la fila ( el vectorFila )
 				
-		std::string new_path=set_directory(pathname);
+		std::string new_path = set_directory(pathname);
 		mkdir(new_path.c_str(),0777);
 		fstream file;
 		file.open(new_path.c_str()+this->filename,std::ios::out|std::ios::binary);
