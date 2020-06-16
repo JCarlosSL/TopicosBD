@@ -5,7 +5,7 @@
 class Bits{
 
 public:
-	std::bitset<24> item;
+	std::bitset<19> item;
 	//float rating;
 
 	Bits(){};

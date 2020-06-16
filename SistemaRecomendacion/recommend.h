@@ -7,8 +7,8 @@ using namespace std;
 
 class Recommender{
 	public:
-		std::map<std::string,int> user;
-		std::map<std::string,int> object;
+		std::map<std::string,Bits> user;
+		std::map<std::string,Bits> object;
 		std::map<Bits,std::map<Bits,float>> dataUsers;//puntaje Usr Banda Puntaje
 		float *averages;
 		std::map<Bits,std::map<Bits,float>> bandaUsrPuntaje;//puntaje Banda Usr Puntaje
@@ -19,6 +19,7 @@ class Recommender{
 	public:
 		Recommender(){};
 		void loadData(string path,char lim);
+		void loadDataItems(string path,char lim);
 		std::vector<std::pair<Bits,float>> computerNearestNeighbors(
 				std::string iduser,int r);
 		std::map<Bits,float> influences(std::string _user,int r);
