@@ -39,7 +39,6 @@ void Recommender::loadData(std::string path,char lim){
 		}
 		else tempq=q->second;
 		dataUsers[tempp][tempq]=std::stof(trim(fields[2]));
-		bandaUsrPuntaje[Bits(tempq)][Bits(tempp)]=std::stof(fields[2]);
 	}
 	f.close();
 }
@@ -348,10 +347,11 @@ float Recommender::prediction(std::string userA, std::string item){
 		auto idit = p.first;
 		auto NR=normalizerR(user[userA],idit);
 		
-		auto sim = items[idit.item.to_ulong()];
+		float sim = items[idit.item.to_ulong()];
 		cout<<NR<<endl;
-		num += items[sim] * NR;
+		num += sim * NR;
 		den += fabs(sim);
+
     }
 	if(fabs(den) <= den * epsilon)
 		return 0;
