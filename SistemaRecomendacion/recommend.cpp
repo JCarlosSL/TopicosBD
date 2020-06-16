@@ -25,22 +25,37 @@ void Recommender::loadData(std::string path,char lim){
 		vector<string> fields=split(temp,lim);
 		auto p=user.find(trim(fields[0]));
 		auto q=object.find(trim(fields[1]));
-		int tempp;
-		int tempq;
+		Bits tempp;
+		Bits tempq;
 		if(p==user.end()){
-			user[trim(fields[0])]=cp;
-			tempp=cp;
+			tempp=Bits(cp);
+			user[trim(fields[0])]=tempp;
 			cp++;
 		}
 		else tempp=p->second;
 		if(q==object.end()){
-			object[trim(fields[1])]=cq;
-			tempq=cq;
+			tempq=Bits(cq);
+			object[trim(fields[1])]=tempq;
 			cq++;
 		}
 		else tempq=q->second;
-		dataUsers[Bits(tempp)][Bits(tempq)]=std::stof(trim(fields[2]));
-		bandaUsrPuntaje[Bits(tempq)][Bits(tempp)]=std::stof(trim(fields[2]));
+		dataUsers[tempp][tempq]=std::stof(trim(fields[2]));
+		bandaUsrPuntaje[Bits(tempq)][Bits(tempp)]=std::stof(fields[2]);
+	}
+	f.close();
+}
+void Recommender::loadDataItems(std::string path,char lim){
+	fstream f;
+	f.open(path,std::ios::in);
+	
+	std::string temp;
+
+	if(getline(f,temp)) cout<<"init \n"; 
+	while(getline(f,temp)){
+		vector<string> fields=split(temp,lim);
+		Bits p=user[trim(fields[0])];
+		Bits q=object[trim(fields[1])];
+		bandaUsrPuntaje[q][p]=std::stof(trim(fields[2]));
 		
 	}
 	f.close();
@@ -63,11 +78,10 @@ float Recommender::computeSimilarity(
 	float dem2=0;
 	auto q1=object[band1];
 	auto q2=object[band2];
-	std::cout<<q1<<" "<<q2<<" fin"<<std::endl;
 
 	for(auto key:dataUsers){
-		auto p1=key.second.find(Bits(q1));
-		auto p2=key.second.find(Bits(q2));
+		auto p1=key.second.find(q1);
+		auto p2=key.second.find(q2);
 		if(p1!=key.second.end() and p2!=key.second.end()){
 			float avg = averages1[key.first];
 			num +=((*p1).second - avg)*((*p2).second - avg);
@@ -93,8 +107,9 @@ void Recommender::getAverage(){
 		    averages[i]=0;
 		    cout<<"raro, tamaño de contenido de key cero?";
 		}
-		else
+		else{
 		    averages[i] = sum/key.second.size();
+		}
 		i++;
 	}
 }
@@ -120,7 +135,7 @@ float* Recommender::computeSimilarity3(Bits bandaA,Bits bandaB){
         
         if(bandaUsrPuntaje[bandaB].find(usr) !=   bandaUsrPuntaje[bandaB].end()){
             float avg = averages[usr.item.to_ulong()];
-            float num1 = (puntaje - avg);
+			float num1 = (puntaje - avg);
             float num2 = (bandaUsrPuntaje[bandaB][usr] - avg);
             num += num1*num2;
             den1 += pow(num1,2);
@@ -157,6 +172,31 @@ std::string Recommender::set_directory(std::string &path){
 	}
 	cout<<"a"<<endl;
 	return "Matriz/"+new_path;
+}
+
+void Recommender::generatevectorDisco(std::string iditem){
+	auto p=object[iditem];
+	size_t size_file = object.size()*3;
+	float *vectorFila = new float[size_file];
+	int i=0;
+	int id=p.item.to_ulong();
+	std::cout<<p<<std::endl;
+	std::string pathname = std::to_string(id);
+	for(int j=0;j<object.size()*3;j+=3){
+		float *valores = computeSimilarity3(p,Bits(i));
+		vectorFila[j] = valores[0];
+		vectorFila[j+1] = valores[1];
+		vectorFila[j+2] = valores[2];
+		delete[] valores;
+		i+=1;
+	}
+	std::string new_path = set_directory(pathname);
+	mkdir(new_path.c_str(),0777);
+	fstream file;
+	file.open(new_path.c_str()+this->filename,std::ios::out|std::ios::binary);
+	file.write(reinterpret_cast<char *>(&vectorFila[0]),size_file*sizeof(float));
+	file.close();
+	delete[] vectorFila;
 }
 
 void Recommender::generateMatrixDisco(){
@@ -198,7 +238,7 @@ std::vector<std::pair<Bits,float>> Recommender::computerNearestNeighbors(
 	float distance=0;
 	for(auto key:dataUsers){
 		if(key.first!=Bits(p)){
-			distance=manhattan(dataUsers[Bits(p)],dataUsers[key.first]);
+			distance=manhattan(dataUsers[p],dataUsers[key.first]);
 			distances.push_back(std::make_pair(key.first,distance));
 		}
 	}
@@ -232,7 +272,7 @@ float Recommender::recommender(
 	auto s=object[objeto];
 	float proyeccion=0;
 	for (auto p:influences){
-		auto q=dataUsers[p.first].find(Bits(s));
+		auto q=dataUsers[p.first].find(s);
 		if(q!=dataUsers[p.first].end()){
 			proyeccion+=(*q).second * p.second;
 		}
@@ -246,7 +286,7 @@ float Recommender::recommender(
 float Recommender::normalizerR(Bits _user,Bits item){
     float ratingN = 0;
     float diference = maxRating - minRating;
-    ratingN = (2*(dataUsers[_user][item] - minRating) - diference)/diference;
+    ratingN = (2*(bandaUsrPuntaje[item][_user] - minRating) - diference)/diference;
     return ratingN;
 }   
     
@@ -288,7 +328,7 @@ std::map<int, float> Recommender::get_items_similars(std::string address){
 }   
 
 float Recommender::prediction(std::string userA, std::string item){
-       int iditem = object[item];
+       int iditem = object[item].item.to_ulong();
        string str = std::to_string(iditem);
 	string address="matriz/";
 	string slash="/";
@@ -304,20 +344,21 @@ float Recommender::prediction(std::string userA, std::string item){
 	for(auto it:items){
 		std::cout<<it.first<<" "<<it.second<<"\n";
 	}*/
-	int keyitem=object[item];
 
-	float num = 0, den = 0;
-    	for(auto key:items){
-			if(keyitem!=key.first){
-		//		cout<<key.first<<" "<<key.second<<"\n";
-				auto NR=normalizerR(Bits(user[userA]),Bits(key.first));
-    	    	num += key.second * NR;
-				den += fabs(key.second);
-			}
-    	}
-    	if(fabs(den) <= den * epsilon)
+	float num = 0.0, den = 0.0;
+	for(auto p:dataUsers[user[userA]]){
+    	//for(auto key:items){
+		auto idit = p.first;
+		auto NR=normalizerR(user[userA],idit);
+		
+		auto sim = items[idit.item.to_ulong()];
+		cout<<NR<<endl;
+		num += items[sim] * NR;
+		den += fabs(sim);
+    }
+	if(fabs(den) <= den * epsilon)
 		return 0;
 	else
-    	return deNormalizerR(num/den);
+		return deNormalizerR(float(num/den));
 }  
 
