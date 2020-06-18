@@ -349,6 +349,10 @@ float Recommender::prediction1(std::string userA,std::string item){
 
 
 float Recommender::prediction(std::string userA, std::string item){
+	
+	if (user.find(userA)==user.end() || object.find(item)==object.end())
+        	return -2;
+	
        int iditem = object[item].item.to_ulong();
        string str = std::to_string(iditem);
 	string address="Matriz/";
