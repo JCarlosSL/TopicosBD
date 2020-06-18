@@ -14,6 +14,11 @@ class Recommender{
 		std::map<Bits,std::map<Bits,float>> bandaUsrPuntaje;//puntaje Banda Usr Puntaje
 		std::vector<float> matrixSimilitud;
 		static std::string filename;
+		//books
+		//int maxRating=10;
+		//int minRating=0;
+		
+		//small y ml25
 		int maxRating=5;
 		int minRating=1;
 	public:

@@ -155,7 +155,6 @@ void Recommender::generateMatrix(){
 	size_t size_file = object.size();
 	int f=0;
 	size_t ns=size_file*(size_file-1)/2;
-	float *vectorFila = new float[ns];
 	for (size_t i=size_file-1;i>0;--i){
 		for(size_t j=0;j<size_file-h;++j){
 			float *valores=computeSimilarity3(Bits(i),Bits(j));
@@ -174,6 +173,7 @@ void Recommender::generateMatrix(){
 		h++;
 	}
 }
+
 
 
 std::string Recommender::set_directory(std::string &path){
@@ -334,7 +334,14 @@ float Recommender::prediction1(std::string userA,std::string item){
 		if(iditem>pitem)
 				pos-=(iditem-pitem);
 
-		float simi = matrixSimilitud[pos];
+		float simi=0;
+		//float simi = matrixSimilitud[pos];
+		float *simil =computeSimilarity3(object[item],p.first);
+		if(fabs(simil[1]) <= epsilon || fabs(simil[2]) <= epsilon)
+			simi=0;
+		else
+			simi=simil[0]/(sqrt(simil[1])*sqrt(simil[2]));
+
 		num+=simi*NR;
 		den+=fabs(simi);
 	}

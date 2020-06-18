@@ -40,12 +40,12 @@ int main(){
 	 
 	Recommender data;
 
-	data.loadData("movie_ratings/Movie_Ratings.csv",',');
-	data.loadDataItems("movie_ratings/Movie_Ratings.csv",',');
+	//data.loadData("movie_ratings/Movie_Ratings.csv",',');
+	//data.loadDataItems("movie_ratings/Movie_Ratings.csv",',');
 	//data.loadData("Data/bandas2.csv",'\t');
 	//data.loadData("Data/bandas2.csv",'\t');
-	//data.loadData("ml-25m/ratings.csv",',');
-	//data.loadDataItems("ml-25m/ratings.csv",',');
+	data.loadData("ml-25m/ratings.csv",',');
+	data.loadDataItems("ml-25m/ratings.csv",',');
 	//data.loadData("BX-Dump/BX-Book-Ratings.csv",';');
 	//data.loadDataItems("BX-Dump/BX-Book-Ratings.csv",';');
 	//data.loadData("Movie_Ratings.csv",'\t');
@@ -53,7 +53,7 @@ int main(){
 	//cout<<data.computeSimilarity("213","2131");
 	//cout<<data.computeSimilarity("Deadmau5","Slightly Stoopid");
 	data.getAverage();
-	data.generateMatrixDisco();
+	//data.generateMatrixDisco();
 	//data.generateMatrix();
 	//cout<<data.computeSimilarity("Alien","Avatar");
 	//data.generateMatrix();
@@ -65,8 +65,7 @@ int main(){
 	    getline(cin, usr);
 	    getline(cin, item);
 	    cout<<usr<<", "<<item<<'\n';
-	//	data.generatevectorDisco(item);
-	    cout<<data.prediction(usr,item)<<"\n\n";
+	    cout<<data.prediction1(usr,item)<<"\n\n";
 	}
 	//cout<<data.computeSimilarity("Star Wars","Jaws");
 	//data.loadData("ml-latest-small/ratings.csv",',');
