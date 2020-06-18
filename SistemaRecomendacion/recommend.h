@@ -12,7 +12,7 @@ class Recommender{
 		std::map<Bits,std::map<Bits,float>> dataUsers;//puntaje Usr Banda Puntaje
 		float *averages;
 		std::map<Bits,std::map<Bits,float>> bandaUsrPuntaje;//puntaje Banda Usr Puntaje
-	
+		std::vector<float> matrixSimilitud;
 		static std::string filename;
 		int maxRating=5;
 		int minRating=1;
@@ -43,6 +43,7 @@ class Recommender{
 		std::map<int,float> get_item_similars(std::string address);
 		std::map<int,float> get_items_similars(std::string address);
 		float prediction(std::string userA, std::string item);	
+		float prediction1(std::string userA, std::string item);	
 };
 
 

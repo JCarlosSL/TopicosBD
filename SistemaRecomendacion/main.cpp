@@ -54,6 +54,7 @@ int main(){
 	//cout<<data.computeSimilarity("Deadmau5","Slightly Stoopid");
 	data.getAverage();
 	data.generateMatrixDisco();
+	//data.generateMatrix();
 	//cout<<data.computeSimilarity("Alien","Avatar");
 	//data.generateMatrix();
 	cout<<"Recomendacion\nUsr, Item\n";

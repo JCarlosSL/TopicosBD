@@ -151,13 +151,28 @@ float* Recommender::computeSimilarity3(Bits bandaA,Bits bandaB){
 }
 
 void Recommender::generateMatrix(){
-	int i=0;
-	std::string item="Kacey Musgraves";
-	for(auto p:object){
-			float sim=computeSimilarity(item,p.first);
-			std::cout<<p.second<<" "<<sim<<"\n";
+	int h=1;
+	size_t size_file = object.size();
+	int f=0;
+	size_t ns=size_file*(size_file-1)/2;
+	float *vectorFila = new float[ns];
+	for (size_t i=size_file-1;i>0;--i){
+		for(size_t j=0;j<size_file-h;++j){
+			float *valores=computeSimilarity3(Bits(i),Bits(j));
+			if(fabs(valores[1])<=epsilon || fabs(valores[2])<=epsilon)
+				matrixSimilitud.push_back(0);
+			else{
+				matrixSimilitud.push_back(
+						valores[0]/(
+						sqrt(valores[1])
+						*sqrt(valores[2])));
+			}
+			++f;
+			delete[] valores;
+		}
+		//cout<<h<<"\n";
+		h++;
 	}
-	std::cout<<"finish \n";
 }
 
 
@@ -169,33 +184,7 @@ std::string Recommender::set_directory(std::string &path){
 		new_path += path[unit]+slash;
 		++i;
 	}
-	cout<<"a"<<endl;
 	return "Matriz/"+new_path;
-}
-
-void Recommender::generatevectorDisco(std::string iditem){
-	auto p=object[iditem];
-	size_t size_file = object.size()*3;
-	float *vectorFila = new float[size_file];
-	int i=0;
-	int id=p.item.to_ulong();
-	std::cout<<p<<std::endl;
-	std::string pathname = std::to_string(id);
-	for(int j=0;j<object.size()*3;j+=3){
-		float *valores = computeSimilarity3(p,Bits(i));
-		vectorFila[j] = valores[0];
-		vectorFila[j+1] = valores[1];
-		vectorFila[j+2] = valores[2];
-		delete[] valores;
-		i+=1;
-	}
-	std::string new_path = set_directory(pathname);
-	mkdir(new_path.c_str(),0777);
-	fstream file;
-	file.open(new_path.c_str()+this->filename,std::ios::out|std::ios::binary);
-	file.write(reinterpret_cast<char *>(&vectorFila[0]),size_file*sizeof(float));
-	file.close();
-	delete[] vectorFila;
 }
 
 void Recommender::generateMatrixDisco(){
@@ -225,7 +214,7 @@ void Recommender::generateMatrixDisco(){
 		file.close();
 
 		delete[] vectorFila;
-		cout<<path<<"\n";
+		//cout<<path<<"\n";
 	}
 }
 
@@ -326,10 +315,43 @@ std::map<int, float> Recommender::get_items_similars(std::string address){
 		return similar_items;
 }   
 
+float Recommender::prediction1(std::string userA,std::string item){
+	int iditem = object[item].item.to_ulong();
+	
+	float den=0,num=0;
+
+	for(auto p:dataUsers[user[userA]]){
+		auto iditemu = p.first;
+		int pitem=iditemu.item.to_ulong();
+		float NR = normalizerR(user[userA],iditemu);
+			
+		int pos=iditem;
+		int size=object.size()-1;
+		while(size>pitem and size>iditem){
+				pos+=size;
+				size--;
+		}
+		if(iditem>pitem)
+				pos-=(iditem-pitem);
+
+		float simi = matrixSimilitud[pos];
+		num+=simi*NR;
+		den+=fabs(simi);
+	}
+	if(fabs(den) <= den * epsilon)
+			return 0;
+	else
+			return deNormalizerR(float(num/den));
+
+	return 0;
+}
+
+
+
 float Recommender::prediction(std::string userA, std::string item){
        int iditem = object[item].item.to_ulong();
        string str = std::to_string(iditem);
-	string address="matriz/";
+	string address="Matriz/";
 	string slash="/";
 	for(auto it:str){
 		address += it + slash;
@@ -339,11 +361,6 @@ float Recommender::prediction(std::string userA, std::string item){
 	address = address;
 	std::map<int,float> items = get_items_similars(address);
 
-/*	
-	for(auto it:items){
-		std::cout<<it.first<<" "<<it.second<<"\n";
-	}*/
-
 	float num = 0.0, den = 0.0;
 	for(auto p:dataUsers[user[userA]]){
     	//for(auto key:items){
@@ -351,7 +368,7 @@ float Recommender::prediction(std::string userA, std::string item){
 		auto NR=normalizerR(user[userA],idit);
 		
 		float sim = items[idit.item.to_ulong()];
-		cout<<NR<<endl;
+		//cout<<NR<<endl;
 		num += sim * NR;
 		den += fabs(sim);
 
