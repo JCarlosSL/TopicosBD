@@ -44,8 +44,10 @@ int main(){
 	//data.loadDataItems("movie_ratings/Movie_Ratings.csv",',');
 	//data.loadData("Data/bandas2.csv",'\t');
 	//data.loadData("Data/bandas2.csv",'\t');
-	data.loadData("ml-25m/ratings.csv",',');
-	data.loadDataItems("ml-25m/ratings.csv",',');
+	data.loadData("ml-latest27/ratings.csv",',');
+	data.loadDataItems("ml-latest27/ratings.csv",',');
+	//data.loadData("ml-25m/ratings.csv",',');
+	//data.loadDataItems("ml-25m/ratings.csv",',');
 	//data.loadData("BX-Dump/BX-Book-Ratings.csv",';');
 	//data.loadDataItems("BX-Dump/BX-Book-Ratings.csv",';');
 	//data.loadData("Movie_Ratings.csv",'\t');
@@ -65,7 +67,7 @@ int main(){
 	    getline(cin, usr);
 	    getline(cin, item);
 	    cout<<usr<<", "<<item<<'\n';
-	    cout<<data.prediction1(usr,item)<<"\n\n";
+	    cout<<data.prediction(usr,item)<<"\n\n";
 	}
 	//cout<<data.computeSimilarity("Star Wars","Jaws");
 	//data.loadData("ml-latest-small/ratings.csv",',');
