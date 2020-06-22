@@ -44,21 +44,24 @@ int main(){
 	//data.loadDataItems("movie_ratings/Movie_Ratings.csv",',');
 	//data.loadData("Data/bandas2.csv",'\t');
 	//data.loadData("Data/bandas2.csv",'\t');
-	data.loadData("ml-latest27/ratings.csv",',');
-	data.loadDataItems("ml-latest27/ratings.csv",',');
 	//data.loadData("ml-25m/ratings.csv",',');
 	//data.loadDataItems("ml-25m/ratings.csv",',');
 	//data.loadData("BX-Dump/BX-Book-Ratings.csv",';');
 	//data.loadDataItems("BX-Dump/BX-Book-Ratings.csv",';');
 	//data.loadData("Movie_Ratings.csv",'\t');
+    //data.loadData("ml-latest27/ratings.csv",',');
+	//data.loadDataItems("ml-latest27/ratings.csv",',');
+	data.loadData("pdf/slopeOne.csv",',');
+    data.loadDataItems("pdf/slopeOne.csv",',');
 
 	//cout<<data.computeSimilarity("213","2131");
 	//cout<<data.computeSimilarity("Deadmau5","Slightly Stoopid");
-	data.getAverage();
+	//data.getAverage();
 	//data.generateMatrixDisco();
 	//data.generateMatrix();
 	//cout<<data.computeSimilarity("Alien","Avatar");
 	//data.generateMatrix();
+	/*
 	cout<<"Recomendacion\nUsr, Item\n";
 	string usr="";
 	string item="";
@@ -67,8 +70,10 @@ int main(){
 	    getline(cin, usr);
 	    getline(cin, item);
 	    cout<<usr<<", "<<item<<'\n';
+	//	data.generatevectorDisco(item);
 	    cout<<data.prediction(usr,item)<<"\n\n";
 	}
+	*/
 	//cout<<data.computeSimilarity("Star Wars","Jaws");
 	//data.loadData("ml-latest-small/ratings.csv",',');
 	//data.loadData("ml-latest/ratings.csv");
@@ -91,6 +96,24 @@ int main(){
 
 	//cout<<data.recommender(v,"21")<<"\n";
 	
+	int numItems = data.bandaUsrPuntaje.size();
+	vector<vector<float>> matriz = data.generateMatrixRAMSlopeOne();
+    	
+	for(int i=0; i<numItems; i++){
+	    for (int j=0; j<numItems*2; j+=2){
+	        cout<<"("<<matriz[i][j]<<", "<<matriz[i][j+1]<<") ";	        
+	    }
+	    cout<<"\n";
+	}
+    
+    map<int,float> predictions;
+    predictions = data.predictionWSlopeOne("Ben", matriz);
+    //predictions = data.predictionWSlopeOne("Clara", matriz);
+    //predictions = data.predictionWSlopeOne("Daisy", matriz);
+
+	for(auto key:predictions)
+		cout<<key.first<<" -> "<<key.second<<endl;
+
 
 	return 0;
 }
