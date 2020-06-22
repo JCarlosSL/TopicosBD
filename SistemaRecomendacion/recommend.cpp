@@ -446,3 +446,27 @@ vector<vector<float>> Recommender::generateMatrixRAMSlopeOne(){
     }
     return matriz;
 }
+
+
+map<int,float> Recommender::predictionWSlopeOne(std::string _user, vector<vector<float>> matriz){
+	map<int,float> recommends;
+	float num=0.0;
+	float den=0.0;
+	for(auto key:bandaUsrPuntaje){
+		if(!key.second[user[_user]]){
+			for(auto key2:bandaUsrPuntaje){
+				if(key2.second[user[_user]]){
+					int i = key.first.item.to_ulong();
+					int j = key2.first.item.to_ulong();
+					num += (matriz[i][j*2] + key2.second[user[_user]]) * matriz[i][(j*2)+1];
+					den += matriz[i][(j*2)+1];
+				}
+			}
+			//cout<<num<<"!!"<<den<<endl;
+			recommends[key.first.item.to_ulong()] = num/den;
+		}
+	}
+	return recommends;
+}
+
+

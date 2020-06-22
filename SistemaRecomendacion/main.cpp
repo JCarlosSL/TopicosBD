@@ -105,6 +105,15 @@ int main(){
 	    }
 	    cout<<"\n";
 	}
+    
+    map<int,float> predictions;
+    predictions = data.predictionWSlopeOne("Ben", matriz);
+    //predictions = data.predictionWSlopeOne("Clara", matriz);
+    //predictions = data.predictionWSlopeOne("Daisy", matriz);
+
+	for(auto key:predictions)
+		cout<<key.first<<" -> "<<key.second<<endl;
+
 
 	return 0;
 }
