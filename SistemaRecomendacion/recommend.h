@@ -49,6 +49,9 @@ class Recommender{
 		std::map<int,float> get_items_similars(std::string address);
 		float prediction(std::string userA, std::string item);	
 		float prediction1(std::string userA, std::string item);	
+	
+		float* computeDev2(Bits bandaA, Bits bandaB);
+		vector<vector<float>> generateMatrixRAMSlopeOne();
 };
 
 
