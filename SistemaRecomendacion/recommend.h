@@ -52,7 +52,9 @@ class Recommender{
 	
 		float* computeDev2(Bits bandaA, Bits bandaB);
 		vector<vector<float>> generateMatrixRAMSlopeOne();
-        std::map<int,float> predictionWSlopeOne(std::string _user, vector<vector<float>> matriz);
+        	std::map<int,float> predictionWSlopeOne(std::string _user, vector<vector<float>> matriz);
+	
+		float predictionSlopeOneRAM(std::string user, std::string item, vector<vector<float>> matriz);
 };
 
 
