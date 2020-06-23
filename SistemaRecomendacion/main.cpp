@@ -40,8 +40,8 @@ int main(){
 	 
 	Recommender data;
 
-	//data.loadData("movie_ratings/Movie_Ratings.csv",',');
-	//data.loadDataItems("movie_ratings/Movie_Ratings.csv",',');
+	data.loadData("movie_ratings/Movie_Ratings.csv",',');
+	data.loadDataItems("movie_ratings/Movie_Ratings.csv",',');
 	//data.loadData("Data/bandas2.csv",'\t');
 	//data.loadData("Data/bandas2.csv",'\t');
 	//data.loadData("ml-25m/ratings.csv",',');
@@ -51,8 +51,8 @@ int main(){
 	//data.loadData("Movie_Ratings.csv",'\t');
     //data.loadData("ml-latest27/ratings.csv",',');
 	//data.loadDataItems("ml-latest27/ratings.csv",',');
-	data.loadData("pdf/slopeOne.csv",',');
-    data.loadDataItems("pdf/slopeOne.csv",',');
+	//data.loadData("pdf/slopeOne.csv",',');
+    	//data.loadDataItems("pdf/slopeOne.csv",',');
 
 	//cout<<data.computeSimilarity("213","2131");
 	//cout<<data.computeSimilarity("Deadmau5","Slightly Stoopid");
@@ -95,7 +95,7 @@ int main(){
 	//auto v =data.influences("332",3);
 
 	//cout<<data.recommender(v,"21")<<"\n";
-	
+	/*
 	int numItems = data.bandaUsrPuntaje.size();
 	vector<vector<float>> matriz = data.generateMatrixRAMSlopeOne();
     	
@@ -105,15 +105,16 @@ int main(){
 	    }
 	    cout<<"\n";
 	}
-    
-    map<int,float> predictions;
-    predictions = data.predictionWSlopeOne("Ben", matriz);
+    */
+    //map<int,float> predictions;
+    //predictions = data.predictionWSlopeOne("Ben", matriz);
     //predictions = data.predictionWSlopeOne("Clara", matriz);
     //predictions = data.predictionWSlopeOne("Daisy", matriz);
+	//for(auto key:predictions)
+	//	cout<<key.first<<" -> "<<key.second<<endl;
 
-	for(auto key:predictions)
-		cout<<key.first<<" -> "<<key.second<<endl;
-
+	vector<vector<float>> matriz = data.generateMatrixRAMSlopeOne();
+	cout<<data.predictionSlopeOneRAM("Patrick C","Village",matriz)<<"\n";
 
 	return 0;
 }
