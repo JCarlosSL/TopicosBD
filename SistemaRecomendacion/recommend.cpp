@@ -469,4 +469,28 @@ map<int,float> Recommender::predictionWSlopeOne(std::string _user, vector<vector
 	return recommends;
 }
 
+float Recommender::predictionSlopeOneRAM(std::string usuario, std::string itemm, vector<vector<float>> matriz){
+    
+    if ( user.find(usuario) == user.end() || object.find(itemm) == object.end() )
+        return -1;
+    
+    Bits usr = user[usuario];    
+    int itemTo = object[itemm].item.to_ulong();
+    
+    float num=0;
+    float den=0;
+    
+    for (auto key: dataUsers[usr]){
+        
+        int itemFrom = key.first.item.to_ulong();
+        float puntaje = key.second;
+        
+        num += (matriz[itemTo][itemFrom*2] + puntaje) * matriz[itemTo][itemFrom*2+1];
+        den += matriz[itemTo][itemFrom*2+1];      
+    }
+    
+    if (den==0)
+        return 0;
+    return num/den;
+}
 
