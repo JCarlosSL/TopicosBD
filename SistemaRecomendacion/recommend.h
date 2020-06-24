@@ -2,20 +2,23 @@
 #define Recommend_H
 #include "bits.h"
 
-typedef std::pair<Bits,float> pbits;
-typedef std::map<std::string,Bits> mapSBits;
-typedef std::map<Bits,std::map<Bits,float>> matrixData;
+using namespace std;
+typedef pair<Bits,float> pairBF;
+typedef map<string,Bits> mapSBits;
+typedef map<Bits,map<Bits,float>> matrixData;
+typedef vector<pair<Bits,float>> distanceBF;
+typedef map<Bits,float> mapBF;
 
 class Recommender{
 	public:
 		mapSBits user; //id usuarios
 		mapSBits object; //id objetos
-		
 		matrixData dataUsers;//puntaje Usr Banda Puntaje
 		float *averages;
 		matrixData bandaUsrPuntaje;//puntaje Banda Usr Puntaje
-		std::vector<float> matrixSimilitud;
 		static std::string filename; //archivo binario
+		
+		std::vector<float> matrixSimilitud;
 		
 		//books rating
 		int maxRating=10;
@@ -26,38 +29,47 @@ class Recommender{
 		//int minRating=1;
 	public:
 		Recommender(){};
-		void loadData(string path,char lim);
-		void loadDataItems(string path,char lim);
-		std::vector<std::pair<Bits,float>> computerNearestNeighbors(
-				std::string iduser,int r);
-		std::map<Bits,float> influences(std::string _user,int r);
-		float recommender(std::map<Bits,float> inf,std::string obj);
-		float computeSimilarity(std::string band1,std::string band2);
+		// cargar la data
+		void loadData(string path,char lim); //cargar por usuarios
+		void loadDataItems(string path,char lim); //cargar por items
+		
+		// calcula los K vecinos mas cercanos
+		distanceBF computerNearestNeighbors(string iduser,int r);
+		
+		// Devuelve el vector de influencia 
+		std::map<Bits,float> influences(string _user,int r);
+
+		// recomendacion basada en usuarios	
+		float recommender(mapBF inf,string obj);
+		
+		// coseno de similitud ajustado
+		float computeSimilarity(string band1,string band2);
 		float* computeSimilarity3(Bits band1,Bits band2);
+
+		// generacion de matriz de similaridad
 		void generateMatrix();
-		void generatevectorDisco(std::string iditem);
 		void generateMatrixDisco();
-		std::pair<Bits,float> normalizar(
-				std::string iduser,std::string iditem);
+
+		pairBF normalizar(string iduser,string iditem);
 	public:
-		std::string set_directory(std::string &path);
+		string set_directory(string &path);
 		void printMatrix();
 		void getAverage();
 
 		float normalizerR(Bits _user,Bits item);
 		float deNormalizerR(float NR);
 
-		std::map<std::string,float> readMatrix(std::string address);
-		std::map<int,float> get_item_similars(std::string address);
-		std::map<int,float> get_items_similars(std::string address);
-		float prediction(std::string userA, std::string item);	
-		float prediction1(std::string userA, std::string item);	
+		map<string,float> readMatrix(string address);
+		map<int,float> get_item_similars(string address);
+		map<int,float> get_items_similars(string address);
+		float prediction(string userA, string item);	
+		float prediction1(string userA, string item);	
 	
 		float* computeDev2(Bits bandaA, Bits bandaB);
 		vector<vector<float>> generateMatrixRAMSlopeOne();
-        	std::map<int,float> predictionWSlopeOne(std::string _user, vector<vector<float>> matriz);
+        	map<int,float> predictionWSlopeOne(string _user, vector<vector<float>> matriz);
 	
-		float predictionSlopeOneRAM(std::string user, std::string item, vector<vector<float>> matriz);
+		float predictionSlopeOneRAM(string user,string item,vector<vector<float>> matriz);
 };
 
 

@@ -2,10 +2,9 @@
 #define Bits_H
 #include <bitset>
 
-using namespace std;
 class Bits{
 public:
-	bitset<19> item;
+	std::bitset<19> item;
 public:
 	Bits(){};
 	Bits(int _item){

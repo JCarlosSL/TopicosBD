@@ -20,7 +20,7 @@ void Recommender::loadData(std::string path,char lim){
 	std::string temp;
 	int cp=0;
 	int cq=0;
-	if(getline(f,temp)) cout<<"init \n"; 
+	if(getline(f,temp)) cout<<"load rating users \n"; 
 	while(getline(f,temp)){
 		vector<string> fields=split(temp,lim);
 		auto p=user.find(trim(fields[0]));
@@ -49,7 +49,7 @@ void Recommender::loadDataItems(std::string path,char lim){
 	
 	std::string temp;
 
-	if(getline(f,temp)) cout<<"init \n"; 
+	if(getline(f,temp)) cout<<"load rating items \n"; 
 	while(getline(f,temp)){
 		vector<string> fields=split(temp,lim);
 		Bits p=user[trim(fields[0])];
