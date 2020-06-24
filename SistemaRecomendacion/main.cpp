@@ -1,30 +1,11 @@
 #include <iostream>
 #include <bits/stdc++.h>
-#include "preprocesar.cpp"
 #include "recommend.cpp"
 
 using namespace std;
 
 std::string path;
 char limit;
-
-void listmetricas(){
-	cout<<"1 manhattan \n";
-	cout<<"2 euclides \n";
-	cout<<"3 minkowsky \n";
-	cout<<"4 coseno \n";
-	cout<<"5 jaccard \n";
-	cout<<"6 pearson \n";
-}
-
-void list(){
-	cout<<"1. metricas \n";
-	cout<<"2. computeSimilarity \n";
-	cout<<"3. generateMatrixDisco \n";
-	cout<<"4. computenearestNeighbors \n";
-	cout<<"5. recomendacion por usuario 'n";
-	cout<<"6. prediccion por items \n";
-}
 
 int main(){
 
@@ -46,22 +27,21 @@ int main(){
 	//data.loadData("Data/bandas2.csv",'\t');
 	//data.loadData("ml-25m/ratings.csv",',');
 	//data.loadDataItems("ml-25m/ratings.csv",',');
-	//data.loadData("BX-Dump/BX-Book-Ratings.csv",';');
-	//data.loadDataItems("BX-Dump/BX-Book-Ratings.csv",';');
+	data.loadData("BX-Dump/BX-Book-Ratings.csv",';');
+	data.loadDataItems("BX-Dump/BX-Book-Ratings.csv",';');
 	//data.loadData("Movie_Ratings.csv",'\t');
-    //data.loadData("ml-latest27/ratings.csv",',');
+    	//data.loadData("ml-latest27/ratings.csv",',');
 	//data.loadDataItems("ml-latest27/ratings.csv",',');
-	data.loadData("pdf/slopeOne.csv",',');
-    data.loadDataItems("pdf/slopeOne.csv",',');
+	//data.loadData("pdf/slopeOne.csv",',');
+	//data.loadDataItems("pdf/slopeOne.csv",',');
 
 	//cout<<data.computeSimilarity("213","2131");
 	//cout<<data.computeSimilarity("Deadmau5","Slightly Stoopid");
-	//data.getAverage();
+	data.getAverage();
 	//data.generateMatrixDisco();
 	//data.generateMatrix();
 	//cout<<data.computeSimilarity("Alien","Avatar");
-	//data.generateMatrix();
-	/*
+	
 	cout<<"Recomendacion\nUsr, Item\n";
 	string usr="";
 	string item="";
@@ -71,9 +51,9 @@ int main(){
 	    getline(cin, item);
 	    cout<<usr<<", "<<item<<'\n';
 	//	data.generatevectorDisco(item);
-	    cout<<data.prediction(usr,item)<<"\n\n";
+		cout<<data.prediction1(usr,item)<<"\n\n";
 	}
-	*/
+	
 	//cout<<data.computeSimilarity("Star Wars","Jaws");
 	//data.loadData("ml-latest-small/ratings.csv",',');
 	//data.loadData("ml-latest/ratings.csv");
@@ -95,7 +75,7 @@ int main(){
 	//auto v =data.influences("332",3);
 
 	//cout<<data.recommender(v,"21")<<"\n";
-	
+	/*
 	int numItems = data.bandaUsrPuntaje.size();
 	vector<vector<float>> matriz = data.generateMatrixRAMSlopeOne();
     	
@@ -105,14 +85,13 @@ int main(){
 	    }
 	    cout<<"\n";
 	}
-    
-    map<int,float> predictions;
-    predictions = data.predictionWSlopeOne("Ben", matriz);
-    //predictions = data.predictionWSlopeOne("Clara", matriz);
-    //predictions = data.predictionWSlopeOne("Daisy", matriz);
+	map<int,float> predictions;
+	predictions = data.predictionWSlopeOne("Ben", matriz);*/
+	//predictions = data.predictionWSlopeOne("Clara", matriz);
+	//predictions = data.predictionWSlopeOne("Daisy", matriz);
 
-	for(auto key:predictions)
-		cout<<key.first<<" -> "<<key.second<<endl;
+	//for(auto key:predictions)
+	//	cout<<key.first<<" -> "<<key.second<<endl;
 
 
 	return 0;

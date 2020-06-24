@@ -2,20 +2,14 @@
 #define Bits_H
 #include <bitset>
 
+using namespace std;
 class Bits{
-
 public:
-	std::bitset<19> item;
-	//float rating;
-
+	bitset<19> item;
+public:
 	Bits(){};
-	/*Bits(int _item,float _rating){
-		item = _item;
-		rating = _rating;
-	}*/
 	Bits(int _item){
 		item = _item;
-		//rating=0;
 	}
 
 	int getitem(){

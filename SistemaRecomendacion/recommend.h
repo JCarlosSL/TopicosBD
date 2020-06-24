@@ -3,23 +3,25 @@
 #include "bits.h"
 
 typedef std::pair<Bits,float> pbits;
-using namespace std;
+typedef std::map<std::string,Bits> mapSBits;
+typedef std::map<Bits,std::map<Bits,float>> matrixData;
 
 class Recommender{
 	public:
-		std::map<std::string,Bits> user;
-		std::map<std::string,Bits> object;
+		mapSBits user; //id usuarios
+		mapSBits object; //id objetos
 		
-		std::map<Bits,std::map<Bits,float>> dataUsers;//puntaje Usr Banda Puntaje
+		matrixData dataUsers;//puntaje Usr Banda Puntaje
 		float *averages;
-		std::map<Bits,std::map<Bits,float>> bandaUsrPuntaje;//puntaje Banda Usr Puntaje
+		matrixData bandaUsrPuntaje;//puntaje Banda Usr Puntaje
 		std::vector<float> matrixSimilitud;
-		static std::string filename;
-		//books
+		static std::string filename; //archivo binario
+		
+		//books rating
 		int maxRating=10;
 		int minRating=0;
 		
-		//small y ml25
+		//small y ml25 rating
 		//int maxRating=5;
 		//int minRating=1;
 	public:

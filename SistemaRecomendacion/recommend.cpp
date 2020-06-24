@@ -447,7 +447,6 @@ vector<vector<float>> Recommender::generateMatrixRAMSlopeOne(){
     return matriz;
 }
 
-
 map<int,float> Recommender::predictionWSlopeOne(std::string _user, vector<vector<float>> matriz){
 	map<int,float> recommends;
 	float num=0.0;
