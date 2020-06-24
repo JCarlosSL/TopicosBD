@@ -9,16 +9,6 @@ char limit;
 
 int main(){
 
-	//Preprocesamiento de la data
-	 
-	/*DataPreprocessing prepro("datasetSmall/ratings.csv");
-	prepro.DataRecognition();
-
-	char limit = prepro.getlim();
-	char strip = prepro.getdiv();	
-	*/
-	//sistema de recomendacion
-	 
 	Recommender data;
 
 	//data.loadData("movie_ratings/Movie_Ratings.csv",',');
@@ -27,21 +17,19 @@ int main(){
 	//data.loadData("Data/bandas2.csv",'\t');
 	//data.loadData("ml-25m/ratings.csv",',');
 	//data.loadDataItems("ml-25m/ratings.csv",',');
-	data.loadData("BX-Dump/BX-Book-Ratings.csv",';');
-	data.loadDataItems("BX-Dump/BX-Book-Ratings.csv",';');
+	//data.loadData("BX-Dump/BX-Book-Ratings.csv",';');
+	//data.loadDataItems("BX-Dump/BX-Book-Ratings.csv",';');
 	//data.loadData("Movie_Ratings.csv",'\t');
     	//data.loadData("ml-latest27/ratings.csv",',');
 	//data.loadDataItems("ml-latest27/ratings.csv",',');
 	//data.loadData("pdf/slopeOne.csv",',');
-	//data.loadDataItems("pdf/slopeOne.csv",',');
-
 	//cout<<data.computeSimilarity("213","2131");
 	//cout<<data.computeSimilarity("Deadmau5","Slightly Stoopid");
-	data.getAverage();
+	//data.getAverage();
 	//data.generateMatrixDisco();
 	//data.generateMatrix();
 	//cout<<data.computeSimilarity("Alien","Avatar");
-	
+	/*
 	cout<<"Recomendacion\nUsr, Item\n";
 	string usr="";
 	string item="";
@@ -50,31 +38,9 @@ int main(){
 	    getline(cin, usr);
 	    getline(cin, item);
 	    cout<<usr<<", "<<item<<'\n';
-	//	data.generatevectorDisco(item);
 		cout<<data.prediction1(usr,item)<<"\n\n";
-	}
+	}*/
 	
-	//cout<<data.computeSimilarity("Star Wars","Jaws");
-	//data.loadData("ml-latest-small/ratings.csv",',');
-	//data.loadData("ml-latest/ratings.csv");
-	//data.loadData("bandas.csv");
-	//std::cout<<data.user.size()<<" "<<data.object.size();
-
-	//cout<<data.computeSimilarity("213","2131");
-	//cout<<data.computeSimilarity("Deadmau5","Slightly Stoopid");
-	//data.getAverage();
-	//data.generateMatrixDisco();
-	//cout<<data.computeSimilarity("Alien","Avatar");
-	//data.generateMatrix();
-	//cout<<data.prediction("David","Kacey Musgraves");
-	//auto p=data.user.find("Stephen");
-	//auto q=data.user.find("Amy");
-	//cout<<jaccard(data.dualhash[p->second],
-	//		data.dualhash[q->second]);
-//	data.dualhash.show();	
-	//auto v =data.influences("332",3);
-
-	//cout<<data.recommender(v,"21")<<"\n";
 	/*
 	int numItems = data.bandaUsrPuntaje.size();
 	vector<vector<float>> matriz = data.generateMatrixRAMSlopeOne();
@@ -93,6 +59,15 @@ int main(){
 	//for(auto key:predictions)
 	//	cout<<key.first<<" -> "<<key.second<<endl;
 
+    	//map<int,float> predictions;
+    	//predictions = data.predictionWSlopeOne("Ben", matriz);
+    	//predictions = data.predictionWSlopeOne("Clara", matriz);
+    	//predictions = data.predictionWSlopeOne("Daisy", matriz);
+	//for(auto key:predictions)
+	//	cout<<key.first<<" -> "<<key.second<<endl;
+
+	vector<vector<float>> matriz = data.generateMatrixRAMSlopeOne();
+	cout<<data.predictionSlopeOneRAM("Patrick C","Village",matriz)<<"\n";
 
 	return 0;
 }
