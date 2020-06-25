@@ -23,9 +23,13 @@ int main(){
     	//data.loadData("ml-latest27/ratings.csv",',');
 	//data.loadDataItems("ml-latest27/ratings.csv",',');
 	//data.loadData("pdf/slopeOne.csv",',');
+	
+	data.loadData("pdf/lorde.csv",',');
+    data.loadDataItems("pdf/lorde.csv",',');
+
 	//cout<<data.computeSimilarity("213","2131");
 	//cout<<data.computeSimilarity("Deadmau5","Slightly Stoopid");
-	//data.getAverage();
+    data.getAverage();
 	//data.generateMatrixDisco();
 	//data.generateMatrix();
 	//cout<<data.computeSimilarity("Alien","Avatar");
@@ -60,7 +64,9 @@ int main(){
 	//	cout<<key.first<<" -> "<<key.second<<endl;
 
 	vector<vector<float>> matriz = data.generateMatrixRAMSlopeOne();
-	cout<<data.predictionSlopeOneRAM("Patrick C","Village",matriz)<<"\n";
+	cout<<data.predictionSlopeOneRAM("Patrick C","Village",matriz)<<"\n";*/
+
+    cout<<data.prediction("David","Kacey Musgraves");
 
 	return 0;
 }
