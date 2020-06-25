@@ -49,25 +49,25 @@ class Recommender{
 		// generacion de matriz de similaridad
 		void generateMatrix();
 		void generateMatrixDisco();
-
+		
 		pairBF normalizar(string iduser,string iditem);
+
 	public:
 		string set_directory(string &path);
-		void printMatrix();
 		void getAverage();
 
 		float normalizerR(Bits _user,Bits item);
 		float deNormalizerR(float NR);
 
 		map<string,float> readMatrix(string address);
-		map<int,float> get_item_similars(string address);
+		
 		map<int,float> get_items_similars(string address);
 		float prediction(string userA, string item);	
 		float prediction1(string userA, string item);	
 	
 		float* computeDev2(Bits bandaA, Bits bandaB);
 		vector<vector<float>> generateMatrixRAMSlopeOne();
-        	map<int,float> predictionWSlopeOne(string _user, vector<vector<float>> matriz);
+			map<int,float> predictionWSlopeOne(string _user, vector<vector<float>> matriz);
 	
 		float predictionSlopeOneRAM(string user,string item,vector<vector<float>> matriz);
 };
