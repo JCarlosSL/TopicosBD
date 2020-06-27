@@ -429,20 +429,16 @@ vector<vector<float>> Recommender::generateMatrixRAMSlopeOne(){
     int numItems = bandaUsrPuntaje.size();
     
     vector<vector<float>> matriz;
-    
-    for(int i=0; i<numItems; i++){
-    
+    int index=43599;
+    for(int i=index; i<index+1; i++){
         vector<float> fila;
-	
 	    for (int j=0; j<numItems; j++){
 	    
 	        fila.push_back(computeDev2(Bits(i), Bits(j))[0]);
 	        fila.push_back(computeDev2(Bits(i), Bits(j))[1]);
 	        
 	    }
-	    
 	    matriz.push_back(fila);
-
     }
     return matriz;
 }
@@ -457,19 +453,21 @@ map<int,float> Recommender::predictionWSlopeOne(std::string _user, vector<vector
 				if(key2.second[user[_user]]){
 					int i = key.first.item.to_ulong();
 					int j = key2.first.item.to_ulong();
-					num += (matriz[i][j*2] + key2.second[user[_user]]) * matriz[i][(j*2)+1];
-					den += matriz[i][(j*2)+1];
+					// cout << "i" << i  << "j" << j << endl;
+					// cout << "numerador" <<  matriz[0][j*2]  << endl;
+					// cout << "denomindor" << matriz[0][(j*2)+1] << endl;
+					num += (matriz[0][j*2] + key2.second[user[_user]]) * matriz[0][(j*2)+1];
+					den += matriz[0][(j*2)+1];
 				}
 			}
-			//cout<<num<<"!!"<<den<<endl;
-			recommends[key.first.item.to_ulong()] = num/den;
+			//recommends[key.first.item.to_ulong()] = num/den;
 		}
 	}
+	cout<<num<<"<--->"<<den<<endl;
 	return recommends;
 }
 
-float Recommender::predictionSlopeOneRAM(std::string usuario, std::string itemm, vector<vector<float>> matriz){
-    
+float Recommender::predictionSlopeOneRAM(std::string usuario, std::string itemm,vector<vector<float>> matriz){    
     if ( user.find(usuario) == user.end() || object.find(itemm) == object.end() )
         return -1;
     
@@ -484,8 +482,8 @@ float Recommender::predictionSlopeOneRAM(std::string usuario, std::string itemm,
         int itemFrom = key.first.item.to_ulong();
         float puntaje = key.second;
         
-        num += (matriz[itemTo][itemFrom*2] + puntaje) * matriz[itemTo][itemFrom*2+1];
-        den += matriz[itemTo][itemFrom*2+1];      
+        num += (matriz[0][itemFrom*2] + puntaje) * matriz[0][itemFrom*2+1];
+        den += matriz[0][itemFrom*2+1];      
     }
     
     if (den==0)

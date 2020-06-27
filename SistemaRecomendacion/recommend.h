@@ -4,7 +4,7 @@
 
 using namespace std;
 typedef pair<Bits,float> pairBF;
-typedef unordered_map<string,Bits> mapSBits;
+typedef map<string,Bits> mapSBits;
 typedef map<Bits,map<Bits,float>> matrixData;
 typedef vector<pair<Bits,float>> distanceBF;
 typedef map<Bits,float> mapBF;
