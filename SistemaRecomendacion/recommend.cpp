@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 #include <string>
 #include <sys/types.h>
+#include "serializerconstants.h"
 #define epsilon 0.0000001f
 
 typedef int idx;
@@ -13,61 +14,66 @@ typedef int idx;
 std::string Recommender::filename = "sim.bin";
 
 void Recommender::loadData(std::string path,char lim){
-//    fstream f;
-//    f.open(path,std::ios::in);
+    // fstream f;
+    // f.open(path,std::ios::in);
 
-//    std::string temp;
-//    int cp=0;
-//    int cq=0;
-//    if(getline(f,temp)) cout<<"init \n";
-//    while(getline(f,temp)){
-//        vector<string> fields=split(temp,lim);
-//        auto p=user.find(trim(fields[0]));
-//        auto q=object.find(trim(fields[1]));
+    // std::string temp;
+    // int cp=0;
+    // int cq=0;
+    // if(getline(f,temp)) cout<<"init \n";
+    // while(getline(f,temp)){
+    //     vector<string> fields=split(temp,lim);
+    //     auto p=user.find(trim(fields[0]));
+    //     auto q=object.find(trim(fields[1]));
 
-//        bits tempp;
-//        bits tempq;
-//        if(p==user.end()){
-//            tempp=cp;
-//            user[trim(fields[0])]=tempp;
-//            cp++;
-//        }
-//        else tempp=p->second;
-//        if(q==object.end()){
-//            tempq=cq;
-//            object[trim(fields[1])]=tempq;
-//            cq++;
-//        }
-//        else tempq=q->second;
-//        dataUsers[tempp][tempq]=std::stof(trim(fields[2]));
-//    }
-//    f.close();
-//    this->fileManager->saveUser(this->user,SerializerConstants::LORDE+SerializerConstants::USER);
-//    this->fileManager->saveUser(this->object,SerializerConstants::LORDE+SerializerConstants::OBJECT);
-//    this->fileManager->saveBandaUsers(this->dataUsers,SerializerConstants::LORDE+SerializerConstants::BANDA_USERS);
+    //     bits tempp;
+    //     bits tempq;
+    //     if(p==user.end()){
+    //         //cout << "input  " << fields[0] << " --"<< fields[1]<< endl;
+    //         //cout << p->first << "---" << p->second <<endl;
+    //         tempp=cp;
+    //         //cout << tempp << endl;
+    //         user[trim(fields[0])]=tempp;
+    //         cp++;
+    //     }
+    //     else tempp=p->second;
+    //     if(q==object.end()){
+    //         //cout << q->first << "---" << q->second <<endl;
+    //         tempq=cq;
+    //         object[trim(fields[1])]=tempq;
+    //         cq++;
+    //     }
+    //     else tempq=q->second;
+    //     dataUsers[tempp][tempq]=std::stof(trim(fields[2]));
+    // }
+    // f.close();
+    // this->fileManager->saveUser(this->user,SerializerConstants::LORDE+SerializerConstants::USER);
+    // this->fileManager->saveUser(this->object,SerializerConstants::LORDE+SerializerConstants::OBJECT);
+    // this->fileManager->saveBandaUsers(this->dataUsers,SerializerConstants::LORDE+SerializerConstants::BANDA_USERS);
     this->user= this->fileManager->recoverUser(SerializerConstants::LORDE+SerializerConstants::USER);
     this->object= this->fileManager->recoverObject(SerializerConstants::LORDE+SerializerConstants::OBJECT);
     this->dataUsers= this->fileManager->recoverBandaUsers(SerializerConstants::LORDE+SerializerConstants::BANDA_USERS);
 }
 void Recommender::loadDataItems(std::string path,char lim){
-//    if(this->fileManager->recoverBandaUsersPuntaje(SerializerConstants::LORDE+SerializerConstants::BANDA_USERS_PUNTAJE)){
+//     fstream f;
+//     f.open(path,std::ios::in);
 
-//    }
-//    fstream f;
-//    f.open(path,std::ios::in);
+//     std::string temp;
 
-//    std::string temp;
-
-//    if(getline(f,temp)) cout<<"init \n";
-//    while(getline(f,temp)){
-//        vector<string> fields=split(temp,lim);
-//        bits p=user[trim(fields[0])];
-//        bits q=object[trim(fields[1])];
-//        bandaUsrPuntaje[q][p]=std::stof(trim(fields[2]));
-//    }
-//    f.close();
+//     if(getline(f,temp)) cout<<"init \n";
+//     while(getline(f,temp)){
+//         vector<string> fields=split(temp,lim);
+//         bits p=user[trim(fields[0])];
+//         bits q=object[trim(fields[1])];
+//         bandaUsrPuntaje[q][p]=std::stof(trim(fields[2]));
+//     }
+//     f.close();
 //    this->fileManager->saveBandaUsersPuntaje(this->bandaUsrPuntaje,SerializerConstants::LORDE+SerializerConstants::BANDA_USERS_PUNTAJE);
-    this->bandaUsrPuntaje= this->bandaUsrPuntaje=this->fileManager->recoverBandaUsersPuntaje(SerializerConstants::LORDE+SerializerConstants::BANDA_USERS_PUNTAJE);
+   this->bandaUsrPuntaje= this->bandaUsrPuntaje=this->fileManager->recoverBandaUsersPuntaje(SerializerConstants::LORDE+SerializerConstants::BANDA_USERS_PUNTAJE);
+   cout << "finished load from serializer" <<endl;
+   for(auto i:this->user){
+       cout << i.first << "--" << i.second << endl;
+   }
 }
 
 float Recommender::computeSimilarity(
@@ -179,6 +185,7 @@ void Recommender::generateMatrix(){
             ++f;
             delete[] valores;
         }
+        //cout<<h<<"\n";
         h++;
     }
 }
