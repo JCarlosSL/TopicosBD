@@ -68,7 +68,7 @@ class Recommender{
         float predictionSlopeOneRAM(std::string user, std::string item, vector<vector<float>> matriz);
 private:
     Serializer *serializer;
-    FileManager *filemanager;
+    //FileManager *filemanager;
 };
 
 #endif // RECOMMENDER_H
