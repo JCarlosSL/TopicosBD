@@ -32,8 +32,8 @@ int main(){
     //data.loadData("Movie_Ratings.csv",'\t');
     //data.loadData("ml-latest27/ratings.csv",',');
     //data.loadDataItems("ml-latest27/ratings.csv",',');
-    data.loadData("pdf/lorde.csv",',');
-    data.loadDataItems("pdf/lorde.csv",',');
+    //data.loadData("pdf/lorde.csv",',');
+    //data.loadDataItems("pdf/lorde.csv",',');
 
     //cout<<data.computeSimilarity("213","2131");
     //cout<<data.computeSimilarity("Deadmau5","Slightly Stoopid");

@@ -3,7 +3,7 @@
 #include <map>
 #include "bits.h"
 #include "filemanager.h"
-float manhattan(std::map<bits,float> rating1,std::map<bits,float> rating2){
+float manhattan(std::map<userOrItemKeyType,float> rating1,std::map<userOrItemKeyType,float> rating2){
     float distance=0;
     bool verbose=false;
     for( auto key:rating1){
@@ -18,7 +18,7 @@ float manhattan(std::map<bits,float> rating1,std::map<bits,float> rating2){
 
 }
 
-float euclides(std::map<bits,float> rating1,std::map<bits,float> rating2){
+float euclides(std::map<userOrItemKeyType,float> rating1,std::map<userOrItemKeyType,float> rating2){
     float distance=0;
     bool verbose=false;
     for( auto key:rating1){
@@ -33,7 +33,7 @@ float euclides(std::map<bits,float> rating1,std::map<bits,float> rating2){
 
 }
 
-float minkowsky(std::map<bits,float> rating1,std::map<bits,float> rating2,int r){
+float minkowsky(std::map<userOrItemKeyType,float> rating1,std::map<userOrItemKeyType,float> rating2,int r){
     float distance=0;
     bool verbose=false;
     for( auto key:rating1){
@@ -49,7 +49,7 @@ float minkowsky(std::map<bits,float> rating1,std::map<bits,float> rating2,int r)
 }
 
 
-float pearson(std::map<bits,float> rating1,std::map<bits,float> rating2){
+float pearson(std::map<userOrItemKeyType,float> rating1,std::map<userOrItemKeyType,float> rating2){
     bool verbose=false;
     float sumxy=0;
     float sumx=0;
@@ -76,7 +76,7 @@ float pearson(std::map<bits,float> rating1,std::map<bits,float> rating2){
 }
 
 
-float coseno(std::map<bits,float> rating1,std::map<bits,float> rating2){
+float coseno(std::map<userOrItemKeyType,float> rating1,std::map<userOrItemKeyType,float> rating2){
     bool verbose=false;
     float productpoint=0;
     float normx=0;
@@ -101,7 +101,7 @@ float coseno(std::map<bits,float> rating1,std::map<bits,float> rating2){
 }
 
 
-float jaccard(std::map<bits,float> rating1,std::map<bits,float> rating2){
+float jaccard(std::map<userOrItemKeyType,float> rating1,std::map<userOrItemKeyType,float> rating2){
     bool verbose=false;
     float intersect=0;
     float nsiz1=rating1.size();
