@@ -19,6 +19,8 @@ Recommender::Recommender(std::string dn,bool serialize=false,int minR=1,int maxR
     else
         this->filemanager->unSerializeData(this->user,this->object,this->dataUsers,this->bandaUsrPuntaje);
 };
+
+
 float Recommender::computeSimilarity(
     std::string band1,std::string band2){
     std::map<userOrItemKeyType,float> averages1;
@@ -529,3 +531,6 @@ void Recommender::insertRatings(std::string path){
     f.close();
 }
 
+void Recommender::serializeUpdate(){
+    this->filemanager->loadDataAndSerialize(this->user,this->object,this->dataUsers,this->bandaUsrPuntaje);
+}

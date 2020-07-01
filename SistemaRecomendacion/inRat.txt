@@ -1,6 +1,8 @@
 Id_user,Id_item,rating
 juan,REM,5.4
 juana,RCP,3.4
+juana,Lorde,3.4
+juana,Daft Punk,3
 luis,limpbizkit,5
 luisa,janis joplin,4
 puto,nirvana,5.9

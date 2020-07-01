@@ -10,18 +10,22 @@ void DatasetLorde(){
     
     Recommender data(DataSetConstants::LORDE,true);
     data.getAverage();
-    data.generateMatrixDisco();
-    cout<<data.prediction("David","Kacey Musgraves");
+    data.generateMatrixDiscoAC();
+//    cout<<data.prediction("juana","Kacey Musgraves");
+
     data.insertRatings("inRat.txt");
+	data.serializeUpdate();
     
 }
 
 void DatasetMovieLeans25M(){
-    Recommender data(DataSetConstants::MOVIELEANS27M);
-    data.getAverage();
+    Recommender data(DataSetConstants::BOOKS,true);
+    //data.getAverage();
+	//data.insertRatings("inRat.txt");
 }
 
 
 int main(){
     DatasetLorde();
+	//DatasetMovieLeans25M();
 }
