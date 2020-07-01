@@ -43,6 +43,9 @@ class Recommender{
             std::map<int,float> predictionWSlopeOne(std::string _user, vector<vector<float>> matriz);
 
         float predictionSlopeOneRAM(std::string user, std::string item, vector<vector<float>> matriz);
+//		void insertUser(std::string user);
+//		void insertItem(std::string item);
+		void insertRatings(std::string path);
 private:
     FileManager *filemanager;
     std::string datasetName;

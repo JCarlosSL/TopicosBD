@@ -416,3 +416,41 @@ float Recommender::predictionSlopeOneRAM(std::string usuario, std::string itemm,
         return 0;
     return num/den;
 }
+
+void Recommender::insertRatings(std::string path){
+
+    char splitter = ',';
+    fstream f;
+    f.open(path,std::ios::in);
+    std::string word;
+    if(getline(f,word)) cout<<"ignore \n";
+    while(getline(f,word)){
+        vector<string> dataVec = split(word,splitter);
+
+        auto it = user.find(dataVec[0]);
+        if(it != user.end()){
+            cout<<"usuario encontrado"<<endl;
+            auto jt = object.find(dataVec[1]);
+            if(jt != object.end()){
+                cout<<"item encontrado"<<endl;
+                //dataUsers[dataVec[0]][dataVec[1]] = bits(dataVec[2]);
+            }else{
+                object[dataVec[1]] = object.size();
+                //dataUsers[dataVec[0]][dataVec[1]] = dataVec[2];
+            }
+        }else{
+            user[dataVec[0]] = user.size();
+            auto jt = object.find(dataVec[1]);
+            if(jt != object.end()){
+                cout<<"item encontrado"<<endl;
+                //dataUsers[dataVec[0]][dataVec[1]] = dataVec[2];
+            }else{
+                object[dataVec[1]] = object.size();
+                //dataUsers[dataVec[0]][dataVec[1]] = dataVec[2];
+            }
+        }
+    }
+
+    f.close();
+}
+
