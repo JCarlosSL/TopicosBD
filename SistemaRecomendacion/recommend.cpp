@@ -415,3 +415,4 @@ float Recommender::predictionSlopeOneRAM(std::string usuario, std::string itemm,
     if (den==0)
         return 0;
     return num/den;
+}
