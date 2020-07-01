@@ -7,10 +7,10 @@
 #include<vector>
 #include "filemanager.h"
 #include "serializer.h"
-#include "serializerconstants.h"
-typedef std::pair<Bits,float> pbits;
+#include "datasetconstants.h"
 using namespace std;
 typedef unordered_map<string, userOrItemKeyType> typeMap1;
+
 class Recommender{
     public:
         typeMap1 user;
@@ -26,14 +26,8 @@ class Recommender{
         int maxRating=5;
         int minRating=1;
     public:
-        Recommender(){
-           this->serializer = new Serializer();
-           //cout << SerializerConstants::LORDE <<endl;
-           //this->filemanager=new FileManager(DataSetConstants::LORDE);
-        };
-        void setData(){
-            //this->filemanager->unSerializeData(this->user,this->object,this->dataUsers,this->bandaUsrPuntaje);
-        }
+        Recommender();
+        void setData();
         void loadData(string path,char lim);
         void loadDataItems(string path,char lim);
         std::vector<std::pair<userOrItemKeyType,float>> computerNearestNeighbors(
@@ -68,7 +62,7 @@ class Recommender{
         float predictionSlopeOneRAM(std::string user, std::string item, vector<vector<float>> matriz);
 private:
     Serializer *serializer;
-    //FileManager *filemanager;
+    FileManager *filemanager;
 };
 
 #endif // RECOMMENDER_H

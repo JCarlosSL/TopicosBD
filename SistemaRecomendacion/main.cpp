@@ -1,13 +1,14 @@
 #include <iostream>
 #include <bits/stdc++.h>
 #include "recommend.cpp"
-#include "serializerconstants.h"
 using namespace std;
 
 std::string path;
 char limit;
 
 int main(){
+
+    //FileManager(DataSetConstants::LORDE);
     //Preprocesamiento de la data
 
     /*DataPreprocessing prepro("datasetSmall/ratings.csv");

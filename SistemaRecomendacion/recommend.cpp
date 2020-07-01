@@ -1,16 +1,12 @@
 #include "recommend.h"
 #include <fstream>
-#include "tools.h"
 #include "metrica.cpp"
 #include <sys/stat.h>
 #include <string>
 #include <sys/types.h>
-#include "serializerconstants.h"
+#include "tools.h"
 #define epsilon 0.0000001f
-
 typedef int idx;
-
-
 std::string Recommender::filename = "sim.bin";
 
 void Recommender::loadData(std::string path,char lim){
@@ -75,7 +71,17 @@ void Recommender::loadDataItems(std::string path,char lim){
        cout << i.first << "--" << i.second << endl;
    }
 }
-
+Recommender::Recommender(){
+    this->serializer = new Serializer();
+    //this->filemanager=new FileManager(DataSetConstants::LORDE);
+    //this->setData();
+};
+/*void Recommender::setData(){
+    this->filemanager->unSerializeData(this->user,this->object,this->dataUsers,this->bandaUsrPuntaje);
+    for(auto i :this->object)
+        std:: cout << i.first << "--" << i.second << std::endl;
+}
+*/
 float Recommender::computeSimilarity(
     std::string band1,std::string band2){
     std::map<userOrItemKeyType,float> averages1;

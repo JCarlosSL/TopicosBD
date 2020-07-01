@@ -20,8 +20,6 @@ public:
 private:
     SerializerConstants();
 };
-
-
 const std::string SerializerConstants::ANGELICA = std::string("serializer/angelica/");
 const std::string SerializerConstants::LORDE = std::string("serializer/lorde/");
 const std::string SerializerConstants::SLOPONE = std::string("serilaizer/slopone/");
