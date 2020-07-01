@@ -10,7 +10,7 @@ void DatasetLorde(){
     
     Recommender data(DataSetConstants::LORDE,true);
     data.getAverage();
-//    data.generateMatrixDisco();
+    data.generateMatrixDisco();
     cout<<data.prediction("David","Kacey Musgraves");
     data.insertRatings("inRat.txt");
     
