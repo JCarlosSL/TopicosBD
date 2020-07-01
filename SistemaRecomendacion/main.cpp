@@ -3,15 +3,16 @@
 #include "recommend.cpp"
 #include "datasetconstants.h"
 using namespace std;
-
 std::string path;
 char limit;
-void DatasetLorde(){
+void DatasetLorde()
+{
     Recommender data(DataSetConstants::LORDE,true);
     data.getAverage();
     cout<<data.prediction("David","Kacey Musgraves");    
 }
-void DatasetMovieLeans25M(){
+void DatasetMovieLeans25M()
+{
     Recommender data(DataSetConstants::MOVIELEANS27M);
     data.getAverage();
 }
