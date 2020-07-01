@@ -282,15 +282,15 @@ float Recommender::prediction(std::string userA, std::string item){
 
     if (user.find(userA)==user.end() || object.find(item)==object.end())
             return -2;
-
-       int iditem = object[item];
-       string str = std::to_string(iditem);
+	int iditem = object[item];
+	string str = std::to_string(iditem);
     string address="Matriz/";
     string slash="/";
     for(auto it:str){
         address += it + slash;
     }
 
+	cout<<" cant: "<<dataUsers[user[userA]].size()<<"\n";
     //relax
     address = address;
     std::map<int,float> items = get_items_similars(address);
@@ -416,3 +416,4 @@ float Recommender::predictionSlopeOneRAM(std::string usuario, std::string itemm,
         return 0;
     return num/den;
 }
+

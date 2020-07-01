@@ -33,7 +33,7 @@ public:
 
     void setLimit(std::string dn){
         if(dn==DataSetConstants::BOOKS)
-            this->limit='::';
+            this->limit=';';
         else
             this->limit=',';
     }
@@ -52,6 +52,7 @@ public:
             
             userOrItemKeyType tempp;
             userOrItemKeyType tempq;
+
             if(p==userMap.end()){
                 tempp=cp;
                 userMap[trim(fields[0])]=tempp;
@@ -64,6 +65,7 @@ public:
                 cq++;
             }
             else tempq=q->second;
+
             userItemMatrix[tempp][tempq]=std::stof(trim(fields[2]));
         }
         f.close();                 
@@ -76,6 +78,8 @@ public:
             userOrItemKeyType q=itemMap[trim(fields[1])];
             itemUserMatrix[q][p]=std::stof(trim(fields[2]));
         }
+        f.close();
+        cout<<"gg"<<endl;
         this->serializer->saveUser(userMap,this->serializeDataPath+SerializerConstants::USER);
         this->serializer->saveUser(itemMap,this->serializeDataPath+SerializerConstants::OBJECT);
         this->serializer->saveBandaUsers(userItemMatrix,this->serializeDataPath+SerializerConstants::BANDA_USERS);

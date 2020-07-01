@@ -14,7 +14,7 @@
 #include <sstream>
 #include "bits.h"
 #include <cassert>
-typedef  unsigned short int	userOrItemKeyType;
+typedef  unsigned int userOrItemKeyType;
 typedef std::unordered_map<std::string,userOrItemKeyType> UserOrItemMap;
 typedef std::unordered_map<userOrItemKeyType,std::map<userOrItemKeyType,float>> MatrixDataMap;
 class Serializer
