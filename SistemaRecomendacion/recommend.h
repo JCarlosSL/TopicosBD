@@ -9,27 +9,11 @@
 #include "serializer.h"
 #include "datasetconstants.h"
 using namespace std;
-typedef unordered_map<string, userOrItemKeyType> typeMap1;
 
 class Recommender{
-    public:
-        typeMap1 user;
-        typeMap1 object;
-        
-        std::map<userOrItemKeyType,std::map<userOrItemKeyType,float>> dataUsers;//puntaje Usr Banda Puntaje
-        float *averages;
-        std::map<userOrItemKeyType,std::map<userOrItemKeyType,float>> bandaUsrPuntaje;//puntaje Banda Usr Puntaje
 
-        std::vector<float> matrixSimilitud;
-        static std::string filename;
-
-        int maxRating=5;
-        int minRating=1;
     public:
-        Recommender();
-        void setData();
-        void loadData(string path,char lim);
-        void loadDataItems(string path,char lim);
+        Recommender(std::string,bool,int,int);
         std::vector<std::pair<userOrItemKeyType,float>> computerNearestNeighbors(
                 std::string iduser,int r);
         std::map<userOrItemKeyType,float> influences(std::string _user,int r);
@@ -45,7 +29,6 @@ class Recommender{
         std::string set_directory(std::string &path);
         void printMatrix();
         void getAverage();
-
         float normalizerR(userOrItemKeyType _user,userOrItemKeyType item);
         float deNormalizerR(float NR);
 
@@ -61,8 +44,20 @@ class Recommender{
 
         float predictionSlopeOneRAM(std::string user, std::string item, vector<vector<float>> matriz);
 private:
-    Serializer *serializer;
     FileManager *filemanager;
+    std::string datasetName;
+
+    //Four maps structure
+    UserOrItemMap user;
+    UserOrItemMap object;
+    MatrixDataMap dataUsers;//puntaje Usr Banda Puntaje
+    MatrixDataMap bandaUsrPuntaje;//puntaje Banda Usr Puntaje
+    
+    float *averages;
+    std::vector<float> matrixSimilitud;
+    static std::string filename;
+    int maxRating;
+    int minRating;
 };
 
 #endif // RECOMMENDER_H

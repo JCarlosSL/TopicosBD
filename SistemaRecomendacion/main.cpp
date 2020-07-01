@@ -1,13 +1,22 @@
 #include <iostream>
 #include <bits/stdc++.h>
 #include "recommend.cpp"
+#include "datasetconstants.h"
 using namespace std;
 
 std::string path;
 char limit;
-
+void DatasetLorde(){
+    Recommender data(DataSetConstants::LORDE,true);
+    data.getAverage();
+    cout<<data.prediction("David","Kacey Musgraves");    
+}
+void DatasetMovieLeans25M(){
+    Recommender data(DataSetConstants::MOVIELEANS27M);
+    data.getAverage();
+}
 int main(){
-
+    DatasetLorde();
     //FileManager(DataSetConstants::LORDE);
     //Preprocesamiento de la data
 
@@ -19,7 +28,7 @@ int main(){
     */
     //sistema de recomendacion
 
-    Recommender data;
+    //Recommender data;
 
     // data.loadData("movie_ratings/Movie_Ratings.csv",',');
     // data.loadDataItems("movie_ratings/Movie_Ratings.csv",',');
@@ -32,12 +41,12 @@ int main(){
     //data.loadData("Movie_Ratings.csv",'\t');
     //data.loadData("ml-latest27/ratings.csv",',');
     //data.loadDataItems("ml-latest27/ratings.csv",',');
-    data.loadData("pdf/lorde.csv",',');
-    data.loadDataItems("pdf/lorde.csv",',');
+    //data.loadData("pdf/lorde.csv",',');
+    //data.loadDataItems("pdf/lorde.csv",',');
 
     //cout<<data.computeSimilarity("213","2131");
     //cout<<data.computeSimilarity("Deadmau5","Slightly Stoopid");
-    data.getAverage();
+    //data.getAverage();
     //data.generateMatrixDisco();
     //data.generateMatrix();
     //cout<<data.computeSimilarity("Alien","Avatar");
@@ -67,7 +76,7 @@ int main(){
     //data.generateMatrixDisco();
     //cout<<data.computeSimilarity("Alien","Avatar");
     //data.generateMatrix();
-    cout<<data.prediction("David","Kacey Musgraves");
+    //cout<<data.prediction("David","Kacey Musgraves");
     //auto p=data.user.find("Stephen");
     //auto q=data.user.find("Amy");
     //cout<<jaccard(data.dualhash[p->second],

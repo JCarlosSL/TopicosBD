@@ -9,79 +9,16 @@
 typedef int idx;
 std::string Recommender::filename = "sim.bin";
 
-void Recommender::loadData(std::string path,char lim){
-    // fstream f;
-    // f.open(path,std::ios::in);
-
-    // std::string temp;
-    // int cp=0;
-    // int cq=0;
-    // if(getline(f,temp)) cout<<"init \n";
-    // while(getline(f,temp)){
-    //     vector<string> fields=split(temp,lim);
-    //     auto p=user.find(trim(fields[0]));
-    //     auto q=object.find(trim(fields[1]));
-
-    //     userOrItemKeyType tempp;
-    //     userOrItemKeyType tempq;
-    //     if(p==user.end()){
-    //         //cout << "input  " << fields[0] << " --"<< fields[1]<< endl;
-    //         //cout << p->first << "---" << p->second <<endl;
-    //         tempp=cp;
-    //         //cout << tempp << endl;
-    //         user[trim(fields[0])]=tempp;
-    //         cp++;
-    //     }
-    //     else tempp=p->second;
-    //     if(q==object.end()){
-    //         //cout << q->first << "---" << q->second <<endl;
-    //         tempq=cq;
-    //         object[trim(fields[1])]=tempq;
-    //         cq++;
-    //     }
-    //     else tempq=q->second;
-    //     dataUsers[tempp][tempq]=std::stof(trim(fields[2]));
-    // }
-    // f.close();
-    // this->serializer->saveUser(this->user,SerializerConstants::LORDE+SerializerConstants::USER);
-    // this->serializer->saveUser(this->object,SerializerConstants::LORDE+SerializerConstants::OBJECT);
-    // this->serializer->saveBandaUsers(this->dataUsers,SerializerConstants::LORDE+SerializerConstants::BANDA_USERS);
-    this->user= this->serializer->recoverUser(SerializerConstants::LORDE+SerializerConstants::USER);
-    this->object= this->serializer->recoverObject(SerializerConstants::LORDE+SerializerConstants::OBJECT);
-    this->dataUsers= this->serializer->recoverBandaUsers(SerializerConstants::LORDE+SerializerConstants::BANDA_USERS);
-}
-void Recommender::loadDataItems(std::string path,char lim){
-//     fstream f;
-//     f.open(path,std::ios::in);
-
-//     std::string temp;
-
-//     if(getline(f,temp)) cout<<"init \n";
-//     while(getline(f,temp)){
-//         vector<string> fields=split(temp,lim);
-//         userOrItemKeyType p=user[trim(fields[0])];
-//         userOrItemKeyType q=object[trim(fields[1])];
-//         bandaUsrPuntaje[q][p]=std::stof(trim(fields[2]));
-//     }
-//     f.close();
-//    this->serializer->saveBandaUsersPuntaje(this->bandaUsrPuntaje,SerializerConstants::LORDE+SerializerConstants::BANDA_USERS_PUNTAJE);
-  this->bandaUsrPuntaje=this->serializer->recoverBandaUsersPuntaje(SerializerConstants::LORDE+SerializerConstants::BANDA_USERS_PUNTAJE);
-   cout << "finished load from serializer" <<endl;
-   for(auto i:this->user){
-       cout << i.first << "--" << i.second << endl;
-   }
-}
-Recommender::Recommender(){
-    this->serializer = new Serializer();
-    //this->filemanager=new FileManager(DataSetConstants::LORDE);
-    //this->setData();
+Recommender::Recommender(std::string dn,bool serialize=false,int minR=1,int maxR=5)
+    :datasetName(dn),minRating(minR),maxRating(maxR)
+{
+    this->filemanager=new FileManager(this->datasetName);
+    if(serialize){
+        this->filemanager->loadDataAndSerialize(this->user,this->object,this->dataUsers,this->bandaUsrPuntaje);
+    }
+    else
+        this->filemanager->unSerializeData(this->user,this->object,this->dataUsers,this->bandaUsrPuntaje);
 };
-/*void Recommender::setData(){
-    this->filemanager->unSerializeData(this->user,this->object,this->dataUsers,this->bandaUsrPuntaje);
-    for(auto i :this->object)
-        std:: cout << i.first << "--" << i.second << std::endl;
-}
-*/
 float Recommender::computeSimilarity(
     std::string band1,std::string band2){
     std::map<userOrItemKeyType,float> averages1;
@@ -94,12 +31,9 @@ float Recommender::computeSimilarity(
         averages1[key.first]=sum/key.second.size();
     }
 
-    float num=0;
-    float dem1=0;
-    float dem2=0;
-    auto q1=object[band1];
-    auto q2=object[band2];
-
+	float num=0,dem1=0,dem2=0;
+	auto q1=object[band1];
+	auto q2=object[band2];
     for(auto key:dataUsers){
         auto p1=key.second.find(q1);
         auto p2=key.second.find(q2);
@@ -167,9 +101,7 @@ float* Recommender::computeSimilarity3(userOrItemKeyType bandaA,userOrItemKeyTyp
     valores[0] = num;
     valores[1] = den1;
     valores[2] = den2;
-
     return valores;
-
 }
 
 void Recommender::generateMatrix(){
@@ -191,13 +123,9 @@ void Recommender::generateMatrix(){
             ++f;
             delete[] valores;
         }
-        //cout<<h<<"\n";
         h++;
     }
 }
-
-
-
 std::string Recommender::set_directory(std::string &path){
     std::string new_path="";
     std::string slash="/";
@@ -208,16 +136,13 @@ std::string Recommender::set_directory(std::string &path){
     }
     return "Matriz/"+new_path;
 }
-
 void Recommender::generateMatrixDisco(){
     size_t size_file = object.size()*3;
     mkdir("Matriz/",0777);
     for(int path=0;path<object.size();path++){
         std::string pathname =std::to_string(path);
         float *vectorFila = new float[size_file];
-
         int h=0;
-
         for(int j = 0 ; j < object.size()*3 ; j+=3){
             float *valores = computeSimilarity3(userOrItemKeyType(path),userOrItemKeyType(h));
             vectorFila[j] = valores[0];
@@ -227,14 +152,12 @@ void Recommender::generateMatrixDisco(){
             h+=1;
         }
         //guardar a disco toda la fila ( el vectorFila )
-
         std::string new_path = set_directory(pathname);
         mkdir(new_path.c_str(),0777);
         fstream file;
-        file.open(new_path.c_str()+this->filename,std::ios::out|std::ios::binary);
+		file.open(new_path.c_str()+this->filename,ios::out|ios::binary);
         file.write( reinterpret_cast<char *>(&vectorFila[0]), size_file*sizeof(float) );
         file.close();
-
         delete[] vectorFila;
         //cout<<path<<"\n";
     }
@@ -259,8 +182,6 @@ std::vector<std::pair<userOrItemKeyType,float>> Recommender::computerNearestNeig
     }
     else return distances;
 }
-
-
 std::map<userOrItemKeyType,float> Recommender::influences(
         std::string iduser,int r){
     auto nearest=computerNearestNeighbors(iduser,r);
@@ -275,10 +196,8 @@ std::map<userOrItemKeyType,float> Recommender::influences(
     }
     return influence;
 }
-
 float Recommender::recommender(
     std::map<userOrItemKeyType,float> influences,std::string objeto){
-
     auto s=object[objeto];
     float proyeccion=0;
     for (auto p:influences){
@@ -289,38 +208,28 @@ float Recommender::recommender(
     }
     return proyeccion;
 }
-
-
 //normalizacion
-
 float Recommender::normalizerR(userOrItemKeyType _user,userOrItemKeyType item){
     float ratingN = 0;
     float diference = maxRating - minRating;
     ratingN = (2*(bandaUsrPuntaje[item][_user] - minRating) - diference)/diference;
     return ratingN;
 }
-
 float Recommender::deNormalizerR(float NR){
     float ratingDN = 0;
     float diference = maxRating - minRating;
     ratingDN = (0.5*((NR +1) * diference) + minRating);
     return ratingDN;
 }
-
 std::map<int, float> Recommender::get_items_similars(std::string address){
     size_t size_items = object.size()*3;
-
         std::fstream fin;
-
         std::map<int, float> similar_items;
         float *vector_items = new float[size_items];
-
         fin.open(address+filename, std::ios::binary | std::ios::in);
         fin.read( reinterpret_cast<char *>(&vector_items[0]), size_items*sizeof(float));
-
         size_t item = 0;
         for (size_t idx = 0; idx < size_items; ++idx){
-
             float num = vector_items[idx];
             float dem1 = vector_items[++idx];
             float dem2 = vector_items[++idx];
@@ -331,17 +240,12 @@ std::map<int, float> Recommender::get_items_similars(std::string address){
                 prediction = num / (sqrt(dem1) * sqrt(dem2));
             similar_items[item] = prediction;
             item += 1;
-        //	cout<<prediction<<" "<<dem1<<" "<<dem2<<"\n";
         }
-
         return similar_items;
 }
-
 float Recommender::prediction1(std::string userA,std::string item){
     int iditem = object[item];
-
     float den=0,num=0;
-
     for(auto p:dataUsers[user[userA]]){
         auto iditemu = p.first;
         int pitem=iditem;
@@ -374,9 +278,6 @@ float Recommender::prediction1(std::string userA,std::string item){
 
     return 0;
 }
-
-
-
 float Recommender::prediction(std::string userA, std::string item){
 
     if (user.find(userA)==user.end() || object.find(item)==object.end())

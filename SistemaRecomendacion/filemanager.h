@@ -38,7 +38,7 @@ public:
             this->limit=',';
     }
 
-    void loadData(UserOrItemMap &userMap, UserOrItemMap &itemMap, MatrixDataMap &userItemMatrix, MatrixDataMap itemUserMatrix) {
+    void loadDataAndSerialize(UserOrItemMap &userMap, UserOrItemMap &itemMap, MatrixDataMap &userItemMatrix, MatrixDataMap &itemUserMatrix) {
         fstream f;
         f.open(this->datasetName,std::ios::in);
         std::string temp;
@@ -64,7 +64,7 @@ public:
                 cq++;
             }
             else tempq=q->second;
-            itemUserMatrix[tempp][tempq]=std::stof(trim(fields[2]));
+            userItemMatrix[tempp][tempq]=std::stof(trim(fields[2]));
         }
         f.close();                 
         
@@ -74,15 +74,15 @@ public:
             vector<string> fields=split(temp,this->limit);
             userOrItemKeyType p=userMap[trim(fields[0])];
             userOrItemKeyType q=itemMap[trim(fields[1])];
-            userItemMatrix[q][p]=std::stof(trim(fields[2]));
+            itemUserMatrix[q][p]=std::stof(trim(fields[2]));
         }
         this->serializer->saveUser(userMap,this->serializeDataPath+SerializerConstants::USER);
         this->serializer->saveUser(itemMap,this->serializeDataPath+SerializerConstants::OBJECT);
-        this->serializer->saveBandaUsers(itemUserMatrix,this->serializeDataPath+SerializerConstants::BANDA_USERS);
-        this->serializer->saveBandaUsersPuntaje(userItemMatrix,this->serializeDataPath+SerializerConstants::BANDA_USERS_PUNTAJE);
+        this->serializer->saveBandaUsers(userItemMatrix,this->serializeDataPath+SerializerConstants::BANDA_USERS);
+        this->serializer->saveBandaUsersPuntaje(itemUserMatrix,this->serializeDataPath+SerializerConstants::BANDA_USERS_PUNTAJE);
     }
 
-    void unSerializeData(UserOrItemMap &userMap, UserOrItemMap &itemMap, MatrixDataMap &userItemMatrix, MatrixDataMap itemUserMatrix){
+    void unSerializeData(UserOrItemMap &userMap, UserOrItemMap &itemMap, MatrixDataMap &userItemMatrix, MatrixDataMap & itemUserMatrix){
         userMap= this->serializer->recoverUser(this->serializeDataPath+SerializerConstants::USER);
         itemMap= this->serializer->recoverObject(this->serializeDataPath+SerializerConstants::OBJECT);
         userItemMatrix= this->serializer->recoverBandaUsers(this->serializeDataPath+SerializerConstants::BANDA_USERS);
