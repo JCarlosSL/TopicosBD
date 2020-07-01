@@ -126,7 +126,7 @@ void Recommender::generateMatrix(){
         h++;
     }
 }
-std::string Recommender::set_directory(std::string &path){
+std::string Recommender::set_directory(std::string &path, int mode = 0){
     std::string new_path="";
     std::string slash="/";
     size_t i = 0;
@@ -134,11 +134,15 @@ std::string Recommender::set_directory(std::string &path){
         new_path += path[unit]+slash;
         ++i;
     }
-    return "Matriz/"+new_path;
+    if (mode == 0)
+        return "MatrizAC/"+new_path;
+    else
+        return "MatrizSO/"+new_path;
 }
-void Recommender::generateMatrixDisco(){
+
+void Recommender::generateMatrixDiscoAC(){
     size_t size_file = object.size()*3;
-    mkdir("Matriz/",0777);
+    mkdir("MatrizAC",0777);
     for(int path=0;path<object.size();path++){
         std::string pathname =std::to_string(path);
         float *vectorFila = new float[size_file];
@@ -223,25 +227,25 @@ float Recommender::deNormalizerR(float NR){
 }
 std::map<int, float> Recommender::get_items_similars(std::string address){
     size_t size_items = object.size()*3;
-        std::fstream fin;
-        std::map<int, float> similar_items;
-        float *vector_items = new float[size_items];
-        fin.open(address+filename, std::ios::binary | std::ios::in);
-        fin.read( reinterpret_cast<char *>(&vector_items[0]), size_items*sizeof(float));
-        size_t item = 0;
-        for (size_t idx = 0; idx < size_items; ++idx){
-            float num = vector_items[idx];
-            float dem1 = vector_items[++idx];
-            float dem2 = vector_items[++idx];
-            float prediction;
-            if (fabs(dem1) <= epsilon || fabs(dem2) <= epsilon)
-                prediction = 0;
-            else
-                prediction = num / (sqrt(dem1) * sqrt(dem2));
-            similar_items[item] = prediction;
-            item += 1;
-        }
-        return similar_items;
+    std::fstream fin;
+    std::map<int, float> similar_items;
+    float *vector_items = new float[size_items];
+    fin.open(address+filename, std::ios::binary | std::ios::in);
+    fin.read( reinterpret_cast<char *>(&vector_items[0]), size_items*sizeof(float));
+    size_t item = 0;
+    for (size_t idx = 0; idx < size_items; ++idx){
+        float num = vector_items[idx];
+        float dem1 = vector_items[++idx];
+        float dem2 = vector_items[++idx];
+        float prediction;
+        if (fabs(dem1) <= epsilon || fabs(dem2) <= epsilon)
+            prediction = 0;
+        else
+            prediction = num / (sqrt(dem1) * sqrt(dem2));
+        similar_items[item] = prediction;
+        item += 1;
+    }
+    return similar_items;
 }
 float Recommender::prediction1(std::string userA,std::string item){
     int iditem = object[item];
@@ -281,11 +285,11 @@ float Recommender::prediction1(std::string userA,std::string item){
 float Recommender::prediction(std::string userA, std::string item){
 
     if (user.find(userA)==user.end() || object.find(item)==object.end())
-            return -2;
+        return -2;
 
-       int iditem = object[item];
-       string str = std::to_string(iditem);
-    string address="Matriz/";
+    int iditem = object[item];
+    string str = std::to_string(iditem);
+    string address="MatrizAC/";
     string slash="/";
     for(auto it:str){
         address += it + slash;
@@ -347,6 +351,31 @@ float* Recommender::computeDev2(userOrItemKeyType bandaA, userOrItemKeyType band
 
 }
 
+void Recommender::generateMatrixDiscoSO(){
+    mkdir("MatrizSO",0777);
+    size_t size_file = object.size()*2;
+    for(int path=0;path<object.size();path++){
+        std::string pathname =std::to_string(path);
+        float *vectorFila = new float[size_file];
+        int h=0;
+        for(int j = 0 ; j < object.size()*2 ; j+=2){
+            float *valores = computeDev2(userOrItemKeyType(path),userOrItemKeyType(h));
+            vectorFila[j] = valores[0];
+            vectorFila[j+1] = valores[1];
+            delete[] valores;
+            h+=1;
+        }
+        //guardar a disco toda la fila ( el vectorFila )
+        std::string new_path = set_directory(pathname,1);
+        mkdir(new_path.c_str(),0777);
+        fstream file;
+		file.open(new_path.c_str()+this->filename,ios::out|ios::binary);
+        file.write( reinterpret_cast<char *>(&vectorFila[0]), size_file*sizeof(float) );
+        file.close();
+        delete[] vectorFila;
+    }
+}
+
 vector<vector<float>> Recommender::generateMatrixRAMSlopeOne(){
 
     int numItems = bandaUsrPuntaje.size();
@@ -390,6 +419,48 @@ map<int,float> Recommender::predictionWSlopeOne(std::string _user, vector<vector
         }
     }
     return recommends;
+}
+
+float* Recommender::get_items_similarsSO(std::string address){
+    size_t size_items = object.size()*2;
+    std::fstream fin;
+    float *vector_items = new float[size_items];
+    fin.open(address+filename, std::ios::binary | std::ios::in);
+    fin.read( reinterpret_cast<char *>(&vector_items[0]), size_items*sizeof(float));
+    return vector_items;
+}
+
+float Recommender::predictionSlopeOneRAM(std::string usuario, std::string itemm){
+    if ( user.find(usuario) == user.end() || object.find(itemm) == object.end() )
+        return -1;
+    userOrItemKeyType usr = user[usuario];
+    int itemTo = object[itemm];
+
+    string str = std::to_string(itemTo);
+    string address="MatrizSO/";
+    string slash="/";
+    for(auto it:str){
+        address += it + slash;
+    }
+
+    float* simil_items = get_items_similarsSO(address);
+
+    float num=0;
+    float den=0;
+
+    for (auto key: dataUsers[usr]){
+
+        int itemFrom = key.first;
+        float puntaje = key.second;
+
+        float c = simil_items[itemFrom*2+1];
+        num += (simil_items[itemFrom*2] + puntaje) * c;
+        den += c;
+    }
+
+    if (den==0)
+        return 0;
+    return num/den;
 }
 
 float Recommender::predictionSlopeOneRAM(std::string usuario, std::string itemm, vector<vector<float>> matriz){

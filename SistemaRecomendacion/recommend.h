@@ -21,12 +21,12 @@ class Recommender{
         float computeSimilarity(std::string band1,std::string band2);
         float* computeSimilarity3(userOrItemKeyType band1,userOrItemKeyType band2);
         void generateMatrix();
-        void generatevectorDisco(std::string iditem);
-        void generateMatrixDisco();
+        void generatevectorDiscoAC(std::string iditem);
+        void generateMatrixDiscoAC();
         std::pair<userOrItemKeyType,float> normalizar(
                 std::string iduser,std::string iditem);
     public:
-        std::string set_directory(std::string &path);
+        std::string set_directory(std::string &path, int mode);
         void printMatrix();
         void getAverage();
         float normalizerR(userOrItemKeyType _user,userOrItemKeyType item);
@@ -42,6 +42,10 @@ class Recommender{
         vector<vector<float>> generateMatrixRAMSlopeOne();
             std::map<int,float> predictionWSlopeOne(std::string _user, vector<vector<float>> matriz);
 
+        float* get_items_similarsSO(std::string address);
+        void generateMatrixDiscoSO();
+
+        float predictionSlopeOneRAM(std::string usuario, std::string itemm);
         float predictionSlopeOneRAM(std::string user, std::string item, vector<vector<float>> matriz);
 private:
     FileManager *filemanager;
