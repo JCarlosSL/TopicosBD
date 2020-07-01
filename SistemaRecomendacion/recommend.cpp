@@ -504,20 +504,24 @@ void Recommender::insertRatings(std::string path){
             auto jt = object.find(dataVec[1]);
             if(jt != object.end()){
                 cout<<"item encontrado"<<endl;
-                //dataUsers[dataVec[0]][dataVec[1]] = bits(dataVec[2]);
+                dataUsers[user[dataVec[0]]][object[dataVec[1]]] = stoi(dataVec[2]);
+                bandaUsrPuntaje[user[dataVec[0]]][object[dataVec[1]]] = stoi(dataVec[2]);
             }else{
                 object[dataVec[1]] = object.size();
-                //dataUsers[dataVec[0]][dataVec[1]] = dataVec[2];
+                dataUsers[user[dataVec[0]]][object[dataVec[1]]] = stoi(dataVec[2]);
+                bandaUsrPuntaje[user[dataVec[0]]][object[dataVec[1]]] = stoi(dataVec[2]);
             }
         }else{
             user[dataVec[0]] = user.size();
             auto jt = object.find(dataVec[1]);
             if(jt != object.end()){
                 cout<<"item encontrado"<<endl;
-                //dataUsers[dataVec[0]][dataVec[1]] = dataVec[2];
+                dataUsers[user[dataVec[0]]][object[dataVec[1]]] = stoi(dataVec[2]);
+                bandaUsrPuntaje[user[dataVec[0]]][object[dataVec[1]]] = stoi(dataVec[2]);
             }else{
                 object[dataVec[1]] = object.size();
-                //dataUsers[dataVec[0]][dataVec[1]] = dataVec[2];
+                dataUsers[user[dataVec[0]]][object[dataVec[1]]] = stoi(dataVec[2]);
+                bandaUsrPuntaje[user[dataVec[0]]][object[dataVec[1]]] = stoi(dataVec[2]);
             }
         }
     }
