@@ -357,7 +357,7 @@ float* Recommender::computeDev2(userOrItemKeyType bandaA, userOrItemKeyType band
 void Recommender::generateMatrixDiscoSO(){
     
     size_t size_file = object.size()*2;
-    ffor(int path=0;path<object.size();path++){
+    for(int path=0;path<object.size();path++){
         std::string pathname =std::to_string(path);
         float *vectorFila = new float[size_file];
         int h=0;
