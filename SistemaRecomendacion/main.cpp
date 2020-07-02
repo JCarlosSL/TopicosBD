@@ -14,20 +14,23 @@ void DatasetLorde(){
     cout<<data.prediction("David","Kacey Musgraves");
     cout<<data.prediction("David","Lorde");
     data.insertRatings("inRat.txt");
+    data.generateMatrixDiscoAC();
+    data.insertRatings("inRat.txt");
+	data.serializeUpdate();
 }
 
 void DatasetMovieLeans25M(){
-    Recommender data(DataSetConstants::MOVIELEANS27M);
-    data.getAverage();
+    Recommender data(DataSetConstants::BOOKS,true);
 }
 
 void DatasetBooks(){
 	cout<<DataSetConstants::BOOKS<<endl;
-	Recommender data(DataSetConstants::BOOKS,true);
+	Recommender data(DataSetConstants::BOOKS,true,0,10);
 	data.getAverage();
 	//data.generateMatrixDisco();	
 	
 	string usuario="",item="";
+	int k=0;
 	cout<<"coseno ajustado \n"<<endl;
 	while(usuario!="fin" and item!="fin"){
 		cout<<"usuario: ";
@@ -35,7 +38,44 @@ void DatasetBooks(){
 		cout<<"item: ";
 		getline(cin,item);
 		auto t1 = chrono::high_resolution_clock::now();
-		float pr= data.prediction1(usuario,item);
+		/*cout<<"k: ";
+		cin>>k;
+		cin.ignore();
+		auto inf = data.influences(usuario,k);
+		float pr = data.recommender(inf,item);
+		*/	
+		float pr= data.prediction(usuario,item);
+		
+		cout<<"prediccion: "<<pr<<endl;
+		auto t2 = chrono::high_resolution_clock::now();
+		auto d = chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
+		cout<<"duracion "<<d/1000.0<<"\n";	
+	}
+
+}
+
+void DatasetMovieAndTV(){
+	cout<<DataSetConstants::MOVIETV<<endl;
+	Recommender data(DataSetConstants::MOVIETV);
+	data.getAverage();
+	//data.generateMatrixDiscoAC();		
+	string usuario="",item="";
+	int k=0;
+	cout<<"coseno ajustado \n"<<endl;
+	while(usuario!="fin" and item!="fin"){
+		cout<<"usuario: ";
+		getline(cin,usuario);
+		cout<<"item: ";
+		getline(cin,item);
+		auto t1 = chrono::high_resolution_clock::now();
+		/*cout<<"k: ";
+		cin>>k;
+		cin.ignore();
+		auto inf = data.influences(usuario,k);
+		float pr = data.recommender(inf,item);
+		*/	
+		float pr= data.prediction(usuario,item);
+		
 		cout<<"prediccion: "<<pr<<endl;
 		auto t2 = chrono::high_resolution_clock::now();
 		auto d = chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
@@ -45,8 +85,6 @@ void DatasetBooks(){
 }
 
 int main(){
-	DatasetLorde();
-    //DatasetMovieLeans25M();
-    DatasetBooks();
+    DatasetMovieAndTV();
     return 0;
 }

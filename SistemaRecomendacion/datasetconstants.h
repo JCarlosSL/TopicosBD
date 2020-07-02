@@ -13,6 +13,7 @@ public:
     static const std::string MOVIELEANSMLLASTETSMALL;
     static const std::string MOVIELEANS27M;
     static const std::string MOVIERATINGS;
+        static const std::string MOVIETV;
 private:
     DataSetConstants();
 };
@@ -24,5 +25,6 @@ const std::string DataSetConstants::MOVIELEANS25M=std::string("ml-25m/ratings.cs
 const std::string DataSetConstants::MOVIELEANS27M=std::string("ml-27m/ratings.csv");
 const std::string DataSetConstants::MOVIERATINGS=std::string("movie_ratings/Movie_Ratings.csv");
 const std::string DataSetConstants::MOVIELEANSMLLASTETSMALL=std::string("ml-latest-small/ratings.csv");
+const std::string DataSetConstants::MOVIETV = std::string("MovieTV/ratings_Movies_and_TV.csv");
 
 #endif // CONSTANTS_H

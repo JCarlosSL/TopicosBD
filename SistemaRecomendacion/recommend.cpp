@@ -18,7 +18,14 @@ Recommender::Recommender(std::string dn,bool serialize=false,int minR=1,int maxR
     }
     else
         this->filemanager->unSerializeData(this->user,this->object,this->dataUsers,this->bandaUsrPuntaje);
+	/*for(auto it=object.begin();it!=object.end();++it){
+		if(it->second<=1000){
+			cout<<it->first<<" "<<it->second<<"\n";
+		}
+	}*/
 };
+
+
 float Recommender::computeSimilarity(
     std::string band1,std::string band2){
     std::map<userOrItemKeyType,float> averages1;
@@ -179,6 +186,7 @@ std::vector<std::pair<userOrItemKeyType,float>> Recommender::computerNearestNeig
             distances.push_back(std::make_pair(key.first,distance));
         }
     }
+    cout<<distances[0].second<<"\n";
     sort(distances.begin(),distances.end(),sortbysec);
     if(distances.size() > r){
         return std::vector<std::pair<userOrItemKeyType,float>>(
@@ -504,20 +512,24 @@ void Recommender::insertRatings(std::string path){
             auto jt = object.find(dataVec[1]);
             if(jt != object.end()){
                 cout<<"item encontrado"<<endl;
-                //dataUsers[dataVec[0]][dataVec[1]] = bits(dataVec[2]);
+                dataUsers[user[dataVec[0]]][object[dataVec[1]]] = stoi(dataVec[2]);
+                bandaUsrPuntaje[user[dataVec[0]]][object[dataVec[1]]] = stoi(dataVec[2]);
             }else{
                 object[dataVec[1]] = object.size();
-                //dataUsers[dataVec[0]][dataVec[1]] = dataVec[2];
+                dataUsers[user[dataVec[0]]][object[dataVec[1]]] = stoi(dataVec[2]);
+                bandaUsrPuntaje[user[dataVec[0]]][object[dataVec[1]]] = stoi(dataVec[2]);
             }
         }else{
             user[dataVec[0]] = user.size();
             auto jt = object.find(dataVec[1]);
             if(jt != object.end()){
                 cout<<"item encontrado"<<endl;
-                //dataUsers[dataVec[0]][dataVec[1]] = dataVec[2];
+                dataUsers[user[dataVec[0]]][object[dataVec[1]]] = stoi(dataVec[2]);
+                bandaUsrPuntaje[user[dataVec[0]]][object[dataVec[1]]] = stoi(dataVec[2]);
             }else{
                 object[dataVec[1]] = object.size();
-                //dataUsers[dataVec[0]][dataVec[1]] = dataVec[2];
+                dataUsers[user[dataVec[0]]][object[dataVec[1]]] = stoi(dataVec[2]);
+                bandaUsrPuntaje[user[dataVec[0]]][object[dataVec[1]]] = stoi(dataVec[2]);
             }
         }
     }
@@ -525,3 +537,6 @@ void Recommender::insertRatings(std::string path){
     f.close();
 }
 
+void Recommender::serializeUpdate(){
+    this->filemanager->loadDataAndSerialize(this->user,this->object,this->dataUsers,this->bandaUsrPuntaje);
+}

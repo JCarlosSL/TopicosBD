@@ -70,7 +70,7 @@ float pearson(std::map<userOrItemKeyType,float> rating1,std::map<userOrItemKeyTy
             verbose=true;
         }
     }
-    if( verbose==false) return 0;
+    if( verbose==false) return -1;
     return (sumxy-(sumx*sumy)/n)/(sqrt(sumx2-pow(sumx,2)/n)*sqrt(sumy2-pow(sumy,2)/n));
 
 }

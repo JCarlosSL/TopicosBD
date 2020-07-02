@@ -25,6 +25,7 @@ class Recommender{
         void generateMatrixDiscoAC();
         std::pair<userOrItemKeyType,float> normalizar(
                 std::string iduser,std::string iditem);
+        void serializeUpdate();
     public:
         std::string set_directory(std::string &path, int mode);
         void printMatrix();

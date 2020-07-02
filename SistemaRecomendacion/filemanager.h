@@ -29,6 +29,8 @@ public:
             this->serializeDataPath=SerializerConstants::MOVIELEANS_25M;
         else if(dn==DataSetConstants::MOVIELEANS27M)
             this->serializeDataPath=SerializerConstants::MOVIELEANS_27M;
+        else if(dn==DataSetConstants::MOVIETV)
+			this->serializeDataPath=SerializerConstants::MOVIETV;
     }
 
     void setLimit(std::string dn){

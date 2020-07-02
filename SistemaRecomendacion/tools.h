@@ -46,9 +46,9 @@ char findS(const vector<char> &S,const string &str){
 	return '0';
 }
 
-bool sortbysec(const std::pair<Bits,float> &a,
-		const std::pair<Bits,float> &b){
-	return (a.second>b.second);
+bool sortbysec(const std::pair<userOrItemKeyType,float> &a,
+		const std::pair<userOrItemKeyType,float> &b){
+	return (a.second < b.second);
 }
 
 
