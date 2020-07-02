@@ -1,2 +1,5 @@
 *.csv
 *.bin
+serializer/
+MatrizAC/
+MatrizAC1/
