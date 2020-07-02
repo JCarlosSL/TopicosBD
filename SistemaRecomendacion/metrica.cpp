@@ -6,6 +6,12 @@
 float manhattan(std::map<userOrItemKeyType,float> rating1,std::map<userOrItemKeyType,float> rating2){
     float distance=0;
     bool verbose=false;
+    if(rating1.size() > rating2.size()){
+    	auto temp = rating1;
+    	rating1 = rating2;
+    	rating2 = temp;
+    }
+    
     for( auto key:rating1){
         auto it=rating2.find(key.first);
         if(it!=rating2.end()){
@@ -21,6 +27,11 @@ float manhattan(std::map<userOrItemKeyType,float> rating1,std::map<userOrItemKey
 float euclides(std::map<userOrItemKeyType,float> rating1,std::map<userOrItemKeyType,float> rating2){
     float distance=0;
     bool verbose=false;
+    if(rating1.size() > rating2.size()){
+    	auto temp = rating1;
+    	rating1 = rating2;
+    	rating2 = temp;
+    }
     for( auto key:rating1){
         auto it=rating2.find(key.first);
         if(it!=rating2.end()){
@@ -36,6 +47,12 @@ float euclides(std::map<userOrItemKeyType,float> rating1,std::map<userOrItemKeyT
 float minkowsky(std::map<userOrItemKeyType,float> rating1,std::map<userOrItemKeyType,float> rating2,int r){
     float distance=0;
     bool verbose=false;
+    if(rating1.size() > rating2.size()){
+    	auto temp = rating1;
+    	rating1 = rating2;
+    	rating2 = temp;
+    }
+    
     for( auto key:rating1){
         auto it=rating2.find(key.first);
         if(it!=rating2.end()){
@@ -57,7 +74,12 @@ float pearson(std::map<userOrItemKeyType,float> rating1,std::map<userOrItemKeyTy
     float sumy=0;
     float sumy2=0;
     float n=0;
-
+    if(rating1.size() > rating2.size()){
+    	auto temp = rating1;
+    	rating1 = rating2;
+    	rating2 = temp;
+    }
+    
     for( auto key:rating1){
         auto it=rating2.find(key.first);
         if(it!=rating2.end()){
@@ -82,6 +104,12 @@ float coseno(std::map<userOrItemKeyType,float> rating1,std::map<userOrItemKeyTyp
     float normx=0;
     float normy=0;
 
+	 if(rating1.size() > rating2.size()){
+    	auto temp = rating1;
+    	rating1 = rating2;
+    	rating2 = temp;
+    }
+
     for( auto key:rating1){
         auto it=rating2.find(key.first);
         if(it!=rating2.end()){
@@ -104,6 +132,12 @@ float coseno(std::map<userOrItemKeyType,float> rating1,std::map<userOrItemKeyTyp
 float jaccard(std::map<userOrItemKeyType,float> rating1,std::map<userOrItemKeyType,float> rating2){
     bool verbose=false;
     float intersect=0;
+	 if(rating1.size() > rating2.size()){
+    	auto temp = rating1;
+    	rating1 = rating2;
+    	rating2 = temp;
+    }
+
     float nsiz1=rating1.size();
     float nsiz2=rating2.size();
 

@@ -175,20 +175,22 @@ void Recommender::generateMatrixDiscoAC(){
         //cout<<path<<"\n";
     }
 }
-
+/* Recomendacion basada en usuarios
+ */
 std::vector<std::pair<userOrItemKeyType,float>> Recommender::computerNearestNeighbors(
         std::string iduser,int r){
+        
     auto p=user[iduser];
     std::vector<std::pair<userOrItemKeyType,float>> distances;
     float distance=0;
     for(auto key:dataUsers){
         if(key.first!=userOrItemKeyType(p)){
-            distance=manhattan(dataUsers[p],dataUsers[key.first]);
+            distance=jaccard(dataUsers[p],dataUsers[key.first]);
             distances.push_back(std::make_pair(key.first,distance));
         }
     }
-    cout<<distances[0].second<<"\n";
     sort(distances.begin(),distances.end(),sortbysec);
+    cout<<distances[0].second<<"\n";
     if(distances.size() > r){
         return std::vector<std::pair<userOrItemKeyType,float>>(
                 distances.begin(),distances.begin()+r);
@@ -303,7 +305,6 @@ float Recommender::prediction(std::string userA, std::string item){
         address += it + slash;
     }
 
-	cout<<" cant: "<<dataUsers[user[userA]].size()<<"\n";
     //relax
     address = address;
     std::map<int,float> items = get_items_similars(address);
@@ -593,4 +594,66 @@ void Recommender::updateMatrix(int idItem, mode type){
     itemFile.write( reinterpret_cast<char *>(&colItem[0]), sizeColItem*type*sizeof(float) );
     itemFile.close();
     delete[] colItem;
+}
+
+float Recommender::prediction1(std::string userA,int item,int l){
+    int iditem = item;
+    float den=0,num=0;
+    for(auto p:dataUsers[user[userA]]){
+        auto iditemu = p.first;
+        int pitem=iditem;
+        float NR = normalizerR(user[userA],iditemu);
+
+        int pos=iditem;
+        int size=object.size()-1;
+        while(size>pitem and size>iditem){
+                pos+=size;
+                size--;
+        }
+        if(iditem>pitem)
+                pos-=(iditem-pitem);
+
+        float simi=0;
+        float *simil =computeSimilarity3(iditem,p.first);
+        if(fabs(simil[1]) <= epsilon || fabs(simil[2]) <= epsilon)
+            simi=0;
+        else
+            simi=simil[0]/(sqrt(simil[1])*sqrt(simil[2]));
+
+        num+=simi*NR;
+        den+=fabs(simi);
+    }
+    if(fabs(den) <= den * epsilon)
+    
+            return 0;
+    else
+            return deNormalizerR(float(num/den));
+
+    return 0;
+}
+
+
+float Recommender::errorcuadratico(string usuario){
+	float sum=0;
+	int cont=0;
+	int j=0;
+	for(auto item:dataUsers[user[usuario]]){
+		if(j==6) break;
+		auto it=object.begin();
+		for (; it != object.end(); ++it)
+			if (it->second == item.first)
+				break;
+		if(item.second!=0){
+			cout<<usuario<<" "<<it->first<<" "<<item.second<<" ";
+			auto pred=prediction1(usuario,it->first);
+			cout<<pred<<" ";
+			auto p=pow(pred-item.second,2);
+			sum+=p;
+			cout<<p<<"\n";
+			++cont;
+			++j;
+		}
+		
+	}
+	return sqrt(sum/cont);
 }
