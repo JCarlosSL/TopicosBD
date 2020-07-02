@@ -5,6 +5,8 @@
 #include "datasetconstants.h"
 #include "serializerconstants.h"
 #include "tools.h"
+#include <sys/stat.h>
+#include <sys/types.h>
 class FileManager
 {
 public:
@@ -71,6 +73,7 @@ public:
             dataUsers[tempp][tempq]=std::stof(trim(fields[2]));
         }
         f.close();
+        mkdir(this->serializeDataPath.c_str(),0777);
         this->serializer->saveUser(user,this->serializeDataPath+SerializerConstants::USER);
         this->serializer->saveObject(object,this->serializeDataPath+SerializerConstants::OBJECT);
         this->serializer->saveBandaUsers(dataUsers,this->serializeDataPath+SerializerConstants::BANDA_USERS);    
@@ -93,7 +96,6 @@ public:
         this->serializer->saveBandaUsersPuntaje(bandaUsrPuntaje,this->serializeDataPath+SerializerConstants::BANDA_USERS_PUNTAJE);    
     }
     void unSerializeData(UserOrItemMap &userMap, UserOrItemMap &itemMap, MatrixDataMap &userItemMatrix, MatrixDataMap & itemUserMatrix){
-        mkdir(this->serializeDataPath.c_str(),0777);
         userMap= this->serializer->recoverUser(this->serializeDataPath+SerializerConstants::USER);
         itemMap= this->serializer->recoverObject(this->serializeDataPath+SerializerConstants::OBJECT);
         userItemMatrix= this->serializer->recoverBandaUsers(this->serializeDataPath+SerializerConstants::BANDA_USERS);

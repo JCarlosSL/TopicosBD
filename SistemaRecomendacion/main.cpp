@@ -35,23 +35,24 @@ void datasetLode1(){
 
 }
 void DatasetMovieLeans27M(){
-    Recommender data(DataSetConstants::MOVIELEANS27M);
-    cout << "termino cargar datos" << endl;
-    string user,item;
-    cout << "input user \t"; cin>> user;
-    cout << "input item \t" ;cin>> item;
-    data.getAverage();
-    while (user!="q" && item!="q")
-    {
-        auto t1 = std::chrono::high_resolution_clock::now();
-        cout << "prediccion" <<  data.prediction(user,item) << endl;
-        auto t2 = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( t2 - t1 ).count();  
-        cout<<"Tiempo " << duration/1000.0<<"\n";
-        cout << "input user \t "; cin>> user;
-        cout << "input item \t" ;cin>> item;
+    Recommender data(DataSetConstants::ANGELICA,true);
 
-    }
+    // cout << "termino cargar datos" << endl;
+    // string user,item;
+    // cout << "input user \t"; cin>> user;
+    // cout << "input item \t" ;cin>> item;
+    // data.getAverage();
+    // while (user!="q" && item!="q")
+    // {
+    //     auto t1 = std::chrono::high_resolution_clock::now();
+    //     cout << "prediccion" <<  data.prediction(user,item) << endl;
+    //     auto t2 = std::chrono::high_resolution_clock::now();
+    //     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( t2 - t1 ).count();  
+    //     cout<<"Tiempo " << duration/1000.0<<"\n";
+    //     cout << "input user \t "; cin>> user;
+    //     cout << "input item \t" ;cin>> item;
+
+    // }
     //data.getAverage();
 }
 void AjusteCosenoMovieLeans27M(){
