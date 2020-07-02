@@ -23,9 +23,9 @@ void DatasetMovieLeans27M(){
     string user,item;
     cout << "input user \t"; cin>> user;
     cout << "input item \t" ;cin>> item;
+    data.getAverage();
     while (user!="q" && item!="q")
     {
-        data.getAverage();
         auto t1 = std::chrono::high_resolution_clock::now();
         cout << "prediccion" <<  data.prediction(user,item) << endl;
         auto t2 = std::chrono::high_resolution_clock::now();
@@ -42,9 +42,9 @@ void AjusteCosenoMovieLeans27M(){
     string user,item;
     cout << "input user \t"; cin>> user;
     cout << "input item \t" ;cin>> item;
+    data.getAverage();
     while (user!="q" && item!="q")
     {
-        data.getAverage();
         auto t1 = std::chrono::high_resolution_clock::now();
         data.prediction1(user,item);
         auto t2 = std::chrono::high_resolution_clock::now();
@@ -60,9 +60,9 @@ void slopOneMovieLeans27m(){
     string user,item;
     cout << "input user \t"; cin>> user;
     cout << "input item \t" ;cin>> item;
+    data.getAverage();
     while (user!="q" && item!="q")
     {
-        data.getAverage();
         int itemkey=data.object[item];
         cout << "item pos" << itemkey <<"--" <<item << endl;
         vector<vector<float>> matriz = data.generateMatrixRAMSlopeOne(itemkey);
@@ -77,9 +77,9 @@ void slopOneMovieLeans27m(){
 }
 int main(){
     //DatasetLorde();
-    //DatasetMovieLeans27M();
+    DatasetMovieLeans27M();
     //AjusteCosenoMovieLeans27M();
-    slopOneMovieLeans27m();
+    //slopOneMovieLeans27m();
 }
 void calculateTime(){
     auto t1 = std::chrono::high_resolution_clock::now();
