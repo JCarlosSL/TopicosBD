@@ -531,7 +531,7 @@ void Recommender::insertRatings(std::string path){
         // updating on similarity matrices
         //int idUser = user[dataVec[0]];
         int idItem = object[dataVec[1]];
-        //float rating = stoi(dataVec[2]);
+        getAverage();
         updateMatrixAC(idItem);
         updateMatrixSO(idItem);
     }
@@ -556,7 +556,7 @@ void Recommender::updateMatrix(int idItem, mode type){
     size_t sizeColItem = object.size();
     std::string idItemCode;
     std::string filepath;
-    streampos posItemFile = idItem*type;
+    streampos posItemFile = sizeof(float)*idItem*type;
     float* (Recommender::*computeSimilarity)(userOrItemKeyType,userOrItemKeyType) = nullptr;
     if (type == AC)
         computeSimilarity = &Recommender::computeSimilarity3;
