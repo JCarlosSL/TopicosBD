@@ -378,13 +378,15 @@ void Recommender::generateMatrixDiscoSO(){
     }
 }
 
-vector<vector<float>> Recommender::generateMatrixRAMSlopeOne(){
-
+vector<vector<float>> Recommender::generateMatrixRAMSlopeOne(int index=-1){
+    
     int numItems = bandaUsrPuntaje.size();
-
+    if(index==-1){
+        index=numItems;
+    }
     vector<vector<float>> matriz;
-
-    for(int i=0; i<numItems; i++){
+    cout << "my index" << index << endl;
+    for(int i=index; i<index+1; i++){
 
         vector<float> fila;
 
@@ -481,8 +483,8 @@ float Recommender::predictionSlopeOneRAM(std::string usuario, std::string itemm,
         int itemFrom = key.first;
         float puntaje = key.second;
 
-        num += (matriz[itemTo][itemFrom*2] + puntaje) * matriz[itemTo][itemFrom*2+1];
-        den += matriz[itemTo][itemFrom*2+1];
+        num += (matriz[0][itemFrom*2] + puntaje) * matriz[0][itemFrom*2+1];
+        den += matriz[0][itemFrom*2+1];
     }
 
     if (den==0)

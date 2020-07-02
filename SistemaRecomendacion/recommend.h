@@ -41,7 +41,7 @@ class Recommender{
         float prediction1(std::string userA, std::string item);
 
         float* computeDev2(userOrItemKeyType bandaA, userOrItemKeyType bandaB);
-        vector<vector<float>> generateMatrixRAMSlopeOne();
+        vector<vector<float>> generateMatrixRAMSlopeOne(int);
             std::map<int,float> predictionWSlopeOne(std::string _user, vector<vector<float>> matriz);
 
         float* get_items_similarsSO(std::string address);
@@ -55,7 +55,7 @@ class Recommender{
         void updateMatrix(int idItem, mode type);
         void updateMatrixAC(int idItem);
         void updateMatrixSO(int idItem);
-private:
+public:
     FileManager *filemanager;
     std::string datasetName;
 

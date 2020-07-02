@@ -33,56 +33,67 @@ public:
 
     void setLimit(std::string dn){
         if(dn==DataSetConstants::BOOKS)
-            this->limit='::';
+            this->limit=';';
         else
             this->limit=',';
     }
 
     void loadDataAndSerialize(UserOrItemMap &userMap, UserOrItemMap &itemMap, MatrixDataMap &userItemMatrix, MatrixDataMap &itemUserMatrix) {
+        this->loadData(userMap,itemMap,userItemMatrix);
+        this->loadItems(userMap,itemMap,itemUserMatrix);
+    }
+    void loadData(UserOrItemMap &user,UserOrItemMap &object,MatrixDataMap &dataUsers){
         fstream f;
         f.open(this->datasetName,std::ios::in);
+        
         std::string temp;
         int cp=0;
         int cq=0;
-        if(getline(f,temp)) cout<<"init \n";
+        if(getline(f,temp)) cout<<"load rating users \n"; 
         while(getline(f,temp)){
             vector<string> fields=split(temp,this->limit);
-            auto p=userMap.find(trim(fields[0]));
-            auto q=itemMap.find(trim(fields[1]));
-            
+            auto p=user.find(trim(fields[0]));
+            auto q=object.find(trim(fields[1]));
             userOrItemKeyType tempp;
             userOrItemKeyType tempq;
-            if(p==userMap.end()){
+            if(p==user.end()){
                 tempp=cp;
-                userMap[trim(fields[0])]=tempp;
+                user[trim(fields[0])]=tempp;
                 cp++;
             }
             else tempp=p->second;
-            if(q==itemMap.end()){
+            if(q==object.end()){
                 tempq=cq;
-                itemMap[trim(fields[1])]=tempq;
+                object[trim(fields[1])]=tempq;
                 cq++;
             }
             else tempq=q->second;
-            userItemMatrix[tempp][tempq]=std::stof(trim(fields[2]));
+            dataUsers[tempp][tempq]=std::stof(trim(fields[2]));
         }
-        f.close();                 
-        
+        f.close();
+        this->serializer->saveUser(user,this->serializeDataPath+SerializerConstants::USER);
+        this->serializer->saveObject(object,this->serializeDataPath+SerializerConstants::OBJECT);
+        this->serializer->saveBandaUsers(dataUsers,this->serializeDataPath+SerializerConstants::BANDA_USERS);    
+  
+    }   
+    void loadItems(UserOrItemMap &user,UserOrItemMap &object,MatrixDataMap & bandaUsrPuntaje){
+        fstream f;
         f.open(this->datasetName,std::ios::in);
-        if(getline(f,temp)) cout<<"init \n";
+        
+        std::string temp;
+
+        if(getline(f,temp)) cout<<"init \n"; 
         while(getline(f,temp)){
             vector<string> fields=split(temp,this->limit);
-            userOrItemKeyType p=userMap[trim(fields[0])];
-            userOrItemKeyType q=itemMap[trim(fields[1])];
-            itemUserMatrix[q][p]=std::stof(trim(fields[2]));
+            userOrItemKeyType p=user[trim(fields[0])];
+            userOrItemKeyType q=object[trim(fields[1])];
+            bandaUsrPuntaje[q][p]=std::stof(trim(fields[2]));   
         }
-        this->serializer->saveUser(userMap,this->serializeDataPath+SerializerConstants::USER);
-        this->serializer->saveUser(itemMap,this->serializeDataPath+SerializerConstants::OBJECT);
-        this->serializer->saveBandaUsers(userItemMatrix,this->serializeDataPath+SerializerConstants::BANDA_USERS);
-        this->serializer->saveBandaUsersPuntaje(itemUserMatrix,this->serializeDataPath+SerializerConstants::BANDA_USERS_PUNTAJE);
+        f.close();
+        this->serializer->saveBandaUsersPuntaje(bandaUsrPuntaje,this->serializeDataPath+SerializerConstants::BANDA_USERS_PUNTAJE);    
     }
-
     void unSerializeData(UserOrItemMap &userMap, UserOrItemMap &itemMap, MatrixDataMap &userItemMatrix, MatrixDataMap & itemUserMatrix){
+        mkdir(this->serializeDataPath.c_str(),0777);
         userMap= this->serializer->recoverUser(this->serializeDataPath+SerializerConstants::USER);
         itemMap= this->serializer->recoverObject(this->serializeDataPath+SerializerConstants::OBJECT);
         userItemMatrix= this->serializer->recoverBandaUsers(this->serializeDataPath+SerializerConstants::BANDA_USERS);
