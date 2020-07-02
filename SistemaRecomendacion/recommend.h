@@ -39,11 +39,11 @@ class Recommender{
         float prediction1(std::string userA, std::string item);
 
         float* computeDev2(userOrItemKeyType bandaA, userOrItemKeyType bandaB);
-        vector<vector<float>> generateMatrixRAMSlopeOne();
+        vector<vector<float>> generateMatrixRAMSlopeOne(int);
             std::map<int,float> predictionWSlopeOne(std::string _user, vector<vector<float>> matriz);
 
         float predictionSlopeOneRAM(std::string user, std::string item, vector<vector<float>> matriz);
-private:
+public:
     FileManager *filemanager;
     std::string datasetName;
 

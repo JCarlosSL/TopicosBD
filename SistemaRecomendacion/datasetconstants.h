@@ -24,5 +24,4 @@ const std::string DataSetConstants::MOVIELEANS25M=std::string("ml-25m/ratings.cs
 const std::string DataSetConstants::MOVIELEANS27M=std::string("ml-27m/ratings.csv");
 const std::string DataSetConstants::MOVIERATINGS=std::string("movie_ratings/Movie_Ratings.csv");
 const std::string DataSetConstants::MOVIELEANSMLLASTETSMALL=std::string("ml-latest-small/ratings.csv");
-
 #endif // CONSTANTS_H

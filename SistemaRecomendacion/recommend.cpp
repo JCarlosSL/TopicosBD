@@ -258,7 +258,7 @@ float Recommender::prediction1(std::string userA,std::string item){
                 size--;
         }
         if(iditem>pitem)
-                pos-=(iditem-pitem);
+            pos-=(iditem-pitem);
 
         float simi=0;
         //float simi = matrixSimilitud[pos];
@@ -283,9 +283,9 @@ float Recommender::prediction(std::string userA, std::string item){
     if (user.find(userA)==user.end() || object.find(item)==object.end())
             return -2;
 
-       int iditem = object[item];
-       string str = std::to_string(iditem);
-    string address="Matriz/";
+    int iditem = object[item];
+    string str = std::to_string(iditem);
+    string address="MatrizMovie27M/";
     string slash="/";
     for(auto it:str){
         address += it + slash;
@@ -311,6 +311,7 @@ float Recommender::prediction(std::string userA, std::string item){
         return 0;
     else
         return deNormalizerR(float(num/den));
+        
 }
 
 float* Recommender::computeDev2(userOrItemKeyType bandaA, userOrItemKeyType bandaB){//2 porque retorna 2 valores: dev y usuarios involucrados
@@ -347,30 +348,23 @@ float* Recommender::computeDev2(userOrItemKeyType bandaA, userOrItemKeyType band
 
 }
 
-vector<vector<float>> Recommender::generateMatrixRAMSlopeOne(){
-
+vector<vector<float>> Recommender::generateMatrixRAMSlopeOne(int index){
+    
     int numItems = bandaUsrPuntaje.size();
-
+    
     vector<vector<float>> matriz;
-
-    for(int i=0; i<numItems; i++){
-
+    for(int i=index; i<index+1; i++){
         vector<float> fila;
-
-        for (int j=0; j<numItems; j++){
-
-            fila.push_back(computeDev2(userOrItemKeyType(i), userOrItemKeyType(j))[0]);
-            fila.push_back(computeDev2(userOrItemKeyType(i), userOrItemKeyType(j))[1]);
-
-        }
-
-        matriz.push_back(fila);
+	    for (int j=0; j<numItems; j++){
+	    
+	        fila.push_back(computeDev2(userOrItemKeyType(i),userOrItemKeyType(j))[0]);
+	        fila.push_back(computeDev2(userOrItemKeyType(i), userOrItemKeyType(j))[1]);
+	    }
+	    matriz.push_back(fila);
 
     }
     return matriz;
 }
-
-
 map<int,float> Recommender::predictionWSlopeOne(std::string _user, vector<vector<float>> matriz){
     map<int,float> recommends;
     float num=0.0;
@@ -408,8 +402,8 @@ float Recommender::predictionSlopeOneRAM(std::string usuario, std::string itemm,
         int itemFrom = key.first;
         float puntaje = key.second;
 
-        num += (matriz[itemTo][itemFrom*2] + puntaje) * matriz[itemTo][itemFrom*2+1];
-        den += matriz[itemTo][itemFrom*2+1];
+        num += (matriz[0][itemFrom*2] + puntaje) * matriz[0][itemFrom*2+1];
+        den += matriz[0][itemFrom*2+1];
     }
 
     if (den==0)
