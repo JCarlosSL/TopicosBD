@@ -1,0 +1,2 @@
+Id_user,Id_item,rating
+David,Lorde,4

@@ -508,24 +508,24 @@ void Recommender::insertRatings(std::string path){
             auto jt = object.find(dataVec[1]);
             if(jt != object.end()){
                 cout<<"item encontrado"<<endl;
-                dataUsers[user[dataVec[0]]][object[dataVec[1]]] = stoi(dataVec[2]);
-                bandaUsrPuntaje[user[dataVec[0]]][object[dataVec[1]]] = stoi(dataVec[2]);
+                dataUsers[user[dataVec[0]]][object[dataVec[1]]] = stof(dataVec[2]);
+                bandaUsrPuntaje[object[dataVec[1]]][user[dataVec[0]]] = stof(dataVec[2]);
             }else{
                 object[dataVec[1]] = object.size();
-                dataUsers[user[dataVec[0]]][object[dataVec[1]]] = stoi(dataVec[2]);
-                bandaUsrPuntaje[user[dataVec[0]]][object[dataVec[1]]] = stoi(dataVec[2]);
+                dataUsers[user[dataVec[0]]][object[dataVec[1]]] = stof(dataVec[2]);
+                bandaUsrPuntaje[object[dataVec[1]]][user[dataVec[0]]] = stof(dataVec[2]);
             }
         }else{
             user[dataVec[0]] = user.size();
-            auto jt = object.find(dataVec[1]);
-            if(jt != object.end()){
+            auto kt = object.find(dataVec[1]);
+            if(kt != object.end()){
                 cout<<"item encontrado"<<endl;
-                dataUsers[user[dataVec[0]]][object[dataVec[1]]] = stoi(dataVec[2]);
-                bandaUsrPuntaje[user[dataVec[0]]][object[dataVec[1]]] = stoi(dataVec[2]);
+                dataUsers[user[dataVec[0]]][object[dataVec[1]]] = stof(dataVec[2]);
+                bandaUsrPuntaje[object[dataVec[1]]][user[dataVec[0]]] = stof(dataVec[2]);
             }else{
                 object[dataVec[1]] = object.size();
-                dataUsers[user[dataVec[0]]][object[dataVec[1]]] = stoi(dataVec[2]);
-                bandaUsrPuntaje[user[dataVec[0]]][object[dataVec[1]]] = stoi(dataVec[2]);
+                dataUsers[user[dataVec[0]]][object[dataVec[1]]] = stof(dataVec[2]);
+                bandaUsrPuntaje[object[dataVec[1]]][user[dataVec[0]]] = stof(dataVec[2]);
             }
         }
         // updating on similarity matrices
