@@ -62,4 +62,8 @@ void CountOccurrences() {
 int main(){
   boost::timer::auto_cpu_timer t;
   CountOccurrences();
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> development

@@ -128,7 +128,7 @@ void Recommender::generateMatrix(){
         h++;
     }
 }
-std::string Recommender::set_directory(std::string &path, int mode = 0){
+std::string Recommender::set_directory(std::string &path, mode type){
     std::string new_path="";
     std::string slash="/";
     size_t i = 0;
@@ -136,7 +136,7 @@ std::string Recommender::set_directory(std::string &path, int mode = 0){
         new_path += path[unit]+slash;
         ++i;
     }
-    if (mode == 0)
+    if (type == AC)
         return "MatrizAC/"+new_path;
     else
         return "MatrizSO/"+new_path;
@@ -158,7 +158,7 @@ void Recommender::generateMatrixDiscoAC(){
             h+=1;
         }
         //guardar a disco toda la fila ( el vectorFila )
-        std::string new_path = set_directory(pathname);
+        std::string new_path = set_directory(pathname,AC);
         mkdir(new_path.c_str(),0777);
         fstream file;
 		file.open(new_path.c_str()+this->filename,ios::out|ios::binary);
@@ -368,7 +368,7 @@ void Recommender::generateMatrixDiscoSO(){
             h+=1;
         }
         //guardar a disco toda la fila ( el vectorFila )
-        std::string new_path = set_directory(pathname,1);
+        std::string new_path = set_directory(pathname,SO);
         mkdir(new_path.c_str(),0777);
         fstream file;
 		file.open(new_path.c_str()+this->filename,ios::out|ios::binary);
@@ -378,13 +378,15 @@ void Recommender::generateMatrixDiscoSO(){
     }
 }
 
-vector<vector<float>> Recommender::generateMatrixRAMSlopeOne(){
-
+vector<vector<float>> Recommender::generateMatrixRAMSlopeOne(int index=-1){
+    
     int numItems = bandaUsrPuntaje.size();
-
+    if(index==-1){
+        index=numItems;
+    }
     vector<vector<float>> matriz;
-
-    for(int i=0; i<numItems; i++){
+    cout << "my index" << index << endl;
+    for(int i=index; i<index+1; i++){
 
         vector<float> fila;
 
@@ -481,8 +483,8 @@ float Recommender::predictionSlopeOneRAM(std::string usuario, std::string itemm,
         int itemFrom = key.first;
         float puntaje = key.second;
 
-        num += (matriz[itemTo][itemFrom*2] + puntaje) * matriz[itemTo][itemFrom*2+1];
-        den += matriz[itemTo][itemFrom*2+1];
+        num += (matriz[0][itemFrom*2] + puntaje) * matriz[0][itemFrom*2+1];
+        den += matriz[0][itemFrom*2+1];
     }
 
     if (den==0)
@@ -526,6 +528,12 @@ void Recommender::insertRatings(std::string path){
                 bandaUsrPuntaje[object[dataVec[1]]][user[dataVec[0]]] = stof(dataVec[2]);
             }
         }
+        // updating on similarity matrices
+        //int idUser = user[dataVec[0]];
+        int idItem = object[dataVec[1]];
+        //float rating = stoi(dataVec[2]);
+        updateMatrixAC(idItem);
+        updateMatrixSO(idItem);
     }
 
     f.close();
@@ -533,4 +541,48 @@ void Recommender::insertRatings(std::string path){
 
 void Recommender::serializeUpdate(){
     this->filemanager->loadDataAndSerialize(this->user,this->object,this->dataUsers,this->bandaUsrPuntaje);
+}
+
+void Recommender::updateMatrixAC(int idItem){
+    updateMatrix(idItem,AC);
+}
+
+void Recommender::updateMatrixSO(int idItem){
+    updateMatrix(idItem,SO);
+}
+
+void Recommender::updateMatrix(int idItem, mode type){
+    //change row idItem
+    size_t sizeColItem = object.size();
+    std::string idItemCode;
+    std::string filepath;
+    streampos posItemFile = idItem*type;
+    float* (Recommender::*computeSimilarity)(userOrItemKeyType,userOrItemKeyType) = nullptr;
+    if (type == AC)
+        computeSimilarity = &Recommender::computeSimilarity3;
+    else if (type == SO)
+        computeSimilarity = &Recommender::computeDev2;
+    float* colItem = new float[sizeColItem*type];
+    int otherItem = 0;
+    for(size_t i = 0; i < sizeColItem*type; i+=type){
+        float *values = new float[type];
+        values = (*this.*computeSimilarity)(idItem,otherItem);
+        for (size_t j = 0; j < type; ++j)
+            colItem[i+j] = values[j];
+        idItemCode = std::to_string(otherItem);
+        filepath = set_directory(idItemCode,type);
+        fstream otherItemFile;
+        otherItemFile.open(filepath.c_str(),ios::out|ios::binary|ios::ate);
+        otherItemFile.seekg(posItemFile,ios::beg);
+        otherItemFile.write( reinterpret_cast<char *>(&values[0]), type*sizeof(float));
+        otherItemFile.close();
+        ++otherItem;
+    }
+    idItemCode = std::to_string(idItem);
+    filepath = set_directory(idItemCode,type);
+    fstream itemFile;
+    itemFile.open(filepath.c_str(),ios::out|ios::binary|ios::ate);
+    itemFile.write( reinterpret_cast<char *>(&colItem[0]), sizeColItem*type*sizeof(float) );
+    itemFile.close();
+    delete[] colItem;
 }
