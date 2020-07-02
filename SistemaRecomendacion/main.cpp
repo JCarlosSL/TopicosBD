@@ -35,7 +35,7 @@ void datasetLode1(){
 
 }
 void DatasetMovieLeans27M(){
-    Recommender data(DataSetConstants::ANGELICA,true);
+    Recommender data(DataSetConstants::MOVIERATINGS,true);
 
     // cout << "termino cargar datos" << endl;
     // string user,item;

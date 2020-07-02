@@ -29,6 +29,8 @@ public:
             this->serializeDataPath=SerializerConstants::BOOKS;
         else if(dn==DataSetConstants::MOVIELEANS25M)
             this->serializeDataPath=SerializerConstants::MOVIELEANS_25M;
+        else if(dn==DataSetConstants::MOVIERATINGS)
+            this->serializeDataPath=SerializerConstants::MOVIERATINGS;    
         else if(dn==DataSetConstants::MOVIELEANS27M)
             this->serializeDataPath=SerializerConstants::MOVIELEANS_27M;
     }
