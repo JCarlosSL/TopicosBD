@@ -16,7 +16,7 @@
 #include <cassert>
 typedef  unsigned int userOrItemKeyType;
 typedef std::unordered_map<std::string,userOrItemKeyType> UserOrItemMap;
-typedef std::unordered_map<userOrItemKeyType,std::map<userOrItemKeyType,float>> MatrixDataMap;
+typedef std::map<userOrItemKeyType,std::map<userOrItemKeyType,float>> MatrixDataMap;
 class Serializer
 {
 public:
