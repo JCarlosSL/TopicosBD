@@ -11,11 +11,10 @@ void DatasetLorde(){
     Recommender data(DataSetConstants::LORDE,true);
     data.getAverage();
     data.generateMatrixDiscoAC();
-//    cout<<data.prediction("juana","Kacey Musgraves");
-
-    data.insertRatings("inRat.txt");
-	data.serializeUpdate();
-    
+    cout<<data.prediction("David","Kacey Musgraves")<<'\n';
+    cout<<data.prediction1("David","Kacey Musgraves")<<'\n';
+    cout<<data.predictionSlopeOneRAM("David","Kacey Musgraves",data.generateMatrixRAMSlopeOne())<<'\n';
+    cout<<data.predictionSlopeOneRAM("David","Kacey Musgraves");
 }
 
 void DatasetMovieLeans25M(){

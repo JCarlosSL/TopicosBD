@@ -13,6 +13,7 @@ using namespace std;
 class Recommender{
 
     public:
+        enum mode{ SO = 2, AC = 3 };
         Recommender(std::string,bool,int,int);
         std::vector<std::pair<userOrItemKeyType,float>> computerNearestNeighbors(
                 std::string iduser,int r);
@@ -27,7 +28,7 @@ class Recommender{
                 std::string iduser,std::string iditem);
         void serializeUpdate();
     public:
-        std::string set_directory(std::string &path, int mode);
+        std::string set_directory(std::string &path, mode type);
         void printMatrix();
         void getAverage();
         float normalizerR(userOrItemKeyType _user,userOrItemKeyType item);
@@ -51,6 +52,9 @@ class Recommender{
 //		void insertUser(std::string user);
 //		void insertItem(std::string item);
 		void insertRatings(std::string path);
+        void updateMatrix(int idItem, mode type);
+        void updateMatrixAC(int idItem);
+        void updateMatrixSO(int idItem);
 private:
     FileManager *filemanager;
     std::string datasetName;
