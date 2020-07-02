@@ -73,7 +73,9 @@ void Recommender::getAverage(){
             averages[i] = sum/key.second.size();
         }
         i++;
+        std::cout<<i<<' '<<sum<<' '<<key.second.size()<<'\n';
     }
+    std::cout<<'\n';
 }
 
 float* Recommender::computeSimilarity3(userOrItemKeyType bandaA,userOrItemKeyType bandaB){
@@ -388,12 +390,26 @@ void Recommender::generateMatrixDiscoSO(){
 
 vector<vector<float>> Recommender::generateMatrixRAMSlopeOne(int index=-1){
     
-    int numItems = bandaUsrPuntaje.size();
-    if(index==-1){
-        index=numItems;
-    }
     vector<vector<float>> matriz;
-    cout << "my index" << index << endl;
+    int numItems = object.size();
+    if(index==-1){
+        for(int i=0; i<numItems; i++){
+
+            vector<float> fila;
+
+            for (int j=0; j<numItems; j++){
+
+                fila.push_back(computeDev2(userOrItemKeyType(i), userOrItemKeyType(j))[0]);
+                fila.push_back(computeDev2(userOrItemKeyType(i), userOrItemKeyType(j))[1]);
+
+            }
+
+            matriz.push_back(fila);
+
+        }  
+    }
+    else{
+    //cout << "my index" << index << endl;
     for(int i=index; i<index+1; i++){
 
         vector<float> fila;
@@ -407,6 +423,7 @@ vector<vector<float>> Recommender::generateMatrixRAMSlopeOne(int index=-1){
 
         matriz.push_back(fila);
 
+    }
     }
     return matriz;
 }
@@ -506,16 +523,16 @@ void Recommender::insertRatings(std::string path){
     fstream f;
     f.open(path,std::ios::in);
     std::string word;
-    if(getline(f,word)) cout<<"ignore \n";
+    if(getline(f,word)); //cout<<"ignore \n";
     while(getline(f,word)){
         vector<string> dataVec = split(word,splitter);
 
         auto it = user.find(dataVec[0]);
         if(it != user.end()){
-            cout<<"usuario encontrado"<<endl;
+            //cout<<"usuario encontrado"<<endl;
             auto jt = object.find(dataVec[1]);
             if(jt != object.end()){
-                cout<<"item encontrado"<<endl;
+                //cout<<"item encontrado"<<endl;
                 dataUsers[user[dataVec[0]]][object[dataVec[1]]] = stof(dataVec[2]);
                 bandaUsrPuntaje[object[dataVec[1]]][user[dataVec[0]]] = stof(dataVec[2]);
             }else{
@@ -527,7 +544,7 @@ void Recommender::insertRatings(std::string path){
             user[dataVec[0]] = user.size();
             auto kt = object.find(dataVec[1]);
             if(kt != object.end()){
-                cout<<"item encontrado"<<endl;
+                //cout<<"item encontrado"<<endl;
                 dataUsers[user[dataVec[0]]][object[dataVec[1]]] = stof(dataVec[2]);
                 bandaUsrPuntaje[object[dataVec[1]]][user[dataVec[0]]] = stof(dataVec[2]);
             }else{
