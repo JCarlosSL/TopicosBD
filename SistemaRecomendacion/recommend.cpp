@@ -130,21 +130,23 @@ void Recommender::generateMatrix(){
 }
 std::string Recommender::set_directory(std::string &path, mode type){
     std::string new_path="";
+    if (type == AC)
+        new_path = "MatrizAC";
+    else
+        new_path = "MatrizSO";
     std::string slash="/";
     size_t i = 0;
     for (int unit=0;unit<path.size();++unit){
-        new_path += path[unit]+slash;
+        new_path += slash+path[unit];
+        mkdir(new_path.c_str(),0777);
         ++i;
     }
-    if (type == AC)
-        return "MatrizAC/"+new_path;
-    else
-        return "MatrizSO/"+new_path;
+    return new_path+slash;
 }
 
 void Recommender::generateMatrixDiscoAC(){
     size_t size_file = object.size()*3;
-    mkdir("MatrizAC",0777);
+    
     for(int path=0;path<object.size();path++){
         std::string pathname =std::to_string(path);
         float *vectorFila = new float[size_file];
@@ -159,7 +161,7 @@ void Recommender::generateMatrixDiscoAC(){
         }
         //guardar a disco toda la fila ( el vectorFila )
         std::string new_path = set_directory(pathname,AC);
-        mkdir(new_path.c_str(),0777);
+
         fstream file;
 		file.open(new_path.c_str()+this->filename,ios::out|ios::binary);
         file.write( reinterpret_cast<char *>(&vectorFila[0]), size_file*sizeof(float) );
@@ -168,7 +170,6 @@ void Recommender::generateMatrixDiscoAC(){
         //cout<<path<<"\n";
     }
 }
-
 
 std::vector<std::pair<userOrItemKeyType,float>> Recommender::computerNearestNeighbors(
         std::string iduser,int r){
@@ -354,9 +355,9 @@ float* Recommender::computeDev2(userOrItemKeyType bandaA, userOrItemKeyType band
 }
 
 void Recommender::generateMatrixDiscoSO(){
-    mkdir("MatrizSO",0777);
+    
     size_t size_file = object.size()*2;
-    for(int path=0;path<object.size();path++){
+    ffor(int path=0;path<object.size();path++){
         std::string pathname =std::to_string(path);
         float *vectorFila = new float[size_file];
         int h=0;
@@ -368,8 +369,9 @@ void Recommender::generateMatrixDiscoSO(){
             h+=1;
         }
         //guardar a disco toda la fila ( el vectorFila )
+        
         std::string new_path = set_directory(pathname,SO);
-        mkdir(new_path.c_str(),0777);
+        
         fstream file;
 		file.open(new_path.c_str()+this->filename,ios::out|ios::binary);
         file.write( reinterpret_cast<char *>(&vectorFila[0]), size_file*sizeof(float) );
