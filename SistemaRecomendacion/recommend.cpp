@@ -25,6 +25,19 @@ Recommender::Recommender(std::string dn,bool serialize=false,int minR=1,int maxR
 	}*/
 };
 
+void Recommender::getMaxItems(float perc=0.15){
+    size_t size_items = object.size();
+    size_t rows = size_items*perc;
+    vector<std::pair<userOrItemKeyType,size_t>> lengthItems;  
+    for (auto it:bandaUsrPuntaje){
+        lengthItems.push_back(std::make_pair(it.first,it.second.size()));
+    }
+    std::sort(lengthItems.begin(),lengthItems.end(),maxsortbysec);
+    for (size_t i = 0; i < rows; i++){
+        rowsItems.insert(lengthItems[i].first);
+    }
+}
+
 
 float Recommender::computeSimilarity(
     std::string band1,std::string band2){
@@ -73,7 +86,6 @@ void Recommender::getAverage(){
             averages[i] = sum/key.second.size();
         }
         i++;
-        std::cout<<i<<' '<<sum<<' '<<key.second.size()<<'\n';
     }
     std::cout<<'\n';
 }
@@ -153,13 +165,13 @@ std::string Recommender::set_directory(std::string &path, mode type){
 
 void Recommender::generateMatrixDiscoAC(){
     size_t size_file = object.size()*3;
-    
-    for(int path=0;path<object.size();path++){
-        std::string pathname =std::to_string(path);
+    mkdir("MatrizAC",0777);
+    for(auto path=rowsItems.begin(); path != rowsItems.end();path++){
+        std::string pathname =std::to_string(*path);
         float *vectorFila = new float[size_file];
         int h=0;
         for(int j = 0 ; j < object.size()*3 ; j+=3){
-            float *valores = computeSimilarity3(userOrItemKeyType(path),userOrItemKeyType(h));
+            float *valores = computeSimilarity3(userOrItemKeyType(*path),userOrItemKeyType(h));
             vectorFila[j] = valores[0];
             vectorFila[j+1] = valores[1];
             vectorFila[j+2] = valores[2];
@@ -258,7 +270,15 @@ std::map<int, float> Recommender::get_items_similars(std::string address){
     }
     return similar_items;
 }
-float Recommender::prediction1(std::string userA,std::string item){
+
+float Recommender::predictionAdjustCosine(std::string userA,std::string item){
+    if (rowsItems.find(object[item]) != rowsItems.end())
+        return Recommender::predictionDisk(userA,item);
+    else
+        return Recommender::predictionRAM(userA,item);
+}
+
+float Recommender::predictionRAM(std::string userA,std::string item){
     int iditem = object[item];
     float den=0,num=0;
     for(auto p:dataUsers[user[userA]]){
@@ -292,7 +312,7 @@ float Recommender::prediction1(std::string userA,std::string item){
 
     return 0;
 }
-float Recommender::prediction(std::string userA, std::string item){
+float Recommender::predictionDisk(std::string userA, std::string item){
 
     if (user.find(userA)==user.end() || object.find(item)==object.end())
             return -2;
@@ -363,14 +383,14 @@ float* Recommender::computeDev2(userOrItemKeyType bandaA, userOrItemKeyType band
 }
 
 void Recommender::generateMatrixDiscoSO(){
-    
+    mkdir("MatrizSO",0777);
     size_t size_file = object.size()*2;
-    for(int path=0;path<object.size();path++){
-        std::string pathname =std::to_string(path);
+    for(auto path=rowsItems.begin(); path != rowsItems.end();path++){
+        std::string pathname =std::to_string(*path);
         float *vectorFila = new float[size_file];
         int h=0;
         for(int j = 0 ; j < object.size()*2 ; j+=2){
-            float *valores = computeDev2(userOrItemKeyType(path),userOrItemKeyType(h));
+            float *valores = computeDev2(userOrItemKeyType(*path),userOrItemKeyType(h));
             vectorFila[j] = valores[0];
             vectorFila[j+1] = valores[1];
             delete[] valores;
@@ -459,7 +479,14 @@ float* Recommender::get_items_similarsSO(std::string address){
     return vector_items;
 }
 
-float Recommender::predictionSlopeOneRAM(std::string usuario, std::string itemm){
+float Recommender::predictionSlopeOne(std::string usuario, std::string itemm){
+    if (rowsItems.find(object[itemm]) != rowsItems.end())
+        return Recommender::predictionSlopeOneDisk(usuario, itemm);
+    else
+        return Recommender::predictionSlopeOneRAM(usuario, itemm, Recommender::generateMatrixRAMSlopeOne());
+}
+
+float Recommender::predictionSlopeOneDisk(std::string usuario, std::string itemm){
     if ( user.find(usuario) == user.end() || object.find(itemm) == object.end() )
         return -1;
     userOrItemKeyType usr = user[usuario];
@@ -564,6 +591,8 @@ void Recommender::insertRatings(std::string path){
     f.close();
 }
 
+void Recommender::setRowItems(size_t id) { rowsItems.insert(id);}
+
 void Recommender::serializeUpdate(){
     this->filemanager->loadDataAndSerialize(this->user,this->object,this->dataUsers,this->bandaUsrPuntaje);
 }
@@ -578,36 +607,63 @@ void Recommender::updateMatrixSO(int idItem){
 
 void Recommender::updateMatrix(int idItem, mode type){
     //change row idItem
+    bool found = true;
+    if (rowsItems.find(idItem) == rowsItems.end())
+        found = false;
     size_t sizeColItem = object.size();
     std::string idItemCode;
     std::string filepath;
+    
     streampos posItemFile = sizeof(float)*idItem*type;
     float* (Recommender::*computeSimilarity)(userOrItemKeyType,userOrItemKeyType) = nullptr;
     if (type == AC)
         computeSimilarity = &Recommender::computeSimilarity3;
     else if (type == SO)
         computeSimilarity = &Recommender::computeDev2;
-    float* colItem = new float[sizeColItem*type];
-    int otherItem = 0;
-    for(size_t i = 0; i < sizeColItem*type; i+=type){
-        float *values = new float[type];
-        values = (*this.*computeSimilarity)(idItem,otherItem);
-        for (size_t j = 0; j < type; ++j)
-            colItem[i+j] = values[j];
-        idItemCode = std::to_string(otherItem);
+    if (found){
+        float* colItem = new float[sizeColItem*type];
+        int otherItem = 0;
+        for(size_t i = 0; i < sizeColItem*type; i+=type){
+            float *values = new float[type];
+            values = (*this.*computeSimilarity)(idItem,otherItem);
+            if (found)
+                for (size_t j = 0; j < type; ++j)
+                    colItem[i+j] = values[j];
+            if (rowsItems.find(otherItem) != rowsItems.end()){
+                idItemCode = std::to_string(otherItem);
+                filepath = set_directory(idItemCode,type);
+                fstream otherItemFile;
+                otherItemFile.open(filepath.c_str(),ios::out|ios::binary|ios::ate);
+                otherItemFile.seekg(posItemFile,ios::beg);
+                otherItemFile.write( reinterpret_cast<char *>(&values[0]), type*sizeof(float));
+                otherItemFile.close();
+            }
+            ++otherItem;
+        }
+        idItemCode = std::to_string(idItem);
         filepath = set_directory(idItemCode,type);
-        fstream otherItemFile;
-        otherItemFile.open(filepath.c_str(),ios::out|ios::binary|ios::ate);
-        otherItemFile.seekg(posItemFile,ios::beg);
-        otherItemFile.write( reinterpret_cast<char *>(&values[0]), type*sizeof(float));
-        otherItemFile.close();
-        ++otherItem;
+        fstream itemFile;
+        itemFile.open(filepath.c_str(),ios::out|ios::binary|ios::ate);
+        itemFile.write( reinterpret_cast<char *>(&colItem[0]), sizeColItem*type*sizeof(float) );
+        itemFile.close();
+        delete[] colItem;
     }
-    idItemCode = std::to_string(idItem);
-    filepath = set_directory(idItemCode,type);
-    fstream itemFile;
-    itemFile.open(filepath.c_str(),ios::out|ios::binary|ios::ate);
-    itemFile.write( reinterpret_cast<char *>(&colItem[0]), sizeColItem*type*sizeof(float) );
-    itemFile.close();
-    delete[] colItem;
+    else{
+        int otherItem = 0;
+        for(size_t i = 0; i < sizeColItem*type; i+=type){
+            float *values = new float[type];
+            values = (*this.*computeSimilarity)(idItem,otherItem);
+            if (rowsItems.find(otherItem) != rowsItems.end()){
+                idItemCode = std::to_string(otherItem);
+                filepath = set_directory(idItemCode,type);
+                fstream otherItemFile;
+                otherItemFile.open(filepath.c_str(),ios::out|ios::binary|ios::ate);
+                otherItemFile.seekg(posItemFile,ios::beg);
+                otherItemFile.write( reinterpret_cast<char *>(&values[0]), type*sizeof(float));
+                otherItemFile.close();
+            }
+            ++otherItem;
+        }
+    }
 }
+
