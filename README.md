@@ -10,6 +10,7 @@ Filtro colaborativo basado en usuarios:
 
 - SlopeOne
 - Ajuste del coseno
+
 ## Pre-requisitos
 Para poder compilar el proyecto , antes se  debe contar con la libreria  [Boost](https://www.boost.org/) . A continuacion se detalla la manera de instalar esta libreria en **Ubuntu** .
 ### Instalar Boost
@@ -38,3 +39,6 @@ aptitude search boost
  - Raúl Edgar Quispe Totocayo
  - Jesus Lazo Quevedo
  
+ Notebook de algoritmos en cuda
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1jKt6TTkZidia5Av4iyP6OiYShWHGINq1?usp=sharing)
