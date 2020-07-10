@@ -51,6 +51,11 @@ bool sortbysec(const std::pair<userOrItemKeyType,float> &a,
 	return (a.second < b.second);
 }
 
+bool maxsortbysec(const std::pair<userOrItemKeyType,size_t> &a,
+		const std::pair<userOrItemKeyType,size_t> &b){
+	return (a.second > b.second);
+}
+
 
 
 
