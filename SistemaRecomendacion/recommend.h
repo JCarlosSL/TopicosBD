@@ -22,7 +22,6 @@ class Recommender{
         float computeSimilarity(std::string band1,std::string band2);
         float* computeSimilarity3(userOrItemKeyType band1,userOrItemKeyType band2);
         void generateMatrix();
-        void generatevectorDiscoAC(std::string iditem);
         void generateMatrixDiscoAC();
         std::pair<userOrItemKeyType,float> normalizar(
                 std::string iduser,std::string iditem);
@@ -37,9 +36,11 @@ class Recommender{
         std::map<std::string,float> readMatrix(std::string address);
         std::map<int,float> get_item_similars(std::string address);
         std::map<int,float> get_items_similars(std::string address);
-        float prediction(std::string userA, std::string item);
-        float prediction1(std::string userA, std::string item);
-        float prediction1(std::string userA, int item,int l);
+        
+	float predictionDisk(std::string userA, std::string item);
+        float predictionAdjustCosine(std::string userA, std::string item);
+        float predictionRAM(std::string userA, std::string item);
+
         float* computeDev2(userOrItemKeyType bandaA, userOrItemKeyType bandaB);
         vector<vector<float>> generateMatrixRAMSlopeOne(int);
             std::map<int,float> predictionWSlopeOne(std::string _user, vector<vector<float>> matriz);
@@ -47,7 +48,8 @@ class Recommender{
         float* get_items_similarsSO(std::string address);
         void generateMatrixDiscoSO();
 
-        float predictionSlopeOneRAM(std::string usuario, std::string itemm);
+        float predictionSlopeOne(std::string usuario, std::string itemm);
+        float predictionSlopeOneDisk(std::string usuario, std::string itemm);
         float predictionSlopeOneRAM(std::string user, std::string item, vector<vector<float>> matriz);
 //		void insertUser(std::string user);
 //		void insertItem(std::string item);
@@ -56,6 +58,8 @@ class Recommender{
         void updateMatrixAC(int idItem);
         void updateMatrixSO(int idItem);
         float errorcuadratico(string usuario);
+        void getMaxItems(float perc);
+        void setRowItems(size_t items);
 public:
     FileManager *filemanager;
     std::string datasetName;
@@ -66,6 +70,8 @@ public:
     MatrixDataMap dataUsers;//puntaje Usr Banda Puntaje
     MatrixDataMap bandaUsrPuntaje;//puntaje Banda Usr Puntaje
     
+    set<userOrItemKeyType> rowsItems;
+
     float *averages;
     std::vector<float> matrixSimilitud;
     static std::string filename;
