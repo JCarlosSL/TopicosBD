@@ -83,12 +83,12 @@ void Recommender::getAverage(){
     }
 }
 
-void UpdateAverage(int id){
+void Recommender::updateAverage(int id){
     float total = 0;
-    for(auto &var: dataUser[id]){
-        total += var;
+    for(auto &var: dataUsers[id]){
+        total += var.first;
     }
-    averages.push_back(total/dataUser[id].second.size());
+    averages.push_back(total/float(dataUsers[id].size()));
 }
 
 float* Recommender::computeSimilarity3(userOrItemKeyType bandaA,userOrItemKeyType bandaB){
@@ -202,7 +202,7 @@ std::vector<std::pair<userOrItemKeyType,float>> Recommender::computerNearestNeig
             distances.push_back(std::make_pair(key.first,distance));
         }
     }
-    sort(distances.begin(),distances.end(),maxsortbysec);
+    sort(distances.begin(),distances.end(),sortbysec);
     if(distances.size() > r){
         return std::vector<std::pair<userOrItemKeyType,float>>(
                 distances.begin(),distances.begin()+r);
@@ -566,6 +566,7 @@ void Recommender::insertRatings(std::string path){
     fstream f;
     f.open(path,std::ios::in);
     std::string word;
+    int idUser;
     if(getline(f,word)); //cout<<"ignore \n";
     while(getline(f,word)){
         vector<string> dataVec = split(word,splitter);
@@ -597,17 +598,18 @@ void Recommender::insertRatings(std::string path){
             }
         }
         // updating on similarity matrices
-        int idUser = user[dataVec[0]];
+        idUser = user[dataVec[0]];
         //int idItem = object[dataVec[1]];
-        updateAverage(idUser);
+        
         //updateMatrixAC(idItem);
         //updateMatrixSO(idItem);
     }
-
     f.close();
+    cout<<"aaa"<<endl;
+    updateAverage(idUser);
 }
 
-void Recommender::setRowItems(size_t id) { rowsItems.insert(id);}
+void Recommender::setRowItems(std::string id) { rowsItems.insert(object[id]);}
 
 void Recommender::serializeUpdate(){
     this->filemanager->loadDataAndSerialize(this->user,this->object,this->dataUsers,this->bandaUsrPuntaje);

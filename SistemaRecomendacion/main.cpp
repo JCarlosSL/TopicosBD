@@ -244,7 +244,7 @@ void slopOneMovieLeans27m(){
 }
 
 void slopOneMovieLeans25m(){
-    Recommender data(DataSetConstants::MOVIELEANS25M,false,0,5);
+    Recommender data(DataSetConstants::MOVIELEANS25M,true,0,5);
     string user,item;
     cout << "input user \t"; cin>> user;
     cout << "input item \t" ;cin>> item;
@@ -267,23 +267,22 @@ void slopOneMovieLeans25m(){
 void MovieLensM25(){
     Recommender data(DataSetConstants::MOVIELEANS25M,false,0,5);
     string user,item;
-    cout << "input user \t"; cin>> user;
-    cout << "input item \t" ;cin>> item;
     data.getAverage();
-    int Item,i=0;
-    while(i < 20){
-        cout << "Item write \t"; cin>> Item;
+		//data.serializeUpdate();
+		vector<string> items = {"1947","8784","1266","7324","318","44972","4226","196","74458","1407","1376","1375","485","4011","1993","26736","48394","7067","110882","852"};
+    for(auto &Item:items){
         data.setRowItems(Item);
-        ++i;
     }
-    //data.generateMatrixDiscoAC();
-    //data.generateMatrixDiscoSO();
-    //data.serializeUpdate();
+    data.generateMatrixDiscoAC();
+    data.generateMatrixDiscoSO();
     data.insertRatings("inRat2.txt");
-    while (user!="q" && item!="q")
+		//data.serializeUpdate();
+		char choose;
+    cout << "(S)lope/(C)osine/(Q)uit \t"; cin>> choose;
+    while (choose != 'Q')
     {
-        char choose;
-        cout << "(S)lope/(C)osine/(Q)uit \t"; cin>> choose;
+				cout << "input user \t"; cin>> user;
+    		cout << "input item \t" ;cin>> item;
         int itemkey=data.object[item];
         cout << "item pos" << itemkey <<"--" <<item << endl;
         if (choose == 'S'){
@@ -307,8 +306,7 @@ void MovieLensM25(){
         else{
             break;
         }
-        cout << "input user \t "; cin>> user;
-        cout << "input item \t" ;cin>> item;
+				cout << "(S)lope/(C)osine/(Q)uit \t"; cin>> choose;
     }
 }
 
@@ -449,25 +447,16 @@ void interfaz(){
 }
 
 int main(){
-<<<<<<< HEAD
     MovieLensM25();
     //DatasetMovieAndTV();
     //slopOneBook();
     //DatasetBooks();
-=======
-	interfaz();
->>>>>>> 1162559d851a150966659622ace63d3045814ada
     //DatasetBooksUsuarios();
     //DatasetBooksError();
     //DatasetMovieAndTVUsuarios();
     //DatasetLorde();
     //calculateTime();
-<<<<<<< HEAD
     //DatasetMovieLeans25M();
     //AjusteCosenoMovieLeans27M();
-=======
-    //DatasetMovieLeans27M();
-    //slopOneMovieLeans27m();
->>>>>>> 1162559d851a150966659622ace63d3045814ada
     return 0;
 }

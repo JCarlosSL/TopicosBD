@@ -59,7 +59,8 @@ class Recommender{
         void updateMatrixSO(int idItem);
         float errorcuadratico(string usuario);
         void getMaxItems(float perc);
-        void setRowItems(size_t items);
+        void setRowItems(std::string items);
+        void updateAverage(int id);
 public:
     FileManager *filemanager;
     std::string datasetName;

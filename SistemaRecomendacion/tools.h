@@ -46,15 +46,15 @@ char findS(const vector<char> &S,const string &str){
 	return '0';
 }
 
-bool maxsortbysec(const std::pair<userOrItemKeyType,float> &a,
+bool sortbysec(const std::pair<userOrItemKeyType,float> &a,
 		const std::pair<userOrItemKeyType,float> &b){
-	return (a.second > b.second);
+	return (a.second < b.second);
 }
 
-/*bool maxsortbysec(const std::pair<userOrItemKeyType,size_t> &a,
+bool maxsortbysec(const std::pair<userOrItemKeyType,size_t> &a,
 		const std::pair<userOrItemKeyType,size_t> &b){
 	return (a.second > b.second);
-}*/
+}
 
 
 
