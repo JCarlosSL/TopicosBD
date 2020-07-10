@@ -10,7 +10,7 @@ typedef int idx;
 std::string Recommender::filename = "sim.bin";
 
 Recommender::Recommender(std::string dn,
-				bool serialize=false,int minR=1,int maxR=5)
+				bool serialize=false,float minR=1,float maxR=5)
     :datasetName(dn),minRating(minR),maxRating(maxR)
 {
     this->filemanager=new FileManager(this->datasetName);
@@ -65,7 +65,7 @@ float Recommender::computeSimilarity(
 }
 
 void Recommender::getAverage(){
-    averages = new float[user.size()]; // sin free, es para la clase Recommender
+    averages.resize(user.size()); // sin free, es para la clase Recommender
     int i=0;
     for(auto key:dataUsers){
         float sum=0.0;
@@ -81,6 +81,14 @@ void Recommender::getAverage(){
         }
         i++;
     }
+}
+
+void UpdateAverage(int id){
+    float total = 0;
+    for(auto &var: dataUser[id]){
+        total += var;
+    }
+    averages.push_back(total/dataUser[id].second.size());
 }
 
 float* Recommender::computeSimilarity3(userOrItemKeyType bandaA,userOrItemKeyType bandaB){
@@ -438,20 +446,20 @@ vector<vector<float>> Recommender::generateMatrixRAMSlopeOne(int index=-1){
     }
     else{
     //cout << "my index" << index << endl;
-    for(int i=index; i<index+1; i++){
+        for(int i=index; i<index+1; i++){
 
-        vector<float> fila;
+            vector<float> fila;
 
-        for (int j=0; j<numItems; j++){
+            for (int j=0; j<numItems; j++){
+                auto dev2 = computeDev2(userOrItemKeyType(i), userOrItemKeyType(j));
+                fila.push_back(dev2[0]);
+                fila.push_back(dev2[1]);
 
-            fila.push_back(computeDev2(userOrItemKeyType(i), userOrItemKeyType(j))[0]);
-            fila.push_back(computeDev2(userOrItemKeyType(i), userOrItemKeyType(j))[1]);
+            }
+
+            matriz.push_back(fila);
 
         }
-
-        matriz.push_back(fila);
-
-    }
     }
     return matriz;
 }
@@ -491,7 +499,7 @@ float Recommender::predictionSlopeOne(std::string usuario, std::string itemm){
     if (rowsItems.find(object[itemm]) != rowsItems.end())
         return Recommender::predictionSlopeOneDisk(usuario, itemm);
     else
-        return Recommender::predictionSlopeOneRAM(usuario, itemm, Recommender::generateMatrixRAMSlopeOne());
+        return Recommender::predictionSlopeOneRAM(usuario, itemm, Recommender::generateMatrixRAMSlopeOne(object[itemm]));
 }
 
 float Recommender::predictionSlopeOneDisk(std::string usuario, std::string itemm){
@@ -543,8 +551,8 @@ float Recommender::predictionSlopeOneRAM(std::string usuario, std::string itemm,
         int itemFrom = key.first;
         float puntaje = key.second;
 
-        num += (matriz[itemTo][itemFrom*2] + puntaje) * matriz[itemTo][itemFrom*2+1];
-        den += matriz[itemTo][itemFrom*2+1];
+        num += (matriz[0][itemFrom*2] + puntaje) * matriz[0][itemFrom*2+1];
+        den += matriz[0][itemFrom*2+1];
     }
 
     if (den==0)
@@ -589,11 +597,11 @@ void Recommender::insertRatings(std::string path){
             }
         }
         // updating on similarity matrices
-        //int idUser = user[dataVec[0]];
-        int idItem = object[dataVec[1]];
-        getAverage();
-        updateMatrixAC(idItem);
-        updateMatrixSO(idItem);
+        int idUser = user[dataVec[0]];
+        //int idItem = object[dataVec[1]];
+        updateAverage(idUser);
+        //updateMatrixAC(idItem);
+        //updateMatrixSO(idItem);
     }
 
     f.close();

@@ -14,7 +14,7 @@ class Recommender{
 
     public:
         enum mode{ SO = 2, AC = 3 };
-        Recommender(std::string,bool,int,int);
+        Recommender(std::string,bool,float,float);
         std::vector<std::pair<userOrItemKeyType,float>> computerNearestNeighbors(
                 std::string iduser,int r);
         std::map<userOrItemKeyType,float> influences(std::string _user,int r);
@@ -72,11 +72,11 @@ public:
     
     set<userOrItemKeyType> rowsItems;
 
-    float *averages;
+    vector<float> averages;
     std::vector<float> matrixSimilitud;
     static std::string filename;
-    int maxRating;
-    int minRating;
+    float maxRating;
+    float minRating;
 };
 
 #endif // RECOMMENDER_H
