@@ -39,6 +39,6 @@ aptitude search boost
  - Raúl Edgar Quispe Totocayo
  - Jesus Lazo Quevedo
  
- Notebook de algoritmos en cuda
+## Notebook de algoritmos en cuda
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1jKt6TTkZidia5Av4iyP6OiYShWHGINq1?usp=sharing)
