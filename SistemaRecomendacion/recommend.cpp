@@ -194,7 +194,7 @@ std::vector<std::pair<userOrItemKeyType,float>> Recommender::computerNearestNeig
             distances.push_back(std::make_pair(key.first,distance));
         }
     }
-    sort(distances.begin(),distances.end(),sortbysec);
+    sort(distances.begin(),distances.end(),maxsortbysec);
     if(distances.size() > r){
         return std::vector<std::pair<userOrItemKeyType,float>>(
                 distances.begin(),distances.begin()+r);
