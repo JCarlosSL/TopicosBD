@@ -1,5 +1,5 @@
 # Sistema de recomendación de filtro colaborativo basado en items y usuarios
-Este sistema de recomendación esta escrito en el lenguaje **C++** , permite hacer prediccionnes con los algoritmos .
+Este sistema de recomendación esta escrito en el lenguaje **C++** , permite hacer prediciones con los algoritmos .
 
 Filtro colaborativo basado en items:
 
@@ -8,8 +8,7 @@ Filtro colaborativo basado en items:
 
 Filtro colaborativo basado en usuarios:
 
-
-- Slopone
+- SlopeOne
 - Ajuste del coseno
 ## Pre-requisitos
 Para poder compilar el proyecto , antes se  debe contar con la libreria  [Boost](https://www.boost.org/) . A continuacion se detalla la manera de instalar esta libreria en **Ubuntu** .
