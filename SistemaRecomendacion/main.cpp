@@ -42,10 +42,10 @@ void datasetLode1(){
 
 //////////FC items(Coseno Ajustado) para books////////////////////////////
 void DatasetBooks(){
+	cin.ignore();
 	Recommender data(DataSetConstants::BOOKS,false,0,10);
 	data.getAverage();
-	//data.generateMatrixDiscoAC();	
-	
+	//data.generateMatrixDiscoAC();		
 	string usuario="",item="";
 	while(usuario!="fin" and item!="fin"){
 		cout<<"usuario: ";getline(cin,usuario);
@@ -264,10 +264,122 @@ void calculateTime(){
     cout<<"duracion de predecir sin disco " << duration/1000.0<<"\n";
 }
 
+void menudata(){
+	cout<<" Base de Datos a cargar: \n";
+	cout<<"1. Books \n";
+	cout<<"2. Movielens27 \n";
+	cout<<"3. Libimseti \n";
+	cout<<"4. Movie and TV \n";
+	cout<<"5. exit \n";
+}
+void titledata(int p){
+	switch(p){
+		case 1:
+			cout<<"Base de Datos Books \n";
+			break;
+		case 2:
+			cout<<"Base de Datos Movielens27 \n";
+			break;
+		case 3:
+			cout<<"Base de Datos Libimseti \n";
+			break;
+		case 4:
+			cout<<"Base de Datos Movie and TV \n";
+			break;
+		default:
+			return;
+
+	}
+}
+
+void menumetrica(){
+	cout<<" metrica: \n";
+	cout<<"1. Coseno Ajustado \n";
+	cout<<"2. Slope One \n";
+}
+
+void interfaz(){
+	cout<<"-----Sistema de recomendacion Basado en Items---";
+	int data;
+	int metrica;
+	while(true){
+		menudata();
+		cin>>data;
+		titledata(data);
+		switch(data){
+			case 1:
+				menumetrica();
+				cin>>metrica;
+				switch(metrica){
+					case 1:
+						cout<<"coseno Ajustado \n";
+						DatasetBooks();
+						break;
+					case 2:
+    					slopOneBook();
+						cout<<"Slope One \n";
+						break;
+					default:
+						break;
+				}
+				break;
+			case 2:
+				menumetrica();
+				cin>>metrica;
+				switch(metrica){
+					case 1:
+						cout<<"coseno Ajustado \n";
+						break;
+					case 2:
+						cout<<"Slope One \n";
+						break;
+					default:
+						break;
+				}
+				break;
+			case 3:
+				menumetrica();
+				cin>>metrica;
+				switch(metrica){
+					case 1:
+						cout<<"coseno Ajustado \n";
+						break;
+					case 2:
+						cout<<"Slope One \n";
+						break;
+					default:
+						break;
+				}
+				break;
+			case 4:
+				menumetrica();
+				cin>>metrica;
+				switch(metrica){
+					case 1:
+						cout<<"coseno Ajustado \n";
+						break;
+					case 2:
+						cout<<"Slope One \n";
+						break;
+					default:
+						break;
+				}
+				break;
+			default:
+				return;
+		}
+
+				
+
+	}
+
+}
+
 int main(){
+	interfaz();
     //DatasetMovieAndTV();
     //slopOneBook();
-    DatasetBooks();
+    //DatasetBooks();
     //DatasetBooksUsuarios();
     //DatasetBooksError();
     //DatasetMovieAndTVUsuarios();
