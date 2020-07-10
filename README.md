@@ -1,5 +1,5 @@
 # Sistema de recomendación de filtro colaborativo basado en items y usuarios
-Este sistema de recomendación esta escrito en el lenguaje **C++** , permite hacer prediciones con los algoritmos .
+Este sistema de recomendación esta escrito en el lenguaje **C++** , permite hacer prediciones con los siguientes algoritmos .
 
 Filtro colaborativo basado en items:
 
