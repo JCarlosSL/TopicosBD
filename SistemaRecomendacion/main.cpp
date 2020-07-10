@@ -6,6 +6,8 @@ using namespace std;
 
 std::string path;
 char limit;
+
+/////Dataset Lorde///////////
 void DatasetLorde(){
     
     Recommender data(DataSetConstants::LORDE,true);
@@ -22,9 +24,7 @@ void DatasetLorde(){
     cout<<data.predictionSlopeOneRAM("David","Kacey Musgraves");
 }
 
-void DatasetMovieLeans25M(){
-    Recommender data(DataSetConstants::BOOKS,true);
-}
+
 void datasetLode1(){
     Recommender data(DataSetConstants::LORDE);
     data.getAverage();
@@ -36,41 +36,79 @@ void datasetLode1(){
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( t2 - t1 ).count();  
     cout<<"duracion de predecir sin disco " << duration/1000.0<<"\n";
 }
+
+//////////FC items(Coseno Ajustado) para books////////////////////////////
 void DatasetBooks(){
-	cout<<DataSetConstants::BOOKS<<endl;
-	Recommender data(DataSetConstants::BOOKS,true,0,10);
+	Recommender data(DataSetConstants::BOOKS,false,0,10);
 	data.getAverage();
-	//data.generateMatrixDisco();	
+	//data.generateMatrixDiscoAC();	
 	
 	string usuario="",item="";
-	//int k=0;
-	//cout<<"coseno ajustado \n"<<endl;
 	while(usuario!="fin" and item!="fin"){
-		//cout<<"usuario: ";
-		getline(cin,usuario);
-		//cout<<"item: ";
-		getline(cin,item);
-		auto t1 = chrono::high_resolution_clock::now();
-		/*cout<<"k: ";
-		cin>>k;
-		cin.ignore();
-		auto inf = data.influences(usuario,k);
-		float pr = data.recommender(inf,item);
-		*/	
-		float pr= data.prediction1(usuario,item);
+		cout<<"usuario: ";getline(cin,usuario);
+		cout<<"item: ";getline(cin,item);
 		
-		//cout<<"prediccion: "<<pr<<endl;
-		cout<<pr;
+		auto t1 = chrono::high_resolution_clock::now();
+		
+		float pr= data.prediction(usuario,item);
+		
+		cout<<"prediccion: "<<pr<<endl;
+		
 		auto t2 = chrono::high_resolution_clock::now();
 		auto d = chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
-		//cout<<"duracion "<<d/1000.0<<"\n";	
+		
+		cout<<"duracion "<<d/1000.0<<"\n";	
 	}
 
 }
 
+///////////FC usuarios Books///////////////////////////////////
+void DatasetBooksUsuarios(){
+	Recommender data(DataSetConstants::BOOKS);	
+	string usuario="",item="";
+	int k=0;
+	while(usuario!="fin" and item!="fin"){
+		cout<<"usuario: ";getline(cin,usuario);
+		cout<<"item: ";getline(cin,item);
+		cout<<"k: ";cin>>k;
+		cin.ignore();
+		auto t1 = chrono::high_resolution_clock::now();	
+
+		auto inf = data.influences(usuario,k);
+		float pr = data.recommender(inf,item);
+			
+		cout<<"prediccion: "<<pr<<endl;
+		auto t2 = chrono::high_resolution_clock::now();
+		auto d = chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
+		
+		cout<<"duracion "<<d/1000.0<<"\n";	
+	}
+
+}
+
+///////FC items SlopeOne Book///////////////////////////////
+void slopOneBook(){
+    Recommender data(DataSetConstants::BOOKS,0,10);
+    string user="",item="";
+    data.getAverage();
+    while (user!="fin" && item!="fin"){
+     	cout << "input user: "; cin>> user;
+        cout << "input item: " ;cin>> item;
+        int itemkey=data.object[item];
+        vector<vector<float>> matriz = data.generateMatrixRAMSlopeOne(itemkey);
+        auto t1 = std::chrono::high_resolution_clock::now();
+        cout << "prediccion: " << data.predictionSlopeOneRAM(user,item,matriz) << endl;
+        auto t2 = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>( t2 - t1 ).count();  
+        cout<<"Tiempo " << duration/1000.0<<"\n";
+       
+    }
+}
+
+////////////////Calculo del Error Cuadratico medio MOVIE and TV////////////////////////
 void DatasetBooksError(){
 	auto t1 = chrono::high_resolution_clock::now();
-	Recommender data(DataSetConstants::MOVIETV);
+	Recommender data(DataSetConstants::MOVIETV,true);
 	auto t2 = chrono::high_resolution_clock::now();
 	auto d = chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
 	cout<<"duracion "<<d/1000.0<<"\n";
@@ -83,17 +121,15 @@ void DatasetBooksError(){
 		cout<<"error: "<<pr<<"\n";
 			
 	}
-
 }
 
-
+////////////////FC items(Coseno Ajustado) MOVIE and TV//////////////////////////////
 void DatasetMovieAndTV(){
 	cout<<DataSetConstants::MOVIETV<<endl;
-	Recommender data(DataSetConstants::MOVIETV,true);
+	Recommender data(DataSetConstants::MOVIETV,true,1,5);
 	data.getAverage();
 	//data.generateMatrixDiscoAC();		
 	string usuario="",item="";
-	cout<<"coseno ajustado \n"<<endl;
 	while(usuario!="fin" and item!="fin"){
 		cout<<"usuario: ";
 		getline(cin,usuario);
@@ -111,29 +147,28 @@ void DatasetMovieAndTV(){
 
 }
 
+///////////////FC usuarios Movie and Tv ////////////////////////
 void DatasetMovieAndTVUsuarios(){
 	cout<<DataSetConstants::MOVIETV<<endl;
-	Recommender data(DataSetConstants::MOVIETV,true);	
+	Recommender data(DataSetConstants::MOVIETV);	
 	string usuario="",item="";
 	int k=0;
-	cout<<"FC basado en usuarios \n"<<endl;
 	while(usuario!="fin" and item!="fin"){
-		cout<<"usuario: ";
-		getline(cin,usuario);
-		cout<<"item: ";
-		getline(cin,item);
+		cout<<"usuario: ";getline(cin,usuario);
+		cout<<"item: ";getline(cin,item);
 		auto t1 = chrono::high_resolution_clock::now();
 		
-		cout<<"k: ";
-		cin>>k;
+		cout<<"k: ";cin>>k;
 		cin.ignore();
+
 		auto inf = data.influences(usuario,k);
 		float pr = data.recommender(inf,item);
-			
-		
+				
 		cout<<"prediccion: "<<pr<<endl;
+		
 		auto t2 = chrono::high_resolution_clock::now();
 		auto d = chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
+		
 		cout<<"duracion "<<d/1000.0<<"\n";	
 	}
 
@@ -200,8 +235,10 @@ void slopOneMovieLeans27m(){
 }
 int main(){
     //DatasetMovieAndTV();
-    //DatasetBooks();
-    DatasetBooksError();
+    //slopOneBook();
+    DatasetBooks();
+    //DatasetBooksUsuarios();
+    //DatasetBooksError();
     //DatasetMovieAndTVUsuarios();
     //DatasetLorde();
     //DatasetMovieLeans27M();

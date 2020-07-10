@@ -9,20 +9,18 @@
 typedef int idx;
 std::string Recommender::filename = "sim.bin";
 
-Recommender::Recommender(std::string dn,bool serialize=false,int minR=1,int maxR=5)
+Recommender::Recommender(std::string dn,
+				bool serialize=false,int minR=1,int maxR=5)
     :datasetName(dn),minRating(minR),maxRating(maxR)
 {
     this->filemanager=new FileManager(this->datasetName);
     if(serialize){
-        this->filemanager->loadDataAndSerialize(this->user,this->object,this->dataUsers,this->bandaUsrPuntaje);
+        this->filemanager->loadDataAndSerialize(this->user,
+						this->object,this->dataUsers,this->bandaUsrPuntaje);
     }
     else
-        this->filemanager->unSerializeData(this->user,this->object,this->dataUsers,this->bandaUsrPuntaje);
-	/*for(auto it=object.begin();it!=object.end();++it){
-		if(it->second<=1000){
-			cout<<it->first<<" "<<it->second<<"\n";
-		}
-	}*/
+        this->filemanager->unSerializeData(this->user,
+						this->object,this->dataUsers,this->bandaUsrPuntaje);
 };
 
 
@@ -37,7 +35,6 @@ float Recommender::computeSimilarity(
         }
         averages1[key.first]=sum/key.second.size();
     }
-
 	float num=0,dem1=0,dem2=0;
 	auto q1=object[band1];
 	auto q2=object[band2];
@@ -52,11 +49,9 @@ float Recommender::computeSimilarity(
         }
     }
     return num/(sqrt(dem1)*sqrt(dem2));
-
 }
 
 void Recommender::getAverage(){
-    //averages std::map<userOrItemKeyType,float> averages;
     averages = new float[user.size()]; // sin free, es para la clase Recommender
     int i=0;
     for(auto key:dataUsers){
@@ -64,7 +59,6 @@ void Recommender::getAverage(){
         for(auto val:key.second){
             sum+=val.second;
         }
-        //averages[key.first]=sum/key.second.size();
         if (key.second.size() == 0){
             averages[i]=0;
             cout<<"raro, tamaño de contenido de key cero?";
@@ -73,9 +67,8 @@ void Recommender::getAverage(){
             averages[i] = sum/key.second.size();
         }
         i++;
-        std::cout<<i<<' '<<sum<<' '<<key.second.size()<<'\n';
+        //std::cout<<i<<' '<<sum<<' '<<key.second.size()<<'\n';
     }
-    std::cout<<'\n';
 }
 
 float* Recommender::computeSimilarity3(userOrItemKeyType bandaA,userOrItemKeyType bandaB){
@@ -153,8 +146,10 @@ std::string Recommender::set_directory(std::string &path, mode type){
 
 void Recommender::generateMatrixDiscoAC(){
     size_t size_file = object.size()*3;
-    
-    for(int path=0;path<object.size();path++){
+   	//for(int path=0;path<object.size();path++){
+   	for (auto p:object){
+   	if(bandaUsrPuntaje[p.second].size() >=592){
+   		int path=p.second;
         std::string pathname =std::to_string(path);
         float *vectorFila = new float[size_file];
         int h=0;
@@ -174,25 +169,23 @@ void Recommender::generateMatrixDiscoAC(){
         file.write( reinterpret_cast<char *>(&vectorFila[0]), size_file*sizeof(float) );
         file.close();
         delete[] vectorFila;
-        //cout<<path<<"\n";
+        cout<<path<<"\n";
+        }
     }
 }
 /* Recomendacion basada en usuarios
- */
-std::vector<std::pair<userOrItemKeyType,float>> Recommender::computerNearestNeighbors(
-        std::string iduser,int r){
-        
-    auto p=user[iduser];
+ //////////////////////////////////////////// */
+std::vector<std::pair<userOrItemKeyType,float>> Recommender::computerNearestNeighbors(std::string iduser,int r){ 
+    userOrItemKeyType idUser=user[iduser];
     std::vector<std::pair<userOrItemKeyType,float>> distances;
     float distance=0;
     for(auto key:dataUsers){
-        if(key.first!=userOrItemKeyType(p)){
-            distance=jaccard(dataUsers[p],dataUsers[key.first]);
+        if(key.first!=idUser){
+            distance=jaccard(dataUsers[idUser],dataUsers[key.first]);
             distances.push_back(std::make_pair(key.first,distance));
         }
     }
     sort(distances.begin(),distances.end(),sortbysec);
-    cout<<distances[0].second<<"\n";
     if(distances.size() > r){
         return std::vector<std::pair<userOrItemKeyType,float>>(
                 distances.begin(),distances.begin()+r);
@@ -225,6 +218,9 @@ float Recommender::recommender(
     }
     return proyeccion;
 }
+//////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+
 //normalizacion
 float Recommender::normalizerR(userOrItemKeyType _user,userOrItemKeyType item){
     float ratingN = 0;
@@ -232,12 +228,16 @@ float Recommender::normalizerR(userOrItemKeyType _user,userOrItemKeyType item){
     ratingN = (2*(bandaUsrPuntaje[item][_user] - minRating) - diference)/diference;
     return ratingN;
 }
+
+////////Desnormalizacion/////////////////
 float Recommender::deNormalizerR(float NR){
     float ratingDN = 0;
     float diference = maxRating - minRating;
     ratingDN = (0.5*((NR +1) * diference) + minRating);
     return ratingDN;
 }
+
+///////////Cargar Items Similares/////////////////////////////
 std::map<int, float> Recommender::get_items_similars(std::string address){
     size_t size_items = object.size()*3;
     std::fstream fin;
@@ -294,6 +294,7 @@ float Recommender::prediction1(std::string userA,std::string item){
 
     return 0;
 }
+
 float Recommender::prediction(std::string userA, std::string item){
 
     if (user.find(userA)==user.end() || object.find(item)==object.end())
@@ -309,7 +310,16 @@ float Recommender::prediction(std::string userA, std::string item){
 
     //relax
     address = address;
-    std::map<int,float> items = get_items_similars(address);
+	std::fstream fin;
+	fin.open(address+filename, std::ios::binary | std::ios::in);
+    if (!fin.is_open()){
+		fin.close();
+		cout<<"prediction RAM \n \n";
+		return prediction1(userA,item);
+	}
+
+	cout<<"Prediction Disco \n \n";	
+	std::map<int,float> items = get_items_similars(address);
 
     float num = 0.0, den = 0.0;
     for(auto p:dataUsers[user[userA]]){
@@ -611,42 +621,6 @@ void Recommender::updateMatrix(int idItem, mode type){
     itemFile.write( reinterpret_cast<char *>(&colItem[0]), sizeColItem*type*sizeof(float) );
     itemFile.close();
     delete[] colItem;
-}
-
-float Recommender::prediction1(std::string userA,int item,int l){
-    int iditem = item;
-    float den=0,num=0;
-    for(auto p:dataUsers[user[userA]]){
-        auto iditemu = p.first;
-        int pitem=iditem;
-        float NR = normalizerR(user[userA],iditemu);
-
-        int pos=iditem;
-        int size=object.size()-1;
-        while(size>pitem and size>iditem){
-                pos+=size;
-                size--;
-        }
-        if(iditem>pitem)
-                pos-=(iditem-pitem);
-
-        float simi=0;
-        float *simil =computeSimilarity3(iditem,p.first);
-        if(fabs(simil[1]) <= epsilon || fabs(simil[2]) <= epsilon)
-            simi=0;
-        else
-            simi=simil[0]/(sqrt(simil[1])*sqrt(simil[2]));
-
-        num+=simi*NR;
-        den+=fabs(simi);
-    }
-    if(fabs(den) <= den * epsilon)
-    
-            return 0;
-    else
-            return deNormalizerR(float(num/den));
-
-    return 0;
 }
 
 

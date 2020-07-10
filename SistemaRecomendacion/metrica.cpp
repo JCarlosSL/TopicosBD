@@ -92,6 +92,7 @@ float pearson(std::map<userOrItemKeyType,float> rating1,std::map<userOrItemKeyTy
             verbose=true;
         }
     }
+    if(n == 0) return 0;
     if( verbose==false) return -1;
     return (sumxy-(sumx*sumy)/n)/(sqrt(sumx2-pow(sumx,2)/n)*sqrt(sumy2-pow(sumy,2)/n));
 
@@ -103,8 +104,8 @@ float coseno(std::map<userOrItemKeyType,float> rating1,std::map<userOrItemKeyTyp
     float productpoint=0;
     float normx=0;
     float normy=0;
-
-	 if(rating1.size() > rating2.size()){
+    
+    if(rating1.size() > rating2.size()){
     	auto temp = rating1;
     	rating1 = rating2;
     	rating2 = temp;
@@ -132,7 +133,7 @@ float coseno(std::map<userOrItemKeyType,float> rating1,std::map<userOrItemKeyTyp
 float jaccard(std::map<userOrItemKeyType,float> rating1,std::map<userOrItemKeyType,float> rating2){
     bool verbose=false;
     float intersect=0;
-	 if(rating1.size() > rating2.size()){
+    if(rating1.size() > rating2.size()){
     	auto temp = rating1;
     	rating1 = rating2;
     	rating2 = temp;
