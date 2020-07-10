@@ -265,7 +265,7 @@ void slopOneMovieLeans25m(){
 }
 
 void MovieLensM25(){
-    Recommender data(DataSetConstants::MOVIELEANS25M,false,0,5);
+    Recommender data(DataSetConstants::MOVIELEANS25M,true,0,5);
     string user,item;
     data.getAverage();
 		//data.serializeUpdate();
